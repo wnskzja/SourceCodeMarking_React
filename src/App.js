@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
+import Home from "./components/Home/Home";
 
 export default function App() {
   return (
@@ -10,6 +11,9 @@ export default function App() {
         <Switch>
           <Route path="/signup">
             <SignUp />
+          </Route>
+          <Route path="/home">
+            <Home />
           </Route>
           <Route path="/">
             <SignIn />
