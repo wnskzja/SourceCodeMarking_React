@@ -108,7 +108,7 @@ const SignUp = () => {
                         ? errors.firstName
                         : ""
                     }
-                    error={Boolean(errors.firstName)}
+                    error={Boolean(errors.firstName && touched.firstName)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -121,8 +121,10 @@ const SignUp = () => {
                     label="Last Name"
                     name="lastName"
                     autoComplete="lname"
-                    helperText={errors.lastName ? errors.lastName : ""}
-                    error={Boolean(errors.lastName)}
+                    helperText={
+                      errors.lastName && touched.lastName ? errors.lastName : ""
+                    }
+                    error={Boolean(errors.lastName && touched.lastName)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -135,8 +137,10 @@ const SignUp = () => {
                     autoComplete="email"
                     name="email"
                     type="email"
-                    helperText={errors.email ? errors.email : ""}
-                    error={Boolean(errors.email)}
+                    helperText={
+                      errors.email && touched.email ? errors.email : ""
+                    }
+                    error={Boolean(errors.email && touched.email)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -150,16 +154,10 @@ const SignUp = () => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    helperText={errors.password ? errors.password : ""}
-                    error={Boolean(errors.password)}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
+                    helperText={
+                      errors.password && touched.password ? errors.password : ""
                     }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
+                    error={Boolean(errors.password && touched.password)}
                   />
                 </Grid>
               </Grid>
