@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+const SignUp = () => {
   const classes = useStyles();
 
   return (
@@ -137,4 +137,5 @@ export default function SignUp() {
       </Box>
     </Container>
   );
-}
+};
+export default SignUp;

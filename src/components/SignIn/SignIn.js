@@ -58,8 +58,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
-export default function SignInSide() {
+const SignIn = () => {
   const classes = useStyles();
 
   return (
@@ -130,4 +129,5 @@ export default function SignInSide() {
       </Grid>
     </Grid>
   );
-}
+};
+export default SignIn;
