@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import Pusher from "pusher-js";
+// import Pusher from "pusher-js";
 import pushid from "pushid";
-import axios from "axios";
+// import axios from "axios";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 
@@ -21,9 +21,7 @@ class Home extends Component {
     };
   }
 
-  componentDidUpdate() {
-    this.runCode();
-  }
+  componentDidUpdate() {}
 
   componentDidMount() {
     this.setState({
@@ -31,41 +29,26 @@ class Home extends Component {
     });
   }
 
-  runCode = () => {
-    const { html, css, js } = this.state;
+  updateCodeMirror = (data) => {
+    // var cm = document.getElementById("CodeMirror")[0].CodeMirror;
+    const cm = document.getElementsByClassName("CodeMirror")[0].CodeMirror;
+    const doc = cm.getDoc();
 
-    const iframe = this.refs.iframe;
-    const document = iframe.contentDocument;
-    const documentContents = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
-        <style>
-          ${css}
-        </style>
-      </head>
-      <body>
-        ${html}
+    // const cursor = doc.getCursor(); // gets the line number in the cursor position
+    const value = doc.getSelection(); // get the line contents
 
-        <script type="text/javascript">
-          ${js}
-        </script>
-      </body>
-      </html>
-    `;
+    const startCursor = doc.getCursor();
+    const lineStartCursor = startCursor.line;
+    const chStartCursor = startCursor.ch;
 
-    document.open();
-    document.write(documentContents);
-    document.close();
+    doc.setCursor({ line: lineStartCursor, ch: chStartCursor + value.length });
   };
 
   render() {
-    const { html, js, css } = this.state;
+    const { html } = this.state;
     const codeMirrorOptions = {
+      mode: "javascript/text/x-scss",
+      autoCloseTags: true,
       theme: "material",
       lineNumbers: true,
       scrollbarStyle: null,
@@ -77,6 +60,7 @@ class Home extends Component {
         <section className="playground">
           <div className="code-editor html-code">
             <div className="editor-header">HTML</div>
+            <button onClick={this.updateCodeMirror}> Bold </button>
             <CodeMirror
               value={html}
               options={{
@@ -86,11 +70,20 @@ class Home extends Component {
               onBeforeChange={(editor, data, html) => {
                 this.setState({ html });
               }}
+              selection={{
+                ranges: [
+                  {
+                    anchor: { ch: 0, line: 0 },
+                    head: { ch: 1, line: 1 },
+                  },
+                ],
+                focus: true, // defaults false if not specified
+              }}
+              onSelection={(editor, data) => {
+                console.log(data);
+              }}
             />
           </div>
-        </section>
-        <section className="result">
-          <iframe title="result" className="iframe" ref="iframe" />
         </section>
       </div>
     );
