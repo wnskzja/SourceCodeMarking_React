@@ -9,9 +9,10 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
+import { withAxios } from "../../axios/index";
 
 function Copyright() {
   return (
@@ -58,8 +59,11 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-const SignIn = () => {
+const SignIn = (props) => {
   const classes = useStyles();
+  const { axios } = props;
+  const history = useHistory();
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -83,11 +87,27 @@ const SignIn = () => {
                 .required("Required"),
             })}
             onSubmit={(values, { setSubmitting }) => {
-              setSubmitting(true);
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-              }, 3000);
+              const email = values.email;
+              const password = values.password;
+              const data = {
+                email: email,
+                password: password,
+              };
+              const header = {
+                "Content-Type": "application/json",
+              };
+              axios
+                .post("/signin", data, {
+                  headers: header,
+                })
+                .then((response) => {
+                  setSubmitting(false);
+                  history.push("/home");
+                })
+                .catch((error) => {
+                  console.error(error);
+                })
+                .finally(() => {});
             }}
           >
             {({ isSubmitting, errors, touched }) => (
@@ -153,4 +173,4 @@ const SignIn = () => {
     </Grid>
   );
 };
-export default SignIn;
+export default withAxios(SignIn);
