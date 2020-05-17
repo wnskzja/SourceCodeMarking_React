@@ -12,6 +12,7 @@ import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
+import { withAxios } from "../../axios/index";
 
 function Copyright() {
   return (
@@ -46,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = () => {
+const SignUp = (props) => {
+  const { axios } = props;
   const classes = useStyles();
   const history = useHistory();
 
@@ -82,10 +84,29 @@ const SignUp = () => {
               .required("Required *"),
           })}
           onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              setSubmitting(false);
-              history.push("/home");
-            }, 2000);
+            const name = values.firstName + " " + values.lastName;
+            const email = values.email;
+            const password = values.password;
+            const data = {
+              name: name,
+              email: email,
+              password: password,
+            };
+            const header = {
+              "Content-Type": "application/json",
+            };
+            axios
+              .post("/signup", data, {
+                headers: header,
+              })
+              .then((response) => {
+                setSubmitting(false);
+                history.push("/home");
+              })
+              .catch((error) => {
+                console.error(error);
+              })
+              .finally(() => {});
           }}
         >
           {({ isSubmitting, errors, touched }) => (
@@ -187,4 +208,4 @@ const SignUp = () => {
     </Container>
   );
 };
-export default SignUp;
+export default withAxios(SignUp);
