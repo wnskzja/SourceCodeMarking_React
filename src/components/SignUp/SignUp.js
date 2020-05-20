@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
+import './SignUp.scss';
 
 function Copyright() {
   return (
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = (props) => {
   const { axios } = props;
+  const [submitError, setSubmitError] = useState(false)
   const classes = useStyles();
   const history = useHistory();
 
@@ -101,9 +103,12 @@ const SignUp = (props) => {
               })
               .then((response) => {
                 setSubmitting(false);
-                history.push("/home");
+                setSubmitError(false);
+                history.push("/");
               })
               .catch((error) => {
+                setSubmitting(false);
+                setSubmitError(true);
                 console.error(error);
               })
               .finally(() => {});
@@ -181,6 +186,11 @@ const SignUp = (props) => {
                   />
                 </Grid>
               </Grid>
+              {submitError ? (
+                <div className="ErrorForm">This account already existed</div>
+              ) : (
+                ''
+              )}
               <Button
                 type="submit"
                 fullWidth

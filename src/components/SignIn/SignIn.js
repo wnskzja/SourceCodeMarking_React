@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
+import './SignIn.scss';
 
 function Copyright() {
   return (
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = (props) => {
   const classes = useStyles();
   const { axios } = props;
+  const [submitError, setSubmitError] = useState(false)
   const history = useHistory();
 
   return (
@@ -102,9 +104,12 @@ const SignIn = (props) => {
                 })
                 .then((response) => {
                   setSubmitting(false);
+                  setSubmitError(false);
                   history.push("/home");
                 })
                 .catch((error) => {
+                  setSubmitting(false);
+                  setSubmitError(true);
                   console.error(error);
                 })
                 .finally(() => {});
@@ -140,6 +145,11 @@ const SignIn = (props) => {
                   }
                   error={Boolean(touched.password && errors.password)}
                 />
+                {submitError ? (
+                  <div className="ErrorForm">You enter wrong email or password</div>
+                ) : (
+                  ''
+                )}
                 <Button
                   type="submit"
                   fullWidth
