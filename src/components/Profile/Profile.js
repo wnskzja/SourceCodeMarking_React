@@ -110,7 +110,7 @@ const Profile = ({ axios }) => {
                         <p className="title_info">Giới tính</p>
                       </Grid>
                       <Grid item xs={8}>
-                        <p>Lưỡng tính</p>
+                        <p>Nam</p>
                       </Grid>
                     </Grid>
                   </div>
