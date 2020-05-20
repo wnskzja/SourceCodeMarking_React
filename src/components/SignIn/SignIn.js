@@ -11,6 +11,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
+import actions from "../../redux/actions/index";
+import selectors from "../../redux/selectors/index";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
 import "./SignIn.scss";
@@ -61,10 +64,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const SignIn = (props) => {
+  const { user } = useSelector(
+    (state) => selectors.getUser(state),
+    shallowEqual
+  );
   const classes = useStyles();
   const { axios } = props;
   const [submitError, setSubmitError] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -80,21 +88,22 @@ const SignIn = (props) => {
             Sign in
           </Typography>
           <Formik
-            initialValues={{ password: "", email: "" }}
+            initialValues={{
+              password: "",
+              email: user ? user?.email : "",
+            }}
             validationSchema={Yup.object({
               password: Yup.string()
-                .min(8, "At least 8 characters")
+                .min(6, "At least 6 characters")
                 .required("Required"),
               email: Yup.string()
                 .email("Invalid email address")
                 .required("Required"),
             })}
             onSubmit={(values, { setSubmitting }) => {
-              const email = values.email;
-              const password = values.password;
               const data = {
-                email: email,
-                password: password,
+                email: values.email,
+                password: values.password,
               };
               const header = {
                 "Content-Type": "application/json",
@@ -104,6 +113,8 @@ const SignIn = (props) => {
                   headers: header,
                 })
                 .then((response) => {
+                  dispatch(actions.setUser(response.data));
+                  localStorage.setItem("token", response?.headers?.token);
                   setSubmitting(false);
                   setSubmitError(false);
                   history.push("/home");
@@ -111,7 +122,6 @@ const SignIn = (props) => {
                 .catch((error) => {
                   setSubmitting(false);
                   setSubmitError(true);
-                  console.error(error);
                 })
                 .finally(() => {});
             }}
@@ -127,7 +137,6 @@ const SignIn = (props) => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  autoFocus
                   helperText={touched.email && errors.email ? errors.email : ""}
                   error={Boolean(touched.email && errors.email)}
                 />
@@ -163,24 +172,24 @@ const SignIn = (props) => {
                 >
                   Sign In
                 </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link to="/" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link to="/signup" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid>
-                <Box mt={5}>
-                  <Copyright />
-                </Box>
               </Form>
             )}
           </Formik>
+          <Grid container>
+            <Grid item xs>
+              <Link to="/" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link to="/signup" variant="body2">
+                Don't have an account? Sign Up
+              </Link>
+            </Grid>
+          </Grid>
+          <Box mt={5}>
+            <Copyright />
+          </Box>
         </div>
       </Grid>
     </Grid>
