@@ -94,6 +94,7 @@ const SignUp = (props) => {
           onSubmit={(values, { setSubmitting }) => {
             const name = values.firstName + " " + values.lastName;
             const email = values.email;
+
             const password = values.password;
             const data = {
               name: name,
