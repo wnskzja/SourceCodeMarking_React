@@ -13,7 +13,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
-import './SignIn.scss';
+import "./SignIn.scss";
 
 function Copyright() {
   return (
@@ -63,12 +63,13 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = (props) => {
   const classes = useStyles();
   const { axios } = props;
-  const [submitError, setSubmitError] = useState(false)
+  const [submitError, setSubmitError] = useState(false);
   const history = useHistory();
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
+
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
@@ -146,9 +147,11 @@ const SignIn = (props) => {
                   error={Boolean(touched.password && errors.password)}
                 />
                 {submitError ? (
-                  <div className="ErrorForm">You enter wrong email or password</div>
+                  <div className="ErrorForm">
+                    You enter wrong email or password
+                  </div>
                 ) : (
-                  ''
+                  ""
                 )}
                 <Button
                   type="submit"
