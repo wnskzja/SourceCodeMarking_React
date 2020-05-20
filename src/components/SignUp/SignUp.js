@@ -10,10 +10,12 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
+import actions from "../../redux/actions/index";
+import { useDispatch } from "react-redux";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
-import './SignUp.scss';
+import "./SignUp.scss";
 
 function Copyright() {
   return (
@@ -53,9 +55,10 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = (props) => {
   const { axios } = props;
-  const [submitError, setSubmitError] = useState(false)
+  const [submitError, setSubmitError] = useState(false);
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -105,6 +108,7 @@ const SignUp = (props) => {
                 headers: header,
               })
               .then((response) => {
+                dispatch(actions.setUser(response.data));
                 setSubmitting(false);
                 setSubmitError(false);
                 history.push("/");
@@ -112,7 +116,6 @@ const SignUp = (props) => {
               .catch((error) => {
                 setSubmitting(false);
                 setSubmitError(true);
-                console.error(error);
               })
               .finally(() => {});
           }}
@@ -130,7 +133,6 @@ const SignUp = (props) => {
                     fullWidth
                     id="firstName"
                     label="First Name"
-                    autoFocus
                     helperText={
                       errors.firstName && touched.firstName
                         ? errors.firstName
@@ -192,7 +194,7 @@ const SignUp = (props) => {
               {submitError ? (
                 <div className="ErrorForm">This account already existed</div>
               ) : (
-                ''
+                ""
               )}
               <Button
                 type="submit"
