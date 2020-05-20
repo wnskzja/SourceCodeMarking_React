@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
+  text: {
+    marginBottom: theme.spacing(2),
+  },
   form: {
     width: "100%",
     marginTop: theme.spacing(3),
@@ -61,7 +64,7 @@ const SignUp = (props) => {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" className={classes.text}>
           Sign up
         </Typography>
         <Formik
