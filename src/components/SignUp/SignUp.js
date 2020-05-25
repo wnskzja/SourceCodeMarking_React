@@ -10,8 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
-import actions from "../../redux/actions/index";
-import { useDispatch } from "react-redux";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
@@ -58,7 +56,6 @@ const SignUp = (props) => {
   const [submitError, setSubmitError] = useState(false);
   const classes = useStyles();
   const history = useHistory();
-  const dispatch = useDispatch();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -94,7 +91,6 @@ const SignUp = (props) => {
           onSubmit={(values, { setSubmitting }) => {
             const name = values.firstName + " " + values.lastName;
             const email = values.email;
-
             const password = values.password;
             const data = {
               name: name,
@@ -109,7 +105,6 @@ const SignUp = (props) => {
                 headers: header,
               })
               .then((response) => {
-                dispatch(actions.setUser(response.data));
                 setSubmitting(false);
                 setSubmitError(false);
                 history.push("/");

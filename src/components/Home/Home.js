@@ -5,6 +5,7 @@ import pushid from "pushid";
 // import axios from "axios";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
+import { Grid } from "@material-ui/core";
 
 import "codemirror/mode/htmlmixed/htmlmixed";
 import "codemirror/mode/css/css";
@@ -30,13 +31,9 @@ class Home extends Component {
   }
 
   updateCodeMirror = (data) => {
-    // var cm = document.getElementById("CodeMirror")[0].CodeMirror;
     const cm = document.getElementsByClassName("CodeMirror")[0].CodeMirror;
     const doc = cm.getDoc();
-
-    // const cursor = doc.getCursor(); // gets the line number in the cursor position
-    const value = doc.getSelection(); // get the line contents
-
+    const value = doc.getSelection();
     const startCursor = doc.getCursor();
     const lineStartCursor = startCursor.line;
     const chStartCursor = startCursor.ch;
@@ -44,10 +41,21 @@ class Home extends Component {
     doc.setCursor({ line: lineStartCursor, ch: chStartCursor + value.length });
   };
 
+  selectFile = (e) => {
+    console.log(e.target.files);
+
+    const reader = new FileReader();
+    reader.readAsText(e.target.files[0]);
+    reader.onload = () => {
+      this.setState({
+        html: reader.result,
+      });
+    };
+  };
   render() {
     const { html } = this.state;
     const codeMirrorOptions = {
-      mode: "javascript/text/x-scss",
+      mode: "javascript",
       autoCloseTags: true,
       theme: "material",
       lineNumbers: true,
@@ -61,28 +69,39 @@ class Home extends Component {
           <div className="code-editor html-code">
             <div className="editor-header">HTML</div>
             <button onClick={this.updateCodeMirror}> Bold </button>
-            <CodeMirror
-              value={html}
-              options={{
-                mode: "htmlmixed",
-                ...codeMirrorOptions,
-              }}
-              onBeforeChange={(editor, data, html) => {
-                this.setState({ html });
-              }}
-              selection={{
-                ranges: [
-                  {
-                    anchor: { ch: 0, line: 0 },
-                    head: { ch: 1, line: 1 },
-                  },
-                ],
-                focus: true, // defaults false if not specified
-              }}
-              onSelection={(editor, data) => {
-                console.log(data);
-              }}
-            />
+            <Grid container>
+              <Grid item xs={9}>
+                <CodeMirror
+                  className="CodeMirrora"
+                  style={{ height: "800px" }}
+                  value={html}
+                  id="code"
+                  options={{
+                    mode: "htmlmixed",
+                    ...codeMirrorOptions,
+                  }}
+                  onBeforeChange={(editor, data, html) => {
+                    this.setState({ html });
+                  }}
+                  selection={{
+                    ranges: [
+                      {
+                        anchor: { ch: 0, line: 0 },
+                        head: { ch: 1, line: 1 },
+                      },
+                    ],
+                    focus: true, // defaults false if not specified
+                  }}
+                  onSelection={(editor, data) => {
+                    console.log(data);
+                  }}
+                />
+              </Grid>
+              <Grid xs={3} item>
+                <p>Comment</p>
+                <input type="file" onChange={(e) => this.selectFile(e)}></input>
+              </Grid>
+            </Grid>
           </div>
         </section>
       </div>

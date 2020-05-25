@@ -11,9 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
-import actions from "../../redux/actions/index";
-import selectors from "../../redux/selectors/index";
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
 import "./SignIn.scss";
@@ -56,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -64,15 +61,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const SignIn = (props) => {
-  const { user } = useSelector(
-    (state) => selectors.getUser(state),
-    shallowEqual
-  );
+  const { from } = props.location.state || { from: { pathname: "/home" } };
   const classes = useStyles();
   const { axios } = props;
   const [submitError, setSubmitError] = useState(false);
   const history = useHistory();
-  const dispatch = useDispatch();
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -90,7 +83,7 @@ const SignIn = (props) => {
           <Formik
             initialValues={{
               password: "",
-              email: user ? user?.email : "",
+              email: "",
             }}
             validationSchema={Yup.object({
               password: Yup.string()
@@ -113,11 +106,12 @@ const SignIn = (props) => {
                   headers: header,
                 })
                 .then((response) => {
-                  dispatch(actions.setUser(response.data));
+                  console.log("SignIn -> response", response);
+                  localStorage.setItem("user", JSON.stringify(response?.data));
                   localStorage.setItem("token", response?.headers?.token);
                   setSubmitting(false);
                   setSubmitError(false);
-                  history.push("/home");
+                  history.push(from);
                 })
                 .catch((error) => {
                   setSubmitting(false);

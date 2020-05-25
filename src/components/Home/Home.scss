@@ -20,7 +20,7 @@ html {
 }
 
 .code-editor {
-  height: 33.33%;
+  // height: 33.33%;
   overflow: hidden;
   position: relative;
 }
@@ -37,7 +37,11 @@ html {
 
 .react-codemirror2 {
   max-height: calc(100% - 30px);
-  overflow: auto;
+  // overflow: auto;
+  height: 500px;
+}
+.CodeMirror {
+  min-height: 100%;
 }
 
 .result {
