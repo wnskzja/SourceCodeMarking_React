@@ -27,22 +27,23 @@ import routers from "../../Router/routers";
 const switchRoutes = (
   <Switch>
     {routers.map((prop, key) => {
-      if (prop.layout === "/teacher") {
+      if (prop.layout === "/student") {
         return (
           <Route
             path={prop.layout + prop.path}
             component={prop.component}
+            exact={prop.exact}
             key={key}
           />
         );
       }
       return null;
     })}
-    <Redirect from="/teacher" to="/teacher/classes" />
+    <Redirect from="/student" to="/student/myclass" />
   </Switch>
 );
 
-function Copyright() {
+const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
@@ -53,7 +54,7 @@ function Copyright() {
       {"."}
     </Typography>
   );
-}
+};
 
 const drawerWidth = 240;
 
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: "flex",
@@ -136,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HomeTeacher = () => {
+const HomeStudent = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -171,11 +172,7 @@ const HomeTeacher = () => {
             color="inherit"
             noWrap
             className={classes.title}
-          >
-            {/* {switchRoutes.name}
-             */}
-            Chuaw cos
-          </Typography>
+          ></Typography>
           <IconButton color="inherit">
             <Badge badgeContent={1} color="secondary">
               <NotificationsIcon />
@@ -211,4 +208,4 @@ const HomeTeacher = () => {
     </div>
   );
 };
-export default HomeTeacher;
+export default HomeStudent;
