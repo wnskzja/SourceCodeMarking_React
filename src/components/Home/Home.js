@@ -3,7 +3,7 @@ import "./Home.scss";
 import { Controlled as CodeMirror } from "react-codemirror2";
 // import Pusher from "pusher-js";
 import pushid from "pushid";
-// import axios from "axios";
+import { withAxios } from "../../axios/index";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import { Grid } from "@material-ui/core";
@@ -13,8 +13,8 @@ import "codemirror/mode/css/css";
 import "codemirror/mode/javascript/javascript";
 
 class Home extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       id: "",
       html: "",
@@ -59,13 +59,50 @@ class Home extends Component {
   };
 
   handleClickSubmitComment = ({ anchor, head }) => {
+    const { axios } = this.props;
     const cm = document.getElementsByClassName("CodeMirror")[0].CodeMirror;
+
+    const rowStart = anchor.line,
+      colStart = anchor.ch,
+      rowEnd = head.line,
+      colEnd = head.ch;
+
     const doc = cm.getDoc();
     doc.markText(
-      { line: anchor.line, ch: anchor.ch },
-      { line: head.line, ch: head.ch },
+      { line: rowStart, ch: colStart },
+      { line: rowEnd, ch: colEnd },
       { className: "styled-background" }
     );
+
+    const fileID = 1;
+    const commentContent = "Không nên như thế này";
+    const data = {
+      file_id: fileID,
+      content: commentContent,
+      start_line: {
+        row: rowStart,
+        column: colStart,
+      },
+      end_line: {
+        row: rowEnd,
+        column: colEnd,
+      },
+    };
+    const header = {
+      "Content-Type": "application/json",
+    };
+
+    axios
+      .post("/v1/comments", data, {
+        headers: header,
+      })
+      .then((response) => {
+        console.log("Comment ", response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
   };
 
   render() {
@@ -156,4 +193,4 @@ class Home extends Component {
     );
   }
 }
-export default Home;
+export default withAxios(Home);
