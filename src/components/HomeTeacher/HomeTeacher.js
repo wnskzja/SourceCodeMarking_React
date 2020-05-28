@@ -174,7 +174,7 @@ const HomeTeacher = () => {
           >
             {/* {switchRoutes.name}
              */}
-            switchRou
+            Chuaw cos
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={1} color="secondary">

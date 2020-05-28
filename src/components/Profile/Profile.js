@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography, Grid } from "@material-ui/core";
 import { withAxios } from "../../axios/index";
-import { useHistory } from "react-router-dom";
 import "./Profile.scss";
 
 const Profile = ({ axios }) => {
   const [profile, setProfile] = useState({});
-  const history = useHistory();
 
   useEffect(() => {
     axios
-      .get("/profile")
+      .get("users/profile")
       .then((response) => {
         setProfile(response.data);
       })
       .catch((error) => {})
       .finally(() => {});
-  }, [axios, history]);
+  }, [axios]);
   return (
     <div className="Profile">
       <Container maxWidth="xl">
