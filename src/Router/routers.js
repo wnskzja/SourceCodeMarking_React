@@ -55,8 +55,8 @@ const routers = [
     exact: true,
   },
   {
-    path: "/detail",
-    name: "Danh sách bài tập",
+    path: "/homework/:id",
+    name: "Bài tập",
     component: Detail,
     layout: "/student",
     exact: true,

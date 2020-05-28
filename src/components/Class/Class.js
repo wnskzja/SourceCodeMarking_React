@@ -4,7 +4,6 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-// import { Link } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 const useStyles = makeStyles({
   root: {
@@ -31,21 +30,23 @@ export default function SimpleCard() {
 
   return (
     <Grid container spacing={2}>
-      <Link href="/student/homework" underline="none">
-        <Card className={classes.root}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              CSS - Web Nâng Cao
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              GV: Lu Phi Xa
-            </Typography>
-            <Typography variant="body2" component="p">
-              Mô tả: Mọi thứ đều nâng cao
-            </Typography>
-          </CardContent>
-        </Card>
-      </Link>
+      <Grid xs={4} item>
+        <Link href="/student/homework" underline="none">
+          <Card className={classes.root}>
+            <CardContent>
+              <Typography variant="h5" component="h2">
+                CSS - Web Nâng Cao
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary">
+                GV: Lu Phi Xa
+              </Typography>
+              <Typography variant="body2" component="p">
+                Mô tả: Mọi thứ đều nâng cao
+              </Typography>
+            </CardContent>
+          </Card>
+        </Link>
+      </Grid>
     </Grid>
   );
 }

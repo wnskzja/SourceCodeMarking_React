@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -67,10 +67,20 @@ const SignIn = (props) => {
   const [submitError, setSubmitError] = useState(false);
   const history = useHistory();
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      if (user.role === "STUDENT") {
+        history.push("/student");
+      } else if (user.role === "TEACHER") {
+        history.push("/teacher");
+      }
+    }
+  }, [history]);
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
@@ -102,12 +112,16 @@ const SignIn = (props) => {
                 "Content-Type": "application/json",
               };
               axios
-                .post("/signin", data, {
+                .post("/users/signin", data, {
                   headers: header,
                 })
                 .then((response) => {
+                  console.log("SignIn -> response", response);
                   localStorage.setItem("user", JSON.stringify(response?.data));
-                  localStorage.setItem("token", response?.headers?.token);
+                  localStorage.setItem(
+                    "token",
+                    response?.headers["access-token"]
+                  );
                   setSubmitting(false);
                   setSubmitError(false);
                   history.push(from);

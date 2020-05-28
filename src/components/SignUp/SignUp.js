@@ -96,12 +96,13 @@ const SignUp = (props) => {
               name: name,
               email: email,
               password: password,
+              role: "STUDENT",
             };
             const header = {
               "Content-Type": "application/json",
             };
             axios
-              .post("/signup", data, {
+              .post("users/signup", data, {
                 headers: header,
               })
               .then((response) => {
