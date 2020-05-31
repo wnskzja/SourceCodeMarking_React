@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-function AuthRouter({ component: Component, pageTitle, ...rest }) {
+const AuthRouter = ({ component: Component, pageTitle, ...rest }) => {
   if (pageTitle) {
     window.document.title = pageTitle;
   }
@@ -26,6 +26,6 @@ function AuthRouter({ component: Component, pageTitle, ...rest }) {
       />
     </>
   );
-}
+};
 
 export default AuthRouter;

@@ -25,13 +25,16 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SimpleCard() {
+const Class = ({ role }) => {
   const classes = useStyles();
 
   return (
     <Grid container spacing={2}>
       <Grid xs={4} item>
-        <Link href="/student/homework" underline="none">
+        <Link
+          href={role === "TEACHER" ? "/teacher/homework" : "/student/homework"}
+          underline="none"
+        >
           <Card className={classes.root}>
             <CardContent>
               <Typography variant="h5" component="h2">
@@ -49,4 +52,5 @@ export default function SimpleCard() {
       </Grid>
     </Grid>
   );
-}
+};
+export default Class;
