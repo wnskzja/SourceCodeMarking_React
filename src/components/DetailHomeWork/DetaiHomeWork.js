@@ -27,7 +27,6 @@ const DetailHomeWork = ({ axios }) => {
   const [isAddFile, setIsAddFile] = useState(false);
   const [dataFile, setDataFile] = useState("");
   const { id } = useParams();
-
   const selectFile = (e) => {
     const file = e.target.files[0];
     new Promise(function (resolve, reject) {
