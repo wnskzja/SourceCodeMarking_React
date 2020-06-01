@@ -111,6 +111,7 @@ class Home extends Component {
         head: {},
       },
       isCommit: false,
+      expandComments: [],
       isEditCommentIcon: false,
       isEditCommentBtn: false,
       isDeleteCommentBtn: false,
@@ -401,8 +402,39 @@ class Home extends Component {
     });
   };
 
-  handleDisabledExpandExpandPanelComment = (e) => {
-    e.stopPropagation();
+  handleDisabledExpandExpandPanelComment = (e, comment) => {
+    const { expandComments } = this.state;
+
+    if (expandComments.length !== 0) {
+      console.log(expandComments);
+      expandComments.forEach((expandComment) => {
+        const { commentExpand } = expandComment;
+        if (commentExpand.id !== comment.id) {
+          const objExpandComment = {
+            commentExpand: comment,
+          };
+
+          const newExpandCommentList = expandComments;
+          newExpandCommentList.push(objExpandComment);
+          console.log(newExpandCommentList);
+          this.setState({
+            expandComments: newExpandCommentList,
+          });
+        } else {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
+    } else {
+      const objExpandComment = [
+        {
+          commentExpand: comment,
+        },
+      ];
+      this.setState({
+        expandComments: objExpandComment,
+      });
+    }
   };
 
   handleSetStartLineAndEndLine = ({ start_line, end_line }) => {
@@ -430,15 +462,18 @@ class Home extends Component {
       const cursorRowEnd = end_line.line + 1;
       const cursorColEnd = end_line.ch + 1;
       if (
-        rowStart <= cursorRowStart &&
-        cursorRowStart <= rowEnd &&
-        rowStart <= cursorRowEnd &&
-        cursorRowEnd <= rowEnd &&
-        colStart <= cursorColStart &&
-        cursorColStart <= colEnd &&
-        colStart <= cursorColEnd &&
-        cursorColEnd <= colEnd
+        (rowStart <= cursorRowStart &&
+          cursorRowStart <= rowEnd &&
+          rowStart <= cursorRowEnd &&
+          cursorRowEnd <= rowEnd) ||
+        (cursorRowStart === rowStart &&
+          rowStart === rowEnd &&
+          colStart <= cursorColStart &&
+          cursorColStart <= colEnd &&
+          colStart <= cursorColEnd &&
+          cursorColEnd <= colEnd)
       ) {
+        console.log("AA");
         if (
           selectedCommentHTML !== undefined &&
           selectedCommentHTML.classList !== undefined
@@ -551,7 +586,10 @@ class Home extends Component {
                           index + 1
                         }`}
                         onClick={(e) =>
-                          this.handleDisabledExpandExpandPanelComment(e)
+                          this.handleDisabledExpandExpandPanelComment(
+                            e,
+                            comment
+                          )
                         }
                       >
                         <ListItemIcon className="wrap-update-delete">
@@ -714,8 +752,7 @@ class Home extends Component {
                     rows="4"
                     cols="50"
                   ></textarea>
-                  {anchor.line === head.line &&
-                  anchor.ch === head.ch &&
+                  {(anchor.line === head.line && anchor.ch === head.ch) ||
                   editComment.isEdit ? (
                     <button
                       className="btn-commit-comment"
