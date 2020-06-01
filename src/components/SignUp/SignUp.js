@@ -96,7 +96,7 @@ const SignUp = (props) => {
               name: name,
               email: email,
               password: password,
-              role: "STUDENT",
+              role: "TEACHER",
             };
             const header = {
               "Content-Type": "application/json",
