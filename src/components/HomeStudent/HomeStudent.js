@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,43 +18,16 @@ import {
 
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ClassIcon from "@material-ui/icons/Class";
+import PermIdentityIcon from "@material-ui/icons/PermIdentity";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import ListAltIcon from "@material-ui/icons/ListAlt";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-import ListMenu from "./ListMenu/ListMenu";
+import { GlobalContext } from "../../ReactContext/ReactContext";
+import ListMenu from "../ListMenu/ListMenu";
 
 import routers from "../../Router/routers";
-
-const switchRoutes = (
-  <Switch>
-    {routers.map((prop, key) => {
-      if (prop.layout === "/student") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            exact={prop.exact}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Redirect from="/student" to="/student/myclass" />
-  </Switch>
-);
-
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https:localhost:3000">
-        Source code Marking
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-};
 
 const drawerWidth = 240;
 
@@ -137,9 +110,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const switchRoutes = (
+  <Switch>
+    {routers.map((prop, key) => {
+      if (prop.layout === "/student") {
+        return (
+          <Route
+            path={prop.layout + prop.path}
+            component={prop.component}
+            exact={prop.exact}
+            key={key}
+          />
+        );
+      }
+      return null;
+    })}
+    <Redirect from="/student" to="/student/myclass" />
+  </Switch>
+);
+
 const HomeStudent = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const { title } = useContext(GlobalContext);
+  const listMenu = [
+    { name: "Lớp Học Của Tôi", icon: ClassIcon, link: "/student/myclass" },
+    { name: "Danh Sách Các Lớp", icon: ListAltIcon, link: "/student/list" },
+    { name: "Thông Tin", icon: PermIdentityIcon, link: "/student/profile" },
+    { name: "Đăng Xuất", icon: ExitToAppIcon },
+  ];
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -172,7 +171,9 @@ const HomeStudent = () => {
             color="inherit"
             noWrap
             className={classes.title}
-          ></Typography>
+          >
+            {title}
+          </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={1} color="secondary">
               <NotificationsIcon />
@@ -193,16 +194,13 @@ const HomeStudent = () => {
           </IconButton>
         </div>
         <Divider />
-        <ListMenu />
+        <ListMenu listMenu={listMenu} />
         <Divider />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           {switchRoutes}
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
     </div>

@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CssBaseline,
   Drawer,
-  Box,
   AppBar,
   Toolbar,
   Typography,
@@ -13,14 +12,27 @@ import {
   IconButton,
   Badge,
   Container,
-  Link,
+  Tooltip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  TextField,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import ClassIcon from "@material-ui/icons/Class";
+import PermIdentityIcon from "@material-ui/icons/PermIdentity";
+import AddIcon from "@material-ui/icons/Add";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import ListAltIcon from "@material-ui/icons/ListAlt";
 
-import ListMenu from "./ListMenu/ListMenu";
+import { GlobalContext } from "../../ReactContext/ReactContext";
+import ListMenu from "../ListMenu/ListMenu";
 
 import routers from "../../Router/routers";
 
@@ -31,8 +43,9 @@ const switchRoutes = (
         return (
           <Route
             path={prop.layout + prop.path}
-            component={prop.component}
+            component={() => <prop.component role="TEACHER" />}
             key={key}
+            exact={prop.exact}
           />
         );
       }
@@ -41,19 +54,6 @@ const switchRoutes = (
     <Redirect from="/teacher" to="/teacher/classes" />
   </Switch>
 );
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https:localhost:3000">
-        Source code Marking
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -138,13 +138,33 @@ const useStyles = makeStyles((theme) => ({
 
 const HomeTeacher = () => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [openDiaglog, setOpenDialog] = useState(false);
+
+  const { title } = useContext(GlobalContext);
+
+  const listMenu = [
+    { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher/classes" },
+    { name: "Danh Sách Đăng Kí", icon: ListAltIcon, link: "/teacher/list" },
+    { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
+    { name: "Đăng Xuất", icon: ExitToAppIcon },
+  ];
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -172,10 +192,13 @@ const HomeTeacher = () => {
             noWrap
             className={classes.title}
           >
-            {/* {switchRoutes.name}
-             */}
-            Chuaw cos
+            {title}
           </Typography>
+          <Tooltip title="Tạo lớp học">
+            <IconButton color="inherit" onClick={handleClickOpen}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
           <IconButton color="inherit">
             <Badge badgeContent={1} color="secondary">
               <NotificationsIcon />
@@ -196,18 +219,47 @@ const HomeTeacher = () => {
           </IconButton>
         </div>
         <Divider />
-        <ListMenu />
+        <ListMenu listMenu={listMenu} />
         <Divider />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           {switchRoutes}
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
+      <Dialog
+        open={openDiaglog}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Tạo lớp học</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Tên lớp *"
+            type="text"
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            id="mota"
+            label="Mô tả"
+            type="text"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Hủy
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Tạo
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
