@@ -1,0 +1,14 @@
+#the docker compose file version
+version: "3.7"
+
+services:
+  source-code-marking-react:
+    container_name: source-code-marking-react
+    build:
+      context: .
+    env_file: .env
+    volumes:
+      - ".:/app"
+      - "/app/node_modules"
+    ports:
+      - "3000:80"
