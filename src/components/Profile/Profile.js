@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { Container, Typography, Grid } from "@material-ui/core";
 import { withAxios } from "../../axios/index";
 import "./Profile.scss";
 
+const useStyles = makeStyles((theme) => ({
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: "100vh",
+    overflow: "auto",
+  },
+}));
+
 const Profile = ({ axios }) => {
   const [profile, setProfile] = useState({});
+  const classes = useStyles();
 
   useEffect(() => {
     axios
@@ -17,6 +28,7 @@ const Profile = ({ axios }) => {
   }, [axios]);
   return (
     <div className="Profile">
+      <div className={classes.appBarSpacer} />
       <Container maxWidth="xl">
         <Grid container={true}>
           <Grid item xs={12}>

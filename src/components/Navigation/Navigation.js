@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,7 +28,6 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AddIcon from "@material-ui/icons/Add";
-import { GlobalContext } from "../../ReactContext/ReactContext";
 import ListMenu from "../ListMenu/ListMenu";
 
 const drawerWidth = 240;
@@ -45,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     padding: "0 8px",
+    color: "white",
+    backgroundColor: "#3f51b5",
     ...theme.mixins.toolbar,
   },
   appBar: {
@@ -115,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
 const Navigation = ({ hidden, createClass }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(hidden);
-  const { title } = useContext(GlobalContext);
+  const title = localStorage.getItem("title");
   const [openDiaglog, setOpenDialog] = useState(false);
   const [nameClass, setNameClass] = useState("");
   const [desClass, setDesClass] = useState("");
@@ -127,13 +128,13 @@ const Navigation = ({ hidden, createClass }) => {
       icon: ListAltIcon,
       link: "/student/listclass",
     },
-    { name: "Thông Tin", icon: PermIdentityIcon, link: "/student/profile" },
+    { name: "Thông Tin", icon: PermIdentityIcon, link: "/profile" },
     { name: "Đăng Xuất", icon: ExitToAppIcon, link: "/logout" },
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
     { name: "Danh Sách Đăng Kí", icon: ListAltIcon, link: "/teacher/list" },
-    { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
+    { name: "Thông Tin", icon: PermIdentityIcon, link: "/profile" },
     { name: "Đăng Xuất", icon: ExitToAppIcon, link: "/logout" },
   ];
   const handleDrawerOpen = () => {
@@ -217,6 +218,7 @@ const Navigation = ({ hidden, createClass }) => {
         open={open}
       >
         <div className={classes.toolbarIcon}>
+          <h3>Source Code Marking</h3>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
@@ -225,7 +227,6 @@ const Navigation = ({ hidden, createClass }) => {
         <ListMenu
           listMenu={role === "TEACHER" ? listMenuTeacher : listMenuStudent}
         />
-        <Divider />
       </Drawer>
       <Dialog
         open={openDiaglog}

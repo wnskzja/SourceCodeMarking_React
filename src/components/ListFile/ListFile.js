@@ -10,7 +10,7 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { withAxios } from "../../axios/index";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -24,6 +24,7 @@ const ListFile = ({ axios }) => {
   const classes = useStyles();
   const [listFile, setListFile] = useState([]);
   const { id } = useParams();
+  const history = useHistory();
   useEffect(() => {
     const header = {
       "Content-Type": "application/json",
@@ -60,6 +61,10 @@ const ListFile = ({ axios }) => {
     return stringDate;
   };
 
+  const markEx = (id) => {
+    history.push(`/mark/exercise/${id}`);
+  };
+
   return (
     <div className={classes.content}>
       <div className={classes.appBarSpacer} />
@@ -85,7 +90,11 @@ const ListFile = ({ axios }) => {
                       {convertDateTime(file.created_at)}
                     </TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" color="primary">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => markEx(file.id)}
+                      >
                         Chấm bài
                       </Button>
                     </TableCell>
