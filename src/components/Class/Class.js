@@ -73,7 +73,13 @@ const Class = ({ axios, infoClass, type }) => {
         );
       case CLASS_TYPE.STUDENT_CLASS:
         return (
-          <Link href={`/student/class/${infoClass.id}`} underline="none">
+          <Link
+            href={`/student/class/${infoClass.id}`}
+            onClick={() => {
+              localStorage.setItem("title", infoClass.name);
+            }}
+            underline="none"
+          >
             <Card className={classes.root}>
               <CardContent>
                 <Typography variant="h5" component="h2">
@@ -91,7 +97,13 @@ const Class = ({ axios, infoClass, type }) => {
         );
       case CLASS_TYPE.TEACHER_CLASS:
         return (
-          <Link href={`/teacher/class/${infoClass.id}`} underline="none">
+          <Link
+            href={`/teacher/class/${infoClass.id}`}
+            onClick={() => {
+              localStorage.setItem("title", infoClass.name);
+            }}
+            underline="none"
+          >
             <Card className={classes.root}>
               <CardContent>
                 <Typography variant="h5" component="h2">

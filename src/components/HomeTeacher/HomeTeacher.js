@@ -6,6 +6,7 @@ import Alert from "../Alert/Alert";
 import { withAxios } from "../../axios/index";
 import { CLASS_TYPE } from "../../constant/class";
 import { ALERT_TYPE } from "../../constant/alert";
+import Loading from "../Loading/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ const HomeTeacher = ({ axios }) => {
   const [listClass, setListClass] = useState([]);
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("user")).id;
@@ -43,6 +45,7 @@ const HomeTeacher = ({ axios }) => {
       )
       .then((response) => {
         setListClass(response.data.classes);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -91,7 +94,12 @@ const HomeTeacher = ({ axios }) => {
   return (
     <div className={classes.root}>
       <Navigation createClass={(data) => createClass(data)} />
-      <MyClass listClass={listClass} type={CLASS_TYPE.TEACHER_CLASS} />
+      {isLoading ? (
+        <Loading></Loading>
+      ) : (
+        <MyClass listClass={listClass} type={CLASS_TYPE.TEACHER_CLASS} />
+      )}
+
       {message ? (
         <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
       ) : null}

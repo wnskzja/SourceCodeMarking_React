@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from "react";
 import Reducer from "./Reducer";
 
 const initialState = {
-  title: "Danh sách Lớp",
+  title: "",
 };
 
 export const GlobalContext = createContext(initialState);

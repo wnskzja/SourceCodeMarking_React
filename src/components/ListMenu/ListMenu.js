@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
-import { GlobalContext } from "../../ReactContext/ReactContext";
 
 import "./ListMenu.scss";
 const useStyles = makeStyles((theme) => ({
@@ -27,12 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ListMenu = ({ listMenu }) => {
   const classes = useStyles();
-  const { setTitle } = useContext(GlobalContext);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
   const handleListItemClick = (event, index, name) => {
-    setSelectedIndex(index);
-    setTitle(name);
+    localStorage.setItem("title", name);
   };
 
   return (
@@ -43,11 +38,6 @@ const ListMenu = ({ listMenu }) => {
             <ListItem
               button
               onClick={(event) => handleListItemClick(event, key, item.name)}
-              className={
-                selectedIndex === key
-                  ? `${classes.child} ${classes.selected}`
-                  : classes.child
-              }
             >
               <ListItemIcon>
                 <item.icon />

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./Home.scss";
 import { Controlled as CodeMirror } from "react-codemirror2";
-// import Pusher from "pusher-js";
 import pushid from "pushid";
 import { withAxios } from "../../axios/index";
 import "codemirror/lib/codemirror.css";
@@ -24,6 +23,7 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import { withRouter } from "react-router-dom";
 
 const theme = createMuiTheme({
   overrides: {
@@ -161,7 +161,8 @@ class Home extends Component {
 
   getDataFromServer = () => {
     const { axios } = this.props;
-    const fileID = "b5dd7c6e-40b6-4ca2-a8c1-f3a0a734e6e8";
+    const id = this.props.match.params.id;
+    const fileID = id;
     const header = {
       "Content-Type": "application/json",
     };
@@ -649,10 +650,6 @@ class Home extends Component {
       <div className="App">
         <section className="playground">
           <div className="code-editor html-code">
-            <div className="editor-header">HTML</div>
-            <button onClick={this.updateCodeMirror}> Bold </button>
-            <input type="file" onChange={(e) => this.selectFile(e)}></input>
-
             <Grid container>
               <Grid item xs={9}>
                 <CodeMirror
@@ -751,4 +748,4 @@ class Home extends Component {
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(withAxios(Home));
+export default withStyles(styles)(withAxios(withRouter(Home)));

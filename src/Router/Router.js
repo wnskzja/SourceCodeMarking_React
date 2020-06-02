@@ -12,6 +12,8 @@ import ListClassStudent from "../components/ListClassStudent/ListClassStudent";
 import DetailClass from "../components/DetailClass/DetailClass";
 import StudentExercise from "../components/StudentExercise/StudentExercise";
 import TeacherExercise from "../components/TeacherExercise/TeacherExercise";
+import Mark from "../components/Mark/Mark";
+import ProfileUser from "../components/ProfileUser/ProfileUser";
 
 const hist = createBrowserHistory();
 const NavRouter = () => {
@@ -23,6 +25,7 @@ const NavRouter = () => {
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
           <AuthRouter exact path="/home" component={Home} />
+          <AuthRouter exact path="/profile" component={ProfileUser} />
           <AuthRouter exact path="/teacher" component={HomeTeacher} />
           <AuthRouter exact path="/teacher/class/:id" component={DetailClass} />
           <AuthRouter
@@ -30,6 +33,7 @@ const NavRouter = () => {
             path="/teacher/exercise/:id"
             component={TeacherExercise}
           />
+          <AuthRouter exact path="/mark/exercise/:id" component={Mark} />
 
           <AuthRouter exact path="/student" component={HomeStudent} />
           <AuthRouter
