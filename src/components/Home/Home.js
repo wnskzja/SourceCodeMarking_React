@@ -24,6 +24,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { withRouter } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import TextField from "@material-ui/core/TextField";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const theme = createMuiTheme({
   overrides: {
@@ -124,6 +130,8 @@ class Home extends Component {
         start_line: {},
         end_line: {},
       },
+      openDiaglog: false,
+      mark: "",
     };
   }
   componentDidMount() {
@@ -633,8 +641,38 @@ class Home extends Component {
     return wrapperListComment;
   };
 
+  handleClose = () => {
+    this.setState({ openDiaglog: false });
+  };
+  onChange = (e) => {
+    console.log("onChange -> e.target.value", typeof e.target.value);
+    this.setState({ mark: e.target.value });
+  };
+  submitMark = () => {
+    const { axios } = this.props;
+    const { id, mark } = this.state;
+    axios
+      .get(`/files/${id}`, {
+        mark: parseInt(mark),
+      })
+      .then((response) => {
+        console.log("response", response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
+    this.setState({ openDiaglog: false });
+  };
+
   render() {
-    const { html, coordinateSelectText, editComment } = this.state;
+    const {
+      html,
+      coordinateSelectText,
+      editComment,
+      openDiaglog,
+      mark,
+    } = this.state;
     const { anchor, head } = coordinateSelectText;
 
     const codeMirrorOptions = {
@@ -711,6 +749,15 @@ class Home extends Component {
                     rows="4"
                     cols="50"
                   ></textarea>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      this.setState({ openDiaglog: true });
+                    }}
+                  >
+                    Chấm điểm
+                  </Button>
                   {anchor.line === head.line &&
                   anchor.ch === head.ch &&
                   editComment.isEdit ? (
@@ -738,6 +785,36 @@ class Home extends Component {
                 </Grid>
               </Grid>
             </Grid>
+            <Dialog
+              open={openDiaglog}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Thêm bài tập</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  name="name"
+                  label="Điểm"
+                  type="number"
+                  InputProps={{ inputProps: { min: 0, max: 10 } }}
+                  fullWidth
+                  value={mark}
+                  onChange={this.onChange}
+                  required
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  Hủy
+                </Button>
+                <Button onClick={this.submitMark} color="primary">
+                  Nhập điểm
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </section>
       </div>
