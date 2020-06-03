@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const SignIn = (props) => {
-  const { from } = props.location.state || { from: { pathname: "/student" } };
+  const { from } = props.location.state ? props.location.state : "";
   const classes = useStyles();
   const { axios } = props;
   const [submitError, setSubmitError] = useState(false);
@@ -131,7 +131,6 @@ const SignIn = (props) => {
                   headers: header,
                 })
                 .then((response) => {
-                  console.log("SignIn -> response", response);
                   localStorage.setItem("user", JSON.stringify(response?.data));
                   localStorage.setItem(
                     "token",
@@ -139,7 +138,15 @@ const SignIn = (props) => {
                   );
                   setSubmitting(false);
                   setSubmitError(false);
-                  history.push(from);
+                  if (from) {
+                    history.push(from);
+                  } else {
+                    if (response?.data.role === "STUDENT") {
+                      history.push("/student");
+                    } else if (response?.data.role === "TEACHER") {
+                      history.push("/teacher");
+                    }
+                  }
                 })
                 .catch((error) => {
                   setSubmitting(false);

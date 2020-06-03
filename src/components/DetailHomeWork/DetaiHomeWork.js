@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -9,24 +8,54 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import addFile from "../utils/addFile";
+import { useParams } from "react-router-dom";
 import { withAxios } from "../../axios/index";
+import Loading from "../Loading/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     backgroundColor: theme.palette.background.paper,
+    marginTop: 10,
+  },
+  content: {
+    flexGrow: 1,
+    height: "100vh",
   },
   button: {
     backgroundColor: "blue",
   },
+  appBarSpacer: theme.mixins.toolbar,
 }));
 
-const DetailHomeWork = ({ axios }) => {
+const DetailHomeWork = ({ axios, exercise }) => {
   const classes = useStyles();
+  const userId = JSON.parse(localStorage.getItem("user")).id;
+  const [isLoading, setIsLoading] = useState(true);
   const [nameFile, setNameFile] = useState("Chưa chọn file");
-  const [isAddFile, setIsAddFile] = useState(false);
+  const [statusFile, setStatusFile] = useState(0);
   const [dataFile, setDataFile] = useState("");
+  const [file, setFile] = useState({});
+  const [disabled, setDisabled] = useState(false);
   const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(
+        `/exercises/${id}/files?filter_by=user_id?filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
+      )
+      .then((response) => {
+        if (response.data.files.length > 0) {
+          setStatusFile(2);
+          setFile(response.data.files[0]);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  }, [axios, id, userId]);
+
   const selectFile = (e) => {
     const file = e.target.files[0];
     new Promise(function (resolve, reject) {
@@ -41,16 +70,17 @@ const DetailHomeWork = ({ axios }) => {
         setDataFile(data);
       })
       .catch(function (err) {
-        console.log(err);
+        console.error(err);
       });
-
+    setStatusFile(1);
     setNameFile(e.target.files[0].name);
-    setIsAddFile(true);
   };
+
   const submitFile = () => {
+    setDisabled(true);
     const dataRequest = {
-      exercise_id: "12",
-      name: "BTCN - Choi Do",
+      exercise_id: id,
+      name: nameFile,
       data: dataFile,
     };
     const header = {
@@ -61,55 +91,102 @@ const DetailHomeWork = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
-        console.log("submitFile -> response", response);
+        setFile(response.data);
+        setStatusFile(2);
+        setDisabled(false);
       })
       .catch((error) => {
-        console.log("submitFile -> error", error);
+        console.error(error);
       })
       .finally(() => {});
   };
+
+  const removeFile = () => {
+    setDisabled(true);
+    axios
+      .delete(`/files/${file.id}`)
+      .then((response) => {
+        if (response.status === 204) {
+          setNameFile("Chưa chọn file");
+          setStatusFile(0);
+          setFile({});
+          setDisabled(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  };
+
+  const renderButton = () => {
+    if (statusFile === 2) {
+      return (
+        <Button
+          size="small"
+          fullWidth
+          color="primary"
+          variant="contained"
+          onClick={removeFile}
+          disabled={disabled}
+        >
+          Hủy
+        </Button>
+      );
+    } else if (statusFile === 1) {
+      return (
+        <Button
+          size="small"
+          fullWidth
+          color="primary"
+          onClick={submitFile}
+          variant="contained"
+          disabled={disabled}
+        >
+          Nộp
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          size="small"
+          fullWidth
+          color="primary"
+          onClick={() => addFile((e) => selectFile(e))}
+          variant="contained"
+        >
+          Chọn file
+        </Button>
+      );
+    }
+  };
   return (
-    <Container maxWidth="md">
-      <Grid xs={12} item container>
-        <Grid item xs={8}>
-          <Paper elevation={0}>
-            <h2>BTCN - Chơi Đồ</h2>
-            <p>Chơi 2kg đồ</p>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Card className={classes.root}>
-            <CardContent>
-              <h3>Bài Nộp</h3>
-              <p>{nameFile}</p>
-            </CardContent>
-            <CardActions>
-              {isAddFile ? (
-                <Button
-                  size="small"
-                  fullWidth
-                  color="primary"
-                  onClick={submitFile}
-                  variant="contained"
-                >
-                  Nộp
-                </Button>
-              ) : (
-                <Button
-                  size="small"
-                  fullWidth
-                  color="primary"
-                  onClick={() => addFile((e) => selectFile(e))}
-                  variant="contained"
-                >
-                  Chọn file
-                </Button>
-              )}
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </Container>
+    <div className={classes.content}>
+      <div className={classes.appBarSpacer} />
+      <Container maxWidth="md">
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Grid xs={12} item container>
+            <Grid item xs={8}>
+              <Paper elevation={0}>
+                <h2>{exercise.name}</h2>
+                <p>{exercise.description}</p>
+              </Paper>
+            </Grid>
+            <Grid item xs={4}>
+              <Card className={classes.root}>
+                <CardContent>
+                  <h3>Bài Nộp</h3>
+                  <p>{file.name ? file.name : nameFile}</p>
+                </CardContent>
+                <CardActions>{renderButton()}</CardActions>
+              </Card>
+            </Grid>
+          </Grid>
+        )}
+      </Container>
+    </div>
   );
 };
 
