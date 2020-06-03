@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HomeWork = ({ axios }) => {
   const classes = useStyles();
+  const [count, setCount] = useState(1);
   const [openDiaglog, setOpenDialog] = useState(false);
   const [currentDay, setCurrentDay] = useState("");
   const [nameEx, setNameEx] = useState("");
@@ -73,7 +74,7 @@ const HomeWork = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, id]);
+  }, [axios, id, count]);
 
   const selectExercise = (name, id) => {
     localStorage.setItem("title", name);
@@ -140,23 +141,9 @@ const HomeWork = ({ axios }) => {
       .then((response) => {
         if (response.status === 201) {
           setIsLoading(true);
-          axios
-            .get(
-              `/classes/${id}/exercises?&order_by=username&order_type=ASC&page_token=1&page_size=20`,
-              {
-                headers: header,
-              }
-            )
-            .then((response) => {
-              setListEx(response.data.exercisees);
-              setMessage("Tạo Bài Tập Thành Công");
-              setTypeAlert(ALERT_TYPE.SUCCESS);
-              setIsLoading(false);
-            })
-            .catch((error) => {
-              console.error(error);
-            })
-            .finally(() => {});
+          setCount(count + 1);
+          setMessage("Tạo Bài Tập Thành Công");
+          setTypeAlert(ALERT_TYPE.SUCCESS);
         }
       })
       .catch((error) => {
@@ -175,11 +162,12 @@ const HomeWork = ({ axios }) => {
     axios
       .delete(`/exercises/${id}`)
       .then((response) => {
+        setIsLoading(true);
+        setCount(count + 1);
         setMessage("Đã Xóa");
         setTypeAlert(ALERT_TYPE.SUCCESS);
       })
       .catch((error) => {
-        console.log("deleteEx -> error", error);
         setMessage("Xóa Thất Bại");
         setTypeAlert(ALERT_TYPE.ERROR);
       })
@@ -210,11 +198,13 @@ const HomeWork = ({ axios }) => {
                     </ListItemIcon>
                     <ListItemText primary={item.name} />
                     <ListItemSecondaryAction>
-                      <Grid container xs={12}>
+                      <Grid container xs={12} item>
                         {renderDeadline(item.deadline)}
-                        <IconButton onClick={() => deleteEx(item.id)}>
-                          <DeleteIcon />
-                        </IconButton>
+                        {role === "TEACHER" ? (
+                          <IconButton onClick={() => deleteEx(item.id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        ) : null}
                       </Grid>
                     </ListItemSecondaryAction>
                   </ListItem>
@@ -240,14 +230,14 @@ const HomeWork = ({ axios }) => {
           onClose={handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Tạo lớp học</DialogTitle>
+          <DialogTitle id="form-dialog-title">Thêm bài tập</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
               id="name"
               name="name"
-              label="Tên bài tập *"
+              label="Tên bài tập"
               type="text"
               fullWidth
               onChange={onChange}
