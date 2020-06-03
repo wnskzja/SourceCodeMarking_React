@@ -6,3 +6,25 @@
   font-size: 16px;
   color: red;
 }
+
+.btn-google-login {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  justify-content: center;
+}
+
+.wrap-btn-facebook-login {
+  margin-top: 15px;
+  width: 100%;
+  span {
+    width: 100%;
+    button {
+      width: 100%;
+    }
+  }
+}
+// .btn-facebook-login {
+//   width: 100%;
+//   justify-content: center;
+// }

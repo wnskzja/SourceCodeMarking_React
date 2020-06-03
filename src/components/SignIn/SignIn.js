@@ -14,6 +14,8 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
 import "./SignIn.scss";
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 function Copyright() {
   return (
@@ -76,8 +78,20 @@ const SignIn = (props) => {
         history.push("/teacher");
       }
     }
+    console.log(`${process.env.REACT_APP_CLIENT_ID_GOOGLE}`);
   }, [history]);
 
+  const responseGoogle = (response) => {
+    console.log(response);
+  };
+
+  const componentClickedFacebook = () => {
+    console.log("Button Facebook login clicked");
+  };
+
+  const responseFacebook = (response) => {
+    console.log(response);
+  };
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -107,6 +121,7 @@ const SignIn = (props) => {
               const data = {
                 email: values.email,
                 password: values.password,
+                service: "EMAIL",
               };
               const header = {
                 "Content-Type": "application/json",
@@ -193,6 +208,25 @@ const SignIn = (props) => {
                 Don't have an account? Sign Up
               </Link>
             </Grid>
+          </Grid>
+          <Grid container>
+            <GoogleLogin
+              className="btn-google-login"
+              buttonText="SIGN IN  WITH GOOGLE"
+              clientId={`${process.env.REACT_APP_CLIENT_ID_GOOGLE}`}
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
+            <div className="wrap-btn-facebook-login">
+              <FacebookLogin
+                className="btn-facebook-login"
+                appId={`${process.env.REACT_APP_ID_APP_FACEBOOK}`}
+                fields="name,email,picture"
+                onClick={componentClickedFacebook}
+                callback={responseFacebook}
+              />
+            </div>
           </Grid>
           <Box mt={5}>
             <Copyright />
