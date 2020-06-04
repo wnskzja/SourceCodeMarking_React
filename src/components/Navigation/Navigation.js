@@ -128,13 +128,13 @@ const Navigation = ({ hidden, createClass }) => {
       icon: ListAltIcon,
       link: "/student/listclass",
     },
-    { name: "Thông Tin", icon: PermIdentityIcon, link: "/profile" },
+    { name: "Thông Tin", icon: PermIdentityIcon, link: "/student/profile" },
     { name: "Đăng Xuất", icon: ExitToAppIcon, link: "/logout" },
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
     { name: "Danh Sách Đăng Kí", icon: ListAltIcon, link: "/teacher/list" },
-    { name: "Thông Tin", icon: PermIdentityIcon, link: "/profile" },
+    { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
     { name: "Đăng Xuất", icon: ExitToAppIcon, link: "/logout" },
   ];
   const handleDrawerOpen = () => {

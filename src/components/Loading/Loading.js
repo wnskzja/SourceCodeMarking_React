@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     flexGrow: 1,
+    marginTop: 10,
   },
   appBarSpacer: theme.mixins.toolbar,
 }));

@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const DetailHomeWork = ({ axios, exercise }) => {
   const classes = useStyles();
   const userId = JSON.parse(localStorage.getItem("user")).id;
+  console.log("DetailHomeWork -> userId", userId);
   const [isLoading, setIsLoading] = useState(true);
   const [nameFile, setNameFile] = useState("Chưa chọn file");
   const [statusFile, setStatusFile] = useState(0);
@@ -46,9 +47,10 @@ const DetailHomeWork = ({ axios, exercise }) => {
   useEffect(() => {
     axios
       .get(
-        `/exercises/${id}/files?filter_by=user_id?filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
+        `/exercises/${id}/files?filter_by=user_id&filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
       )
       .then((response) => {
+        console.log("DetailHomeWork -> response", response);
         if (response.data.files.length > 0) {
           setStatusFile(2);
           setFile(response.data.files[0]);

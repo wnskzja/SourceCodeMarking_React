@@ -65,7 +65,12 @@ const Class = ({ axios, infoClass, type }) => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={enrollClass}>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={enrollClass}
+              >
                 Enroll
               </Button>
             </CardActions>

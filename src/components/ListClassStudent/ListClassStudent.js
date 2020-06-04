@@ -4,6 +4,7 @@ import Navigation from "../Navigation/Navigation";
 import MyClass from "../MyClass/MyClass";
 import { withAxios } from "../../axios/index";
 import { CLASS_TYPE } from "../../constant/class";
+import Loading from "../Loading/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,30 +14,59 @@ const useStyles = makeStyles((theme) => ({
 
 const ListClassStudent = ({ axios }) => {
   const classes = useStyles();
+  const [isLoading, setIsLoading] = useState(true);
   const [listClass, setListClass] = useState([]);
+  const [activePage, setActivePage] = useState(1);
+  const [totalClass, setTotalClass] = useState(0);
+  const pageSize = 12;
+
   useEffect(() => {
     const header = {
       "Content-Type": "application/json",
     };
+    const params = {
+      params: {
+        order_type: "ASC",
+        order_by: "username",
+        page_token: activePage,
+        page_size: pageSize,
+      },
+    };
     axios
-      .get(
-        `/classes?&order_by=username&order_type=ASC&page_token=1&page_size=20`,
-        {
-          headers: header,
-        }
-      )
+      .get("/classes", params, {
+        headers: header,
+      })
       .then((response) => {
+        console.log("ListClassStudent -> response", response);
         setListClass(response.data.classes);
+        setTotalClass(response.data.total_records);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios]);
+  }, [axios, activePage]);
+  const handlePageChange = (event, value) => {
+    setActivePage(value);
+  };
   return (
     <div className={classes.root}>
       <Navigation />
-      <MyClass listClass={listClass} type={CLASS_TYPE.CLASS_STORE} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <MyClass
+            listClass={listClass}
+            type={CLASS_TYPE.CLASS_STORE}
+            activePage={activePage}
+            itemPerPage={pageSize}
+            totalItems={totalClass}
+            handlePageChange={handlePageChange}
+          />
+        </>
+      )}
     </div>
   );
 };
