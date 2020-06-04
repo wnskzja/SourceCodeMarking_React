@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import DialogChooseRole from "./DialogChooseRole/DialogChooseRole";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -67,6 +68,8 @@ const SignIn = (props) => {
   const classes = useStyles();
   const { axios } = props;
   const [submitError, setSubmitError] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(false);
+  const [dataResponseService, setDataResponseService] = useState({});
   const history = useHistory();
 
   useEffect(() => {
@@ -80,32 +83,43 @@ const SignIn = (props) => {
     }
   }, [history]);
 
+  const handleIsisgnIn = ({ isSignIn }) => {
+    setIsSignIn(isSignIn);
+  };
+
   const responseGoogle = (response) => {
     const { profileObj } = response;
     const { email } = profileObj;
     const data = {
       email: email,
       fullname: profileObj.name,
+      role: "",
       service: "GOOGLE",
     };
     const header = {
       "Content-Type": "application/json",
     };
+
     axios
       .post("/users/signin", data, {
         headers: header,
       })
       .then((response) => {
-        localStorage.setItem("user", JSON.stringify(response?.data));
-        localStorage.setItem("token", response?.headers["access-token"]);
-        if (from) {
-          history.push(from.pathname);
-        } else {
-          if (response?.data.role === "STUDENT") {
-            history.push("/student");
-          } else if (response?.data.role === "TEACHER") {
-            history.push("/teacher");
+        if (response?.data?.role) {
+          localStorage.setItem("user", JSON.stringify(response?.data));
+          localStorage.setItem("token", response?.headers["access-token"]);
+          if (from) {
+            history.push(from.pathname);
+          } else {
+            if (response?.data.role === "STUDENT") {
+              history.push("/student");
+            } else if (response?.data.role === "TEACHER") {
+              history.push("/teacher");
+            }
           }
+        } else {
+          setIsSignIn(true);
+          setDataResponseService(data);
         }
       })
       .catch((error) => {
@@ -123,6 +137,7 @@ const SignIn = (props) => {
     const data = {
       email: email,
       fullname: name,
+      role: "",
       service: "FACEBOOK",
     };
     const header = {
@@ -133,16 +148,21 @@ const SignIn = (props) => {
         headers: header,
       })
       .then((response) => {
-        localStorage.setItem("user", JSON.stringify(response?.data));
-        localStorage.setItem("token", response?.headers["access-token"]);
-        if (from) {
-          history.push(from.pathname);
-        } else {
-          if (response?.data.role === "STUDENT") {
-            history.push("/student");
-          } else if (response?.data.role === "TEACHER") {
-            history.push("/teacher");
+        if (response?.data?.role) {
+          localStorage.setItem("user", JSON.stringify(response?.data));
+          localStorage.setItem("token", response?.headers["access-token"]);
+          if (from) {
+            history.push(from.pathname);
+          } else {
+            if (response?.data.role === "STUDENT") {
+              history.push("/student");
+            } else if (response?.data.role === "TEACHER") {
+              history.push("/teacher");
+            }
           }
+        } else {
+          setIsSignIn(true);
+          setDataResponseService(data);
         }
       })
       .catch((error) => {
@@ -290,6 +310,14 @@ const SignIn = (props) => {
                 fields="name,email,picture"
                 onClick={componentClickedFacebook}
                 callback={responseFacebook}
+              />
+            </div>
+            <div>
+              <DialogChooseRole
+                isSignIn={isSignIn}
+                dataResponseService={dataResponseService}
+                handleIsisgnIn={handleIsisgnIn}
+                from={from}
               />
             </div>
           </Grid>
