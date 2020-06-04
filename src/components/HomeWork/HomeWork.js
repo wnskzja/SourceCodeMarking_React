@@ -19,12 +19,15 @@ import {
   Box,
   IconButton,
   Grid,
+  CircularProgress,
+  Fade,
 } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
 import { withAxios } from "../../axios/index";
 import Alert from "../Alert/Alert";
 import { ALERT_TYPE } from "../../constant/alert";
 import Loading from "../Loading/Loading";
+import Pagination from "../Pagination/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -52,6 +55,10 @@ const HomeWork = ({ axios }) => {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [activePage, setActivePage] = useState(1);
+  const [process, setProcess] = useState(false);
+  const [totalEx, setTotalEx] = useState(0);
+  const pageSize = 10;
 
   const role = JSON.parse(localStorage.getItem("user")).role;
 
@@ -59,22 +66,29 @@ const HomeWork = ({ axios }) => {
     const header = {
       "Content-Type": "application/json",
     };
+    const params = {
+      params: {
+        order_type: "ASC",
+        order_by: "username",
+        page_token: activePage,
+        page_size: pageSize,
+      },
+    };
     axios
-      .get(
-        `/classes/${id}/exercises?&order_by=username&order_type=ASC&page_token=1&page_size=20`,
-        {
-          headers: header,
-        }
-      )
+      .get(`/classes/${id}/exercises`, params, {
+        headers: header,
+      })
       .then((response) => {
         setListEx(response.data.exercisees);
+        setTotalEx(response.data.total_records);
         setIsLoading(false);
+        setProcess(false);
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, id, count]);
+  }, [axios, id, count, activePage]);
 
   const selectExercise = (name, id) => {
     if (role === "TEACHER") {
@@ -107,7 +121,6 @@ const HomeWork = ({ axios }) => {
       setDesEx(value);
     } else {
       const date = new Date(value).toISOString();
-      console.log("onChange -> date", date);
       setDeadline(date);
     }
   };
@@ -130,6 +143,7 @@ const HomeWork = ({ axios }) => {
   };
 
   const createExercise = () => {
+    setProcess(true);
     const header = {
       "Content-Type": "application/json",
     };
@@ -145,7 +159,6 @@ const HomeWork = ({ axios }) => {
       })
       .then((response) => {
         if (response.status === 201) {
-          setIsLoading(true);
           setCount(count + 1);
           setMessage("Tạo Bài Tập Thành Công");
           setTypeAlert(ALERT_TYPE.SUCCESS);
@@ -164,10 +177,10 @@ const HomeWork = ({ axios }) => {
   };
 
   const deleteEx = (id) => {
+    setProcess(true);
     axios
       .delete(`/exercises/${id}`)
       .then((response) => {
-        setIsLoading(true);
         setCount(count + 1);
         setMessage("Đã Xóa");
         setTypeAlert(ALERT_TYPE.SUCCESS);
@@ -177,6 +190,10 @@ const HomeWork = ({ axios }) => {
         setTypeAlert(ALERT_TYPE.ERROR);
       })
       .finally(() => {});
+  };
+
+  const handlePageChange = (event, value) => {
+    setActivePage(value);
   };
 
   return (
@@ -220,15 +237,27 @@ const HomeWork = ({ axios }) => {
         )}
         {role === "TEACHER" ? (
           <Box align="center">
+            <div>
+              <Fade in={process} unmountOnExit>
+                <CircularProgress />
+              </Fade>
+            </div>
             <Button
               variant="contained"
               color="primary"
               onClick={handleClickOpen}
+              disabled={process}
             >
               Thêm bài tập
             </Button>
           </Box>
         ) : null}
+        <Pagination
+          activePage={activePage}
+          itemPerPage={pageSize}
+          totalItems={totalEx}
+          handlePageChange={handlePageChange}
+        />
 
         <Dialog
           open={openDiaglog}

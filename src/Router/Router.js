@@ -27,16 +27,17 @@ const NavRouter = () => {
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <AuthRouter exact path="/home" component={Home} role="TEACHER" />
-          <AuthRouter
-            exact
-            path="/profile"
-            component={ProfileUser}
-            role="TEACHER"
-          />
+
           <AuthRouter
             exact
             path="/teacher"
             component={HomeTeacher}
+            role="TEACHER"
+          />
+          <AuthRouter
+            exact
+            path="/teacher/profile"
+            component={ProfileUser}
             role="TEACHER"
           />
           <AuthRouter
@@ -62,6 +63,12 @@ const NavRouter = () => {
             exact
             path="/student"
             component={HomeStudent}
+            role="STUDENT"
+          />
+          <AuthRouter
+            exact
+            path="/student/profile"
+            component={ProfileUser}
             role="STUDENT"
           />
           <AuthRouter
