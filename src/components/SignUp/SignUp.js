@@ -105,20 +105,20 @@ const SignUp = (props) => {
               "Content-Type": "application/json",
             };
             console.log(values);
-            // axios
-            //   .post("users/signup", data, {
-            //     headers: header,
-            //   })
-            //   .then((response) => {
-            //     setSubmitting(false);
-            //     setSubmitError(false);
-            //     history.push("/");
-            //   })
-            //   .catch((error) => {
-            //     setSubmitting(false);
-            //     setSubmitError(true);
-            //   })
-            //   .finally(() => {});
+            axios
+              .post("users/signup", data, {
+                headers: header,
+              })
+              .then((response) => {
+                setSubmitting(false);
+                setSubmitError(false);
+                history.push("/");
+              })
+              .catch((error) => {
+                setSubmitting(false);
+                setSubmitError(true);
+              })
+              .finally(() => {});
           }}
         >
           {({ isSubmitting, errors, touched }) => (
@@ -193,7 +193,7 @@ const SignUp = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                   <InputLabel shrink htmlFor="age-native-label-placeholder">
-                    Age
+                    Role
                   </InputLabel>
                   <Field
                     component="select"
