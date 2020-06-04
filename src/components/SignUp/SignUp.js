@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Alert from "../Alert/Alert";
+import { ALERT_TYPE } from "../../constant/alert";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -56,8 +58,14 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = (props) => {
   const { axios } = props;
   const [submitError, setSubmitError] = useState(false);
+  const [message, setMessage] = useState("");
+  const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
   const classes = useStyles();
   const history = useHistory();
+
+  const clearMessage = () => {
+    setMessage("");
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -105,7 +113,7 @@ const SignUp = (props) => {
             const header = {
               "Content-Type": "application/json",
             };
-            console.log(values);
+
             axios
               .post("users/signup", data, {
                 headers: header,
@@ -113,7 +121,11 @@ const SignUp = (props) => {
               .then((response) => {
                 setSubmitting(false);
                 setSubmitError(false);
-                history.push("/");
+                setMessage("Bạn hãy vào email để xác thực tài khoản!");
+                setTypeAlert(ALERT_TYPE.SUCCESS);
+                setInterval(function () {
+                  history.push("/");
+                }, 3000);
               })
               .catch((error) => {
                 setSubmitting(false);
@@ -206,7 +218,6 @@ const SignUp = (props) => {
                   >
                     <option value="STUDENT">STUDENT</option>
                     <option value="TEACHER">TEACHER</option>
-                    <option value="ADMIN">ADMIN</option>
                   </Field>
                 </Grid>
               </Grid>
@@ -236,6 +247,17 @@ const SignUp = (props) => {
           )}
         </Formik>
       </div>
+
+      <div className="wrap-alert-confirm">
+        {message ? (
+          <Alert
+            message={message}
+            clearMessage={clearMessage}
+            type={typeAlert}
+          />
+        ) : null}
+      </div>
+
       <Box mt={5}>
         <Copyright />
       </Box>
