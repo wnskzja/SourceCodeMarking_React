@@ -67,6 +67,7 @@ const HomeWork = ({ axios }) => {
         }
       )
       .then((response) => {
+        console.log("HomeWork -> response", response);
         setListEx(response.data.exercisees);
         setIsLoading(false);
       })
@@ -77,7 +78,6 @@ const HomeWork = ({ axios }) => {
   }, [axios, id, count]);
 
   const selectExercise = (name, id) => {
-    localStorage.setItem("title", name);
     if (role === "TEACHER") {
       history.push(`/teacher/exercise/${id}`);
     } else if (role === "STUDENT") {

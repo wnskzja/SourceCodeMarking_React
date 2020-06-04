@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
 }));
 
-const DetailHomeWork = ({ axios, exercise }) => {
+const ResultExersice = ({ axios, exercise }) => {
   const classes = useStyles();
   const userId = JSON.parse(localStorage.getItem("user")).id;
   const [isLoading, setIsLoading] = useState(true);
@@ -207,4 +207,4 @@ const DetailHomeWork = ({ axios, exercise }) => {
   );
 };
 
-export default withAxios(DetailHomeWork);
+export default withAxios(ResultExersice);
