@@ -89,8 +89,8 @@ class Home extends Component {
   }
 
   getDataFromServer = () => {
-    const { axios } = this.props;
-    const id = this.props.match.params.id;
+    const { axios, idFile } = this.props;
+    const id = idFile;
     const fileID = id;
     const header = {
       "Content-Type": "application/json",
@@ -407,6 +407,7 @@ class Home extends Component {
       selectedCommentObj,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
+    const role = JSON.parse(localStorage.getItem("user")).role;
 
     const codeMirrorOptions = {
       mode: "javascript",
@@ -479,47 +480,44 @@ class Home extends Component {
                     />
                   </Grid>
                 </Grid>
-                <Grid className="wrap-box-comment" item>
-                  <p>Comment:</p>
-                  <textarea
-                    id="commentTextAread"
-                    name="commentTextAread"
-                    rows="4"
-                    cols="50"
-                  ></textarea>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                      this.setState({ openDiaglog: true });
-                    }}
-                  >
-                    Chấm điểm
-                  </Button>
-                  {(anchor.line === head.line && anchor.ch === head.ch) ||
-                  editComment.isEdit ? (
-                    <button
-                      className="btn-commit-comment"
-                      disabled={true}
-                      onClick={() =>
-                        this.handleClickSubmitComment({ anchor, head })
-                      }
-                    >
-                      {" "}
-                      Commit{" "}
-                    </button>
-                  ) : (
-                    <button
-                      className="btn-commit-comment"
-                      onClick={() =>
-                        this.handleClickSubmitComment({ anchor, head })
-                      }
-                    >
-                      {" "}
-                      Commit{" "}
-                    </button>
-                  )}
-                </Grid>
+                {role === "TEACHER" ? (
+                  <Grid className="wrap-box-comment" item>
+                    <p>Comment:</p>
+                    <textarea
+                      id="commentTextAread"
+                      name="commentTextAread"
+                      rows="4"
+                      cols="50"
+                    ></textarea>
+
+                    <>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          this.setState({ openDiaglog: true });
+                        }}
+                      >
+                        Chấm điểm
+                      </Button>
+
+                      <button
+                        className="btn-commit-comment"
+                        disabled={
+                          (anchor.line === head.line &&
+                            anchor.ch === head.ch) ||
+                          editComment.isEdit
+                        }
+                        onClick={() =>
+                          this.handleClickSubmitComment({ anchor, head })
+                        }
+                      >
+                        {" "}
+                        Commit{" "}
+                      </button>
+                    </>
+                  </Grid>
+                ) : null}
               </Grid>
             </Grid>
             <Dialog

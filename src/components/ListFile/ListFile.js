@@ -62,7 +62,7 @@ const ListFile = ({ axios }) => {
   };
 
   const markEx = (id) => {
-    history.push(`/mark/exercise/${id}`);
+    history.push(`/teacher/mark/exercise/${id}`);
   };
 
   return (

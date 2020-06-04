@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Navigation from "../Navigation/Navigation";
 import Home from "../Home/Home";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -16,12 +17,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Mark = () => {
   const classes = useStyles();
+  const { id } = useParams();
   return (
     <div className={classes.root}>
       <Navigation hidden={false} />
       <div className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Home />
+        <Home idFile={id} />
       </div>
     </div>
   );

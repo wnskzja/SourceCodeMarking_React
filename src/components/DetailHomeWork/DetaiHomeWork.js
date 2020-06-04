@@ -11,6 +11,7 @@ import addFile from "../utils/addFile";
 import { useParams } from "react-router-dom";
 import { withAxios } from "../../axios/index";
 import Loading from "../Loading/Loading";
+import Home from "../Home/Home";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "blue",
   },
   appBarSpacer: theme.mixins.toolbar,
+  home: {
+    padding: 15,
+  },
 }));
 
 const DetailHomeWork = ({ axios, exercise }) => {
@@ -36,7 +40,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
   const [statusFile, setStatusFile] = useState(0);
   const [dataFile, setDataFile] = useState("");
   const [file, setFile] = useState({});
-  const [comment, setComment] = useState({});
+  const [result, setResult] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { id } = useParams();
   useEffect(() => {
@@ -45,24 +49,11 @@ const DetailHomeWork = ({ axios, exercise }) => {
         `/exercises/${id}/files?filter_by=user_id?filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
       )
       .then((response) => {
-        console.log("DetailHomeWork -> response", response);
         if (response.data.files.length > 0) {
           setStatusFile(2);
           setFile(response.data.files[0]);
           if (response.data.files[0].mark) {
-            console.log(
-              "DetailHomeWork -> response.data.files[0].mark",
-              response.data.files[0].mark
-            );
-            axios
-              .get(`/files/${response.data.files[0].id}`)
-              .then((response) => {
-                console.log("DetailHomeWork -> response", response);
-              })
-              .catch((error) => {
-                console.error(error);
-              })
-              .finally(() => {});
+            setResult(true);
           }
         }
         setIsLoading(false);
@@ -180,29 +171,41 @@ const DetailHomeWork = ({ axios, exercise }) => {
   return (
     <div className={classes.content}>
       <div className={classes.appBarSpacer} />
-      <Container maxWidth="md">
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <Grid xs={12} item container>
-            <Grid item xs={8}>
-              <Paper elevation={0}>
-                <h2>{exercise.name}</h2>
-                <p>{exercise.description}</p>
-              </Paper>
-            </Grid>
-            <Grid item xs={4}>
-              <Card className={classes.root}>
-                <CardContent>
-                  <h3>Bài Nộp</h3>
-                  <p>{file.name ? file.name : nameFile}</p>
-                </CardContent>
-                <CardActions>{renderButton()}</CardActions>
-              </Card>
-            </Grid>
-          </Grid>
-        )}
-      </Container>
+
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <h2 style={{ textAlign: "center" }}>{exercise.name}</h2>
+          {result ? (
+            <div className={classes.home}>
+              <h3>Kết quả: {file.mark} điểm</h3>
+              <Home idFile={file.id} />
+            </div>
+          ) : (
+            <>
+              <Container maxWidth="md">
+                <Grid xs={12} item container>
+                  <Grid item xs={8}>
+                    <Paper elevation={0}>
+                      <p>{exercise.description}</p>
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Card className={classes.root}>
+                      <CardContent>
+                        <h3>Bài Nộp</h3>
+                        <p>{file.name ? file.name : nameFile}</p>
+                      </CardContent>
+                      <CardActions>{renderButton()}</CardActions>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Container>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };

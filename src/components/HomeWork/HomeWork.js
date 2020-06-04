@@ -67,7 +67,6 @@ const HomeWork = ({ axios }) => {
         }
       )
       .then((response) => {
-        console.log("HomeWork -> response", response);
         setListEx(response.data.exercisees);
         setIsLoading(false);
       })
@@ -86,8 +85,13 @@ const HomeWork = ({ axios }) => {
   };
 
   const handleClickOpen = () => {
-    const today = new Date().toISOString().substr(0, 16);
-    setCurrentDay(today);
+    const today = new Date();
+    const string =
+      today.toISOString().substr(0, 10) +
+      "T" +
+      today.toTimeString().substr(0, 5);
+    setCurrentDay(string);
+    setDeadline(today.toISOString());
     setOpenDialog(true);
   };
 
@@ -103,6 +107,7 @@ const HomeWork = ({ axios }) => {
       setDesEx(value);
     } else {
       const date = new Date(value).toISOString();
+      console.log("onChange -> date", date);
       setDeadline(date);
     }
   };
