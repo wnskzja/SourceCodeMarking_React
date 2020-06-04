@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Home.scss";
+import ListComment from "./ListComment/ListComment";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import pushid from "pushid";
 import { withAxios } from "../../axios/index";
@@ -13,16 +14,7 @@ import "codemirror/mode/javascript/javascript";
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { ActionTitle, ActionWrapper } from "./Action.style.js";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -30,78 +22,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogTitle from "@material-ui/core/DialogTitle";
-
-const theme = createMuiTheme({
-  overrides: {
-    MuiCollapse: {
-      entered: {
-        height: "auto",
-        overflow: "hidden",
-      },
-    },
-  },
-});
-
-const styles = (theme) => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    position: "relative",
-    overflow: "auto",
-    maxHeight: 300,
-  },
-  listSection: {
-    backgroundColor: "inherit",
-  },
-  ul: {
-    backgroundColor: "inherit",
-    padding: 0,
-  },
-  selectedComment: {
-    backgroundColor: "blue",
-  },
-});
-
-const ExpansionPanel = withStyles({
-  root: {
-    width: "100%",
-    backgroundColor: "white",
-    boxShadow: "none",
-    "&:not(:last-child)": {
-      borderBottom: 0,
-    },
-    "&:before": {
-      display: "none",
-    },
-    "&$expanded": {
-      margin: "auto",
-    },
-  },
-  expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-  root: {
-    padding: 0,
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
-    backgroundColor: "white",
-    borderBottom: "1px solid rgba(0, 0, 0, .125)",
-    marginBottom: 1,
-    minHeight: 30,
-    height: 40,
-    "&$expanded": {
-      minHeight: 40,
-    },
-  },
-  content: {
-    height: "100%",
-    "&$expanded": {
-      margin: "11px 0",
-    },
-  },
-  expanded: {},
-})(MuiExpansionPanelSummary);
 
 class Home extends Component {
   constructor(props) {
@@ -201,17 +121,6 @@ class Home extends Component {
       .finally(() => {});
   };
 
-  updateCodeMirror = (data) => {
-    const cm = document.getElementsByClassName("CodeMirror")[0].CodeMirror;
-    const doc = cm.getDoc();
-    const value = doc.getSelection();
-    const startCursor = doc.getCursor();
-    const lineStartCursor = startCursor.line;
-    const chStartCursor = startCursor.ch;
-
-    doc.setCursor({ line: lineStartCursor, ch: chStartCursor + value.length });
-  };
-
   selectFile = (e) => {
     const reader = new FileReader();
     reader.readAsText(e.target.files[0]);
@@ -282,14 +191,6 @@ class Home extends Component {
         console.log(error);
       })
       .finally(() => {});
-  };
-
-  jumpToLine = ({ start_line, end_line }) => {
-    const startPosition =
-      start_line.row <= end_line.row ? start_line.row : end_line.row;
-    const cm = document.getElementsByClassName("CodeMirror")[0].CodeMirror;
-    var t = cm.charCoords({ line: startPosition, ch: 0 }, "local").top;
-    cm.scrollTo(null, t);
   };
 
   handleEditStatusComment = ({ id, content }) => {
@@ -402,50 +303,6 @@ class Home extends Component {
       .finally(() => {});
   };
 
-  handleChangeComment = (e) => {
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        expanded: !prevState.expanded,
-      };
-    });
-  };
-
-  handleDisabledExpandExpandPanelComment = (e, comment) => {
-    const { expandComments } = this.state;
-
-    if (expandComments.length !== 0) {
-      console.log(expandComments);
-      expandComments.forEach((expandComment) => {
-        const { commentExpand } = expandComment;
-        if (commentExpand.id !== comment.id) {
-          const objExpandComment = {
-            commentExpand: comment,
-          };
-
-          const newExpandCommentList = expandComments;
-          newExpandCommentList.push(objExpandComment);
-          console.log(newExpandCommentList);
-          this.setState({
-            expandComments: newExpandCommentList,
-          });
-        } else {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      });
-    } else {
-      const objExpandComment = [
-        {
-          commentExpand: comment,
-        },
-      ];
-      this.setState({
-        expandComments: objExpandComment,
-      });
-    }
-  };
-
   handleSetStartLineAndEndLine = ({ start_line, end_line }) => {
     let result = {
       start_line: { row: start_line.line, column: start_line.ch },
@@ -482,7 +339,6 @@ class Home extends Component {
           colStart <= cursorColEnd &&
           cursorColEnd <= colEnd)
       ) {
-        console.log("AA");
         if (
           selectedCommentHTML !== undefined &&
           selectedCommentHTML.classList !== undefined
@@ -515,170 +371,6 @@ class Home extends Component {
     }
   };
 
-  isSelectedCommentInCodeMirror = ({ selectedComment, currentComment }) => {
-    const currentStartLine = currentComment.start_line,
-      currentEndLine = currentComment.end_line,
-      selectedStartLine = selectedComment.start_line,
-      selectedEndLine = selectedComment.end_line;
-    let isSelectedComment = false;
-    if (
-      currentStartLine.row <= selectedStartLine.row &&
-      selectedStartLine.row <= currentEndLine.row &&
-      currentStartLine.row <= selectedEndLine.row &&
-      selectedEndLine.row <= currentEndLine.row &&
-      currentStartLine.column <= selectedStartLine.column &&
-      selectedStartLine.column <= currentEndLine.column &&
-      currentStartLine.column <= selectedEndLine.column &&
-      selectedEndLine.column <= currentEndLine.column
-    ) {
-      isSelectedComment = true;
-    }
-    return isSelectedComment;
-  };
-
-  renderListComment = () => {
-    const { id, comments, editComment, selectedCommentObj } = this.state;
-    const { classes } = this.props;
-    const listComment = [];
-    if (comments) {
-      comments.forEach((comment, index) => {
-        const { start_line, end_line } = comment;
-        const commentStartAt =
-          start_line.row <= end_line.row ? start_line : end_line;
-        const commentEndAt =
-          start_line.row > end_line.row ? start_line : end_line;
-        const durationLine =
-          commentStartAt.row === commentEndAt.row
-            ? commentStartAt.row + 1
-            : `${commentStartAt.row + 1} - ${commentEndAt.row + 1}`;
-
-        const isSelectComment = this.isSelectedCommentInCodeMirror({
-          selectedComment: selectedCommentObj,
-          currentComment: comment,
-        })
-          ? "selected-comment"
-          : "";
-
-        listComment.push(
-          <li
-            key={`wrap-comment-li-${index + 1}-${id}`}
-            className={"classes.listSection"}
-            onClick={() => this.jumpToLine({ start_line, end_line })}
-          >
-            <ul
-              key={`wrap-comment-ul-${index + 1}-${id}`}
-              className={classes.ul}
-            >
-              <ListItem key={`wrap-comment-listitem-${index + 1}-${id}`}>
-                <ThemeProvider theme={theme}>
-                  <ExpansionPanel square className="Action">
-                    <ExpansionPanelSummary
-                      className={`expand-summary-comment ${isSelectComment}`}
-                      value={`RS: ${commentStartAt.row + 1} - CS: ${
-                        commentStartAt.column + 1
-                      } - RE: ${commentEndAt.row + 1} - CE: ${
-                        commentEndAt.column + 1
-                      }`}
-                    >
-                      <ActionTitle
-                        className="Asset_Comment_Title"
-                        key={`${id}-${comment.id}-comment-title-${index + 1}`}
-                        p={1}
-                        flexGrow={1}
-                        onClick={(e) => this.handleChangeComment(e)}
-                      >
-                        {`Commnet ${index + 1}: (Line ${durationLine})`}
-                      </ActionTitle>
-                      <ActionTitle
-                        className="Asset_area_edit_comment_Title"
-                        key={`${id}-${comment.id}-area-edit-comment-${
-                          index + 1
-                        }`}
-                        onClick={(e) =>
-                          this.handleDisabledExpandExpandPanelComment(
-                            e,
-                            comment
-                          )
-                        }
-                      >
-                        <ListItemIcon className="wrap-update-delete">
-                          <EditIcon
-                            className="btn-edit-comment"
-                            onClick={() =>
-                              this.handleEditStatusComment({
-                                id: comment.id,
-                                content: comment.content,
-                              })
-                            }
-                          />
-                          <DeleteIcon
-                            className="btn-delete-comment"
-                            onClick={() => this.handleDeleteComment(comment.id)}
-                          />
-                        </ListItemIcon>
-                      </ActionTitle>
-                    </ExpansionPanelSummary>
-                    {editComment.id !== comment.id ||
-                    editComment.isEdit === false ? (
-                      <ActionWrapper>{`${comment.content}`}</ActionWrapper>
-                    ) : (
-                      <ActionWrapper>
-                        <Grid container className="wrap-edit-comment-area">
-                          <Grid item xs={12}>
-                            <textarea
-                              id={`editCommentTextAread-${comment.id}`}
-                              name={`editCommentTextAread-${comment.id}`}
-                              rows="3"
-                              cols="34"
-                            ></textarea>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <button
-                              className="btn-cancel-comment"
-                              onClick={() =>
-                                this.handleCancelEditComment(comment.id)
-                              }
-                            >
-                              {" "}
-                              Cancel{" "}
-                            </button>
-                            <button
-                              className="btn-edit-comment"
-                              onClick={() =>
-                                this.handleEditComment({
-                                  idComment: comment.id,
-                                })
-                              }
-                            >
-                              {" "}
-                              Edit{" "}
-                            </button>
-                          </Grid>
-                        </Grid>
-                      </ActionWrapper>
-                    )}
-                  </ExpansionPanel>
-                </ThemeProvider>
-              </ListItem>
-            </ul>
-          </li>
-        );
-      });
-    }
-
-    const wrapperListComment = [];
-    wrapperListComment.push(
-      <List
-        key={`wrap-list-book-${id}`}
-        className={classes.root}
-        subheader={<li />}
-      >
-        {listComment}
-      </List>
-    );
-    return wrapperListComment;
-  };
-
   handleClose = () => {
     this.setState({ openDiaglog: false });
   };
@@ -690,7 +382,7 @@ class Home extends Component {
     const { axios } = this.props;
     const { id, mark } = this.state;
     axios
-      .get(`/files/${id}`, {
+      .patch(`/files/${id}`, {
         mark: parseInt(mark),
       })
       .then((response) => {
@@ -710,6 +402,9 @@ class Home extends Component {
       editComment,
       openDiaglog,
       mark,
+      id,
+      comments,
+      selectedCommentObj,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
 
@@ -776,7 +471,12 @@ class Home extends Component {
               <Grid className="wrap-list-comment" xs={3} item>
                 <Grid>
                   <Grid container className="list-comment">
-                    {this.renderListComment()}
+                    <ListComment
+                      id={id}
+                      comments={comments}
+                      editComment={editComment}
+                      selectedCommentObj={selectedCommentObj}
+                    />
                   </Grid>
                 </Grid>
                 <Grid className="wrap-box-comment" item>
@@ -859,7 +559,5 @@ class Home extends Component {
   }
 }
 
-Home.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-export default withStyles(styles)(withAxios(withRouter(Home)));
+Home.propTypes = {};
+export default withAxios(withRouter(Home));

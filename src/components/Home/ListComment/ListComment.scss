@@ -1,0 +1,66 @@
+.list-comment {
+    width: 100%;
+}
+.ListComment-root {
+    width: 10px;
+    max-width: 500px;
+    position: "relative";
+    max-height: 300px;
+    .listSection {
+        background-color: "inherit";
+        ul {
+            width: 100%;
+            background-color: "inherit";
+            padding: 0;
+        }
+    }
+    .selectedComment {
+        background-color: "blue";
+    }
+}
+
+.wrap-list-comment {
+    .list-comment {
+        height: 350px;
+    }
+    .wrap-box-comment {
+        margin-left: 25px;
+
+        .btn-commit-comment {
+            margin-top: 10px;
+            float: right;
+            line-height: 30px;
+        }
+    }
+
+    #commentTextAread {
+        max-width: 305px;
+    }
+}
+
+.wrap-update-delete {
+    position: absolute;
+    right: 0px;
+    .btn-edit-comment {
+        margin-right: 10px;
+    }
+}
+
+.wrap-edit-comment-area {
+    margin-top: 10px;
+    margin-bottom: -10px;
+    .btn-edit-comment {
+        margin-top: 5px;
+        line-height: 20px;
+        float: right;
+        margin-right: 10px;
+        width: 45px;
+    }
+    .btn-cancel-comment {
+        right: 5px;
+        margin-top: 5px;
+        line-height: 20px;
+        float: right;
+        margin-right: 22px;
+    }
+}
