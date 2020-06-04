@@ -14,6 +14,8 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
 import "./SignIn.scss";
+import { GoogleLogin } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 function Copyright() {
   return (
@@ -78,6 +80,76 @@ const SignIn = (props) => {
     }
   }, [history]);
 
+  const responseGoogle = (response) => {
+    const { profileObj } = response;
+    const { email } = profileObj;
+    const data = {
+      email: email,
+      fullname: profileObj.name,
+      service: "GOOGLE",
+    };
+    const header = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post("/users/signin", data, {
+        headers: header,
+      })
+      .then((response) => {
+        localStorage.setItem("user", JSON.stringify(response?.data));
+        localStorage.setItem("token", response?.headers["access-token"]);
+        if (from) {
+          history.push(from.pathname);
+        } else {
+          if (response?.data.role === "STUDENT") {
+            history.push("/student");
+          } else if (response?.data.role === "TEACHER") {
+            history.push("/teacher");
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
+  };
+
+  const componentClickedFacebook = () => {
+    console.log("Button Facebook login clicked");
+  };
+
+  const responseFacebook = (response) => {
+    const { name, email } = response;
+    const data = {
+      email: email,
+      fullname: name,
+      service: "FACEBOOK",
+    };
+    const header = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post("/users/signin", data, {
+        headers: header,
+      })
+      .then((response) => {
+        localStorage.setItem("user", JSON.stringify(response?.data));
+        localStorage.setItem("token", response?.headers["access-token"]);
+        if (from) {
+          history.push(from.pathname);
+        } else {
+          if (response?.data.role === "STUDENT") {
+            history.push("/student");
+          } else if (response?.data.role === "TEACHER") {
+            history.push("/teacher");
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
+  };
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -201,6 +273,25 @@ const SignIn = (props) => {
                 Don't have an account? Sign Up
               </Link>
             </Grid>
+          </Grid>
+          <Grid container>
+            <GoogleLogin
+              className="btn-google-login"
+              buttonText="SIGN IN  WITH GOOGLE"
+              clientId={`${process.env.REACT_APP_CLIENT_ID_GOOGLE}`}
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
+            <div className="wrap-btn-facebook-login">
+              <FacebookLogin
+                className="btn-facebook-login"
+                appId={`${process.env.REACT_APP_ID_APP_FACEBOOK}`}
+                fields="name,email,picture"
+                onClick={componentClickedFacebook}
+                callback={responseFacebook}
+              />
+            </div>
           </Grid>
           <Box mt={5}>
             <Copyright />

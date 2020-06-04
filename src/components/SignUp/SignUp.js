@@ -3,6 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
+import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -73,6 +74,7 @@ const SignUp = (props) => {
             lastName: "",
             email: "",
             password: "",
+            role: "STUDENT",
           }}
           validationSchema={Yup.object({
             firstName: Yup.string()
@@ -92,15 +94,17 @@ const SignUp = (props) => {
             const name = values.firstName + " " + values.lastName;
             const email = values.email;
             const password = values.password;
+            const role = values.role;
             const data = {
               name: name,
               email: email,
               password: password,
-              role: "TEACHER",
+              role: role,
             };
             const header = {
               "Content-Type": "application/json",
             };
+            console.log(values);
             axios
               .post("users/signup", data, {
                 headers: header,
@@ -186,6 +190,23 @@ const SignUp = (props) => {
                     }
                     error={Boolean(errors.password && touched.password)}
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputLabel shrink htmlFor="age-native-label-placeholder">
+                    Role
+                  </InputLabel>
+                  <Field
+                    component="select"
+                    id="role"
+                    name="role"
+                    label="role"
+                    value="STUDENT"
+                    className="select-role-sign-up"
+                  >
+                    <option value="STUDENT">STUDENT</option>
+                    <option value="TEACHER">TEACHER</option>
+                    <option value="ADMIN">ADMIN</option>
+                  </Field>
                 </Grid>
               </Grid>
               {submitError ? (
