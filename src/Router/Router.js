@@ -14,6 +14,7 @@ import StudentExercise from "../components/StudentExercise/StudentExercise";
 import TeacherExercise from "../components/TeacherExercise/TeacherExercise";
 import Mark from "../components/Mark/Mark";
 import ProfileUser from "../components/ProfileUser/ProfileUser";
+import VerifyEmail from "../components/VerifyEmail/VerifyEmail";
 
 const hist = createBrowserHistory();
 const NavRouter = () => {
@@ -24,25 +25,59 @@ const NavRouter = () => {
           <Route exact path="/" component={SignIn} />
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
-          <AuthRouter exact path="/home" component={Home} />
-          <AuthRouter exact path="/profile" component={ProfileUser} />
-          <AuthRouter exact path="/teacher" component={HomeTeacher} />
-          <AuthRouter exact path="/teacher/class/:id" component={DetailClass} />
+          <Route exact path="/confirmation/:token" component={VerifyEmail} />
+          <AuthRouter exact path="/home" component={Home} role="TEACHER" />
           <AuthRouter
             exact
+            path="/profile"
+            component={ProfileUser}
+            role="TEACHER"
+          />
+          <AuthRouter
+            exact
+            path="/teacher"
+            component={HomeTeacher}
+            role="TEACHER"
+          />
+          <AuthRouter
+            exact
+            path="/teacher/class/:id"
+            component={DetailClass}
+            role="TEACHER"
+          />
+          <AuthRouter
+            exact
+            role="TEACHER"
             path="/teacher/exercise/:id"
             component={TeacherExercise}
           />
-          <AuthRouter exact path="/mark/exercise/:id" component={Mark} />
-
-          <AuthRouter exact path="/student" component={HomeStudent} />
           <AuthRouter
+            exact
+            role="TEACHER"
+            path="/teacher/mark/exercise/:id"
+            component={Mark}
+          />
+
+          <AuthRouter
+            exact
+            path="/student"
+            component={HomeStudent}
+            role="STUDENT"
+          />
+          <AuthRouter
+            role="STUDENT"
             exact
             path="/student/listclass"
             component={ListClassStudent}
           />
-          <AuthRouter exact path="/student/class/:id" component={DetailClass} />
           <AuthRouter
+            exact
+            path="/student/class/:id"
+            role="STUDENT"
+            component={DetailClass}
+          />
+          <AuthRouter
+            role="STUDENT"
             exact
             path="/student/exercise/:id"
             component={StudentExercise}
