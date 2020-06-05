@@ -47,6 +47,7 @@ const HomeWork = ({ axios }) => {
   const [openDiaglog, setOpenDialog] = useState(false);
   const [currentDay, setCurrentDay] = useState("");
   const [nameEx, setNameEx] = useState("");
+  const [errorText, setErrorText] = useState("");
   const [desEx, setDesEx] = useState("");
   const [deadline, setDeadline] = useState("");
   const history = useHistory();
@@ -143,33 +144,37 @@ const HomeWork = ({ axios }) => {
   };
 
   const createExercise = () => {
-    setProcess(true);
-    const header = {
-      "Content-Type": "application/json",
-    };
-    const dataRequest = {
-      class_id: id,
-      name: nameEx,
-      description: desEx,
-      deadline: deadline,
-    };
-    axios
-      .post("/exercises", dataRequest, {
-        headers: header,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          setCount(count + 1);
-          setMessage("Tạo Bài Tập Thành Công");
-          setTypeAlert(ALERT_TYPE.SUCCESS);
-        }
-      })
-      .catch((error) => {
-        setMessage("Tạo Bài Tập Thất Bại");
-        setTypeAlert(ALERT_TYPE.ERROR);
-      })
-      .finally(() => {});
-    setOpenDialog(false);
+    if (nameEx) {
+      setProcess(true);
+      const header = {
+        "Content-Type": "application/json",
+      };
+      const dataRequest = {
+        class_id: id,
+        name: nameEx,
+        description: desEx,
+        deadline: deadline,
+      };
+      axios
+        .post("/exercises", dataRequest, {
+          headers: header,
+        })
+        .then((response) => {
+          if (response.status === 201) {
+            setCount(count + 1);
+            setMessage("Tạo Bài Tập Thành Công");
+            setTypeAlert(ALERT_TYPE.SUCCESS);
+          }
+        })
+        .catch((error) => {
+          setMessage("Tạo Bài Tập Thất Bại");
+          setTypeAlert(ALERT_TYPE.ERROR);
+        })
+        .finally(() => {});
+      setOpenDialog(false);
+    } else {
+      setErrorText("Vui lòng không để trống");
+    }
   };
 
   const clearMessage = () => {
@@ -273,6 +278,8 @@ const HomeWork = ({ axios }) => {
               name="name"
               label="Tên bài tập"
               type="text"
+              error={errorText}
+              helperText={errorText}
               fullWidth
               onChange={onChange}
               required
@@ -285,7 +292,6 @@ const HomeWork = ({ axios }) => {
               type="text"
               fullWidth
               onChange={onChange}
-              required
             />
             <TextField
               id="datetime-local"
@@ -300,10 +306,14 @@ const HomeWork = ({ axios }) => {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="default" variant="contained">
               Hủy
             </Button>
-            <Button onClick={createExercise} color="primary">
+            <Button
+              onClick={createExercise}
+              color="primary"
+              variant="contained"
+            >
               Tạo
             </Button>
           </DialogActions>

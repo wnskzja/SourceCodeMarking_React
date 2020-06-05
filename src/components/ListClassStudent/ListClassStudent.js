@@ -21,6 +21,7 @@ const ListClassStudent = ({ axios }) => {
   const pageSize = 12;
 
   useEffect(() => {
+    localStorage.setItem("title", "Danh Sách Các Lớp");
     const header = {
       "Content-Type": "application/json",
     };
