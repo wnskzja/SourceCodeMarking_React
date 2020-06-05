@@ -42,7 +42,7 @@ function SimpleDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <DialogTitle id="simple-dialog-title">Select your role</DialogTitle>
+      <DialogTitle id="simple-dialog-title">Chọn loại tài khoản</DialogTitle>
       <List>
         {roles.map((role) => (
           <ListItem button onClick={() => handleListItemClick(role)} key={role}>
