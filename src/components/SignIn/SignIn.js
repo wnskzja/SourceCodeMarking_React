@@ -180,7 +180,7 @@ const SignIn = (props) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Đăng nhập
           </Typography>
           <Formik
             initialValues={{
@@ -241,7 +241,7 @@ const SignIn = (props) => {
                   margin="normal"
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   autoComplete="email"
                   helperText={touched.email && errors.email ? errors.email : ""}
@@ -253,7 +253,7 @@ const SignIn = (props) => {
                   margin="normal"
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Mật khẩu"
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -277,27 +277,27 @@ const SignIn = (props) => {
                   className={classes.submit}
                   disabled={isSubmitting}
                 >
-                  Sign In
+                  Đăng nhập
                 </Button>
               </Form>
             )}
           </Formik>
           <Grid container>
             <Grid item xs>
-              <Link to="/" variant="body2">
-                Forgot password?
+              <Link to="/resetpassword" variant="body2">
+                Quên mật khẩu?
               </Link>
             </Grid>
             <Grid item>
               <Link to="/signup" variant="body2">
-                Don't have an account? Sign Up
+                Bạn không có tài khoản? Đăng kí
               </Link>
             </Grid>
           </Grid>
           <Grid container>
             <GoogleLogin
               className="btn-google-login"
-              buttonText="SIGN IN  WITH GOOGLE"
+              buttonText="ĐĂNG NHẬP VỚI GOOGLE"
               clientId={`${process.env.REACT_APP_CLIENT_ID_GOOGLE}`}
               onSuccess={responseGoogle}
               onFailure={responseGoogle}

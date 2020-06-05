@@ -75,7 +75,7 @@ const SignUp = (props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5" className={classes.text}>
-          Sign up
+          Đăng kí
         </Typography>
         <Formik
           initialValues={{
@@ -146,7 +146,7 @@ const SignUp = (props) => {
                     required
                     fullWidth
                     id="firstName"
-                    label="First Name"
+                    label="Họ"
                     helperText={
                       errors.firstName && touched.firstName
                         ? errors.firstName
@@ -163,7 +163,7 @@ const SignUp = (props) => {
                     fullWidth
                     id="lastName"
                     label="Last Name"
-                    name="lastName"
+                    name="Tên"
                     autoComplete="lname"
                     helperText={
                       errors.lastName && touched.lastName ? errors.lastName : ""
@@ -177,7 +177,7 @@ const SignUp = (props) => {
                     variant="outlined"
                     required
                     fullWidth
-                    label="Email Address"
+                    label="Email"
                     autoComplete="email"
                     name="email"
                     type="email"
@@ -194,7 +194,7 @@ const SignUp = (props) => {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="Mật khẩu"
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -206,7 +206,7 @@ const SignUp = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                   <InputLabel shrink htmlFor="age-native-label-placeholder">
-                    Role
+                    Loại tài khoản
                   </InputLabel>
                   <Field
                     component="select"
@@ -216,8 +216,8 @@ const SignUp = (props) => {
                     value="STUDENT"
                     className="select-role-sign-up"
                   >
-                    <option value="STUDENT">STUDENT</option>
-                    <option value="TEACHER">TEACHER</option>
+                    <option value="STUDENT">Học Viên</option>
+                    <option value="TEACHER">Giáo Viên</option>
                   </Field>
                 </Grid>
               </Grid>
@@ -234,12 +234,12 @@ const SignUp = (props) => {
                 className={classes.submit}
                 disabled={isSubmitting}
               >
-                Sign Up
+                Đăng kí
               </Button>
               <Grid container justify="flex-end">
                 <Grid item>
                   <Link to="/signin" variant="body2">
-                    Already have an account? Sign in
+                    Bạn đã có tài khoản? Đăng nhập
                   </Link>
                 </Grid>
               </Grid>
