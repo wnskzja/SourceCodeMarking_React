@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,6 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import { withAxios } from "../../axios/index";
 import { CLASS_TYPE } from "../../constant/class";
+import Alert from "../Alert/Alert";
+import { ALERT_TYPE } from "../../constant/alert";
 
 const useStyles = makeStyles({
   root: {
@@ -28,11 +30,20 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  classStore: {
+    minWidth: 275,
+  },
 });
 
 const Class = ({ axios, infoClass, type }) => {
   const classes = useStyles();
+  const [cursor, setCursor] = useState("pointer");
+  const [message, setMessage] = useState("");
+  const [typeAlert, setTypeAlert] = useState("");
+
   const enrollClass = () => {
+    document.body.style.cursor = "wait";
+    setCursor("wait");
     const header = {
       "Content-Type": "application/json",
     };
@@ -41,10 +52,15 @@ const Class = ({ axios, infoClass, type }) => {
         headers: header,
       })
       .then((response) => {
-        console.log("enrollClass -> response", response);
+        document.body.style.cursor = "default";
+        setCursor("pointer");
+        setMessage("Enroll lớp thành công");
+        setTypeAlert(ALERT_TYPE.SUCCESS);
       })
       .catch((error) => {
         console.error(error);
+        setMessage("Enroll lớp thất bại!");
+        setTypeAlert(ALERT_TYPE.ERROR);
       })
       .finally(() => {});
   };
@@ -52,7 +68,7 @@ const Class = ({ axios, infoClass, type }) => {
     switch (type) {
       case CLASS_TYPE.CLASS_STORE:
         return (
-          <Card className={classes.root}>
+          <Card className={classes.classStore}>
             <CardContent>
               <Typography variant="h5" component="h2">
                 {infoClass.name}
@@ -70,6 +86,7 @@ const Class = ({ axios, infoClass, type }) => {
                 variant="contained"
                 color="primary"
                 onClick={enrollClass}
+                style={{ cursor }}
               >
                 Enroll
               </Button>
@@ -128,8 +145,14 @@ const Class = ({ axios, infoClass, type }) => {
         break;
     }
   };
+  const clearMessage = () => {
+    setMessage("");
+  };
   return (
     <Grid xs={4} item>
+      {message ? (
+        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
+      ) : null}
       {renderClass()}
     </Grid>
   );

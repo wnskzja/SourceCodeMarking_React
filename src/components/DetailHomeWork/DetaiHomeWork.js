@@ -12,6 +12,8 @@ import { useParams } from "react-router-dom";
 import { withAxios } from "../../axios/index";
 import Loading from "../Loading/Loading";
 import Home from "../Home/Home";
+import Alert from "../Alert/Alert";
+import { ALERT_TYPE } from "../../constant/alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,12 +32,16 @@ const useStyles = makeStyles((theme) => ({
   home: {
     padding: 15,
   },
+  paper: {
+    paddingLeft: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
+  },
 }));
 
 const DetailHomeWork = ({ axios, exercise }) => {
   const classes = useStyles();
   const userId = JSON.parse(localStorage.getItem("user")).id;
-  console.log("DetailHomeWork -> userId", userId);
   const [isLoading, setIsLoading] = useState(true);
   const [nameFile, setNameFile] = useState("Chưa chọn file");
   const [statusFile, setStatusFile] = useState(0);
@@ -43,14 +49,21 @@ const DetailHomeWork = ({ axios, exercise }) => {
   const [file, setFile] = useState({});
   const [result, setResult] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [cursor, setCursor] = useState("pointer");
   const { id } = useParams();
+  const [message, setMessage] = useState("");
+  const [typeAlert, setTypeAlert] = useState("");
   useEffect(() => {
+    const today = new Date();
+    const deadline = new Date(exercise.deadline);
+    if (today > deadline) {
+      setStatusFile(3);
+    }
     axios
       .get(
         `/exercises/${id}/files?filter_by=user_id&filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
       )
       .then((response) => {
-        console.log("DetailHomeWork -> response", response);
         if (response.data.files.length > 0) {
           setStatusFile(2);
           setFile(response.data.files[0]);
@@ -64,7 +77,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, id, userId]);
+  }, [axios, id, userId, exercise.deadline]);
 
   const selectFile = (e) => {
     const file = e.target.files[0];
@@ -88,6 +101,8 @@ const DetailHomeWork = ({ axios, exercise }) => {
 
   const submitFile = () => {
     setDisabled(true);
+    document.body.style.cursor = "wait";
+    setCursor("wait");
     const dataRequest = {
       exercise_id: id,
       name: nameFile,
@@ -104,15 +119,22 @@ const DetailHomeWork = ({ axios, exercise }) => {
         setFile(response.data);
         setStatusFile(2);
         setDisabled(false);
+        setMessage("Đã Nộp!");
+        setTypeAlert(ALERT_TYPE.SUCCESS);
+        document.body.style.cursor = "default";
+        setCursor("pointer");
       })
       .catch((error) => {
-        console.error(error);
+        setMessage("Nộp thất bại!");
+        setTypeAlert(ALERT_TYPE.ERROR);
       })
       .finally(() => {});
   };
 
   const removeFile = () => {
     setDisabled(true);
+    document.body.style.cursor = "wait";
+    setCursor("wait");
     axios
       .delete(`/files/${file.id}`)
       .then((response) => {
@@ -121,6 +143,8 @@ const DetailHomeWork = ({ axios, exercise }) => {
           setStatusFile(0);
           setFile({});
           setDisabled(false);
+          document.body.style.cursor = "default";
+          setCursor("pointer");
         }
       })
       .catch((error) => {
@@ -139,6 +163,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
           variant="contained"
           onClick={removeFile}
           disabled={disabled}
+          cursor={cursor}
         >
           Hủy
         </Button>
@@ -152,11 +177,12 @@ const DetailHomeWork = ({ axios, exercise }) => {
           onClick={submitFile}
           variant="contained"
           disabled={disabled}
+          cursor={cursor}
         >
           Nộp
         </Button>
       );
-    } else {
+    } else if (statusFile === 0) {
       return (
         <Button
           size="small"
@@ -168,8 +194,25 @@ const DetailHomeWork = ({ axios, exercise }) => {
           Chọn file
         </Button>
       );
+    } else {
+      return (
+        <Button
+          size="small"
+          fullWidth
+          color="primary"
+          variant="contained"
+          disabled
+        >
+          Đóng
+        </Button>
+      );
     }
   };
+
+  const clearMessage = () => {
+    setMessage("");
+  };
+
   return (
     <div className={classes.content}>
       <div className={classes.appBarSpacer} />
@@ -178,6 +221,13 @@ const DetailHomeWork = ({ axios, exercise }) => {
         <Loading />
       ) : (
         <>
+          {message ? (
+            <Alert
+              message={message}
+              clearMessage={clearMessage}
+              type={typeAlert}
+            />
+          ) : null}
           <h2 style={{ textAlign: "center" }}>{exercise.name}</h2>
           {result ? (
             <div className={classes.home}>
@@ -189,8 +239,8 @@ const DetailHomeWork = ({ axios, exercise }) => {
               <Container maxWidth="md">
                 <Grid xs={12} item container>
                   <Grid item xs={8}>
-                    <Paper elevation={0}>
-                      <p>{exercise.description}</p>
+                    <Paper elevation={0} className={classes.paper}>
+                      <p>Mô tả: {exercise.description}</p>
                     </Paper>
                   </Grid>
                   <Grid item xs={4}>

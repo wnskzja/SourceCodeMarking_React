@@ -13,7 +13,6 @@ import "codemirror/mode/css/css";
 import "codemirror/mode/javascript/javascript";
 
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/styles";
 
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -22,6 +21,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Loading from "../Loading/Loading";
 
 class Home extends Component {
   constructor(props) {
@@ -53,6 +53,7 @@ class Home extends Component {
       },
       openDiaglog: false,
       mark: "",
+      isLoading: true,
     };
   }
   componentDidMount() {
@@ -106,6 +107,7 @@ class Home extends Component {
           html: data,
           id: fileID,
           comments: comments,
+          isLoading: false,
         });
 
         if (comments) {
@@ -405,6 +407,7 @@ class Home extends Component {
       id,
       comments,
       selectedCommentObj,
+      isLoading,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
     const role = JSON.parse(localStorage.getItem("user")).role;
@@ -422,110 +425,118 @@ class Home extends Component {
       <div className="App">
         <section className="playground">
           <div className="code-editor html-code">
-            <Grid container>
-              <Grid item xs={9}>
-                <CodeMirror
-                  className="CodeMirrora"
-                  value={html}
-                  options={{
-                    mode: "htmlmixed",
-                    ...codeMirrorOptions,
-                  }}
-                  onBeforeChange={(editor, data, html) => {
-                    this.setState({ html });
-                  }}
-                  selection={{
-                    ranges: [
-                      {
-                        anchor: { ch: 0, line: 0 },
-                        head: { ch: 1, line: 1 },
-                      },
-                    ],
-                    focus: true, // defaults false if not specified
-                  }}
-                  onSelection={(editor, data) => {
-                    const { ranges } = data;
-                    let resStartLine = ranges[0].anchor,
-                      resEndLine = ranges[0].head;
-                    if (
-                      resStartLine.line > resEndLine.line ||
-                      (resStartLine.line === resEndLine.line &&
-                        resStartLine.ch > resEndLine.ch)
-                    ) {
-                      resStartLine = ranges[0].head;
-                      resEndLine = ranges[0].anchor;
-                    }
-                    this.setState({
-                      coordinateSelectText: {
-                        anchor: resStartLine,
-                        head: resEndLine,
-                      },
-                    });
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <Grid container>
+                <Grid item xs={9}>
+                  <CodeMirror
+                    className="CodeMirrora"
+                    value={html}
+                    options={{
+                      mode: "htmlmixed",
+                      ...codeMirrorOptions,
+                    }}
+                    onBeforeChange={(editor, data, html) => {
+                      this.setState({ html });
+                    }}
+                    selection={{
+                      ranges: [
+                        {
+                          anchor: { ch: 0, line: 0 },
+                          head: { ch: 1, line: 1 },
+                        },
+                      ],
+                      focus: true, // defaults false if not specified
+                    }}
+                    onSelection={(editor, data) => {
+                      const { ranges } = data;
+                      let resStartLine = ranges[0].anchor,
+                        resEndLine = ranges[0].head;
+                      if (
+                        resStartLine.line > resEndLine.line ||
+                        (resStartLine.line === resEndLine.line &&
+                          resStartLine.ch > resEndLine.ch)
+                      ) {
+                        resStartLine = ranges[0].head;
+                        resEndLine = ranges[0].anchor;
+                      }
+                      this.setState({
+                        coordinateSelectText: {
+                          anchor: resStartLine,
+                          head: resEndLine,
+                        },
+                      });
 
-                    this.handleScrollToViewListComment({
-                      start_line: resStartLine,
-                      end_line: resEndLine,
-                    });
-                  }}
-                />
-              </Grid>
-              <Grid className="wrap-list-comment" xs={3} item>
-                <Grid>
-                  <Grid container className="list-comment">
-                    <ListComment
-                      id={id}
-                      comments={comments}
-                      editComment={editComment}
-                      selectedCommentObj={selectedCommentObj}
-                    />
-                  </Grid>
+                      this.handleScrollToViewListComment({
+                        start_line: resStartLine,
+                        end_line: resEndLine,
+                      });
+                    }}
+                  />
                 </Grid>
-                {role === "TEACHER" ? (
-                  <Grid className="wrap-box-comment" item>
-                    <p>Comment:</p>
-                    <textarea
-                      id="commentTextAread"
-                      name="commentTextAread"
-                      rows="4"
-                      cols="50"
-                    ></textarea>
-
-                    <>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          this.setState({ openDiaglog: true });
-                        }}
-                      >
-                        Chấm điểm
-                      </Button>
-
-                      <button
-                        className="btn-commit-comment"
-                        disabled={
-                          (anchor.line === head.line &&
-                            anchor.ch === head.ch) ||
-                          editComment.isEdit
-                        }
-                        onClick={() =>
-                          this.handleClickSubmitComment({ anchor, head })
-                        }
-                      >
-                        {" "}
-                        Commit{" "}
-                      </button>
-                    </>
+                <Grid className="wrap-list-comment" xs={3} item>
+                  <Grid>
+                    <Grid container className="list-comment">
+                      <ListComment
+                        id={id}
+                        comments={comments}
+                        editComment={editComment}
+                        selectedCommentObj={selectedCommentObj}
+                      />
+                    </Grid>
                   </Grid>
-                ) : null}
+                  {role === "TEACHER" ? (
+                    <Grid className="wrap-box-comment" item>
+                      <p>Comment:</p>
+                      <textarea
+                        id="commentTextAread"
+                        name="commentTextAread"
+                        rows="4"
+                        cols="50"
+                      ></textarea>
+
+                      <>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            this.setState({ openDiaglog: true });
+                          }}
+                        >
+                          Chấm điểm
+                        </Button>
+
+                        <Button
+                          className="btn-commit-comment"
+                          ariant="contained"
+                          color="primary"
+                          variant="contained"
+                          disabled={
+                            (anchor.line === head.line &&
+                              anchor.ch === head.ch) ||
+                            editComment.isEdit
+                          }
+                          onClick={() =>
+                            this.handleClickSubmitComment({ anchor, head })
+                          }
+                        >
+                          {" "}
+                          Commit{" "}
+                        </Button>
+                      </>
+                    </Grid>
+                  ) : null}
+                </Grid>
               </Grid>
-            </Grid>
+            )}
+
             <Dialog
               open={openDiaglog}
               onClose={this.handleClose}
               aria-labelledby="form-dialog-title"
             >
-              <DialogTitle id="form-dialog-title">Thêm bài tập</DialogTitle>
+              <DialogTitle id="form-dialog-title">Điểm bài tập</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
