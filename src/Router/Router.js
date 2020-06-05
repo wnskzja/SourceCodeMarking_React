@@ -26,7 +26,6 @@ const NavRouter = () => {
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
-          <AuthRouter exact path="/home" component={Home} role="TEACHER" />
 
           <AuthRouter
             exact

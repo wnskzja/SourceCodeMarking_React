@@ -37,7 +37,6 @@ const ListClassStudent = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
-        console.log("ListClassStudent -> response", response);
         setListClass(response.data.classes);
         setTotalClass(response.data.total_records);
         setIsLoading(false);
@@ -56,16 +55,14 @@ const ListClassStudent = ({ axios }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <>
-          <MyClass
-            listClass={listClass}
-            type={CLASS_TYPE.CLASS_STORE}
-            activePage={activePage}
-            itemPerPage={pageSize}
-            totalItems={totalClass}
-            handlePageChange={handlePageChange}
-          />
-        </>
+        <MyClass
+          listClass={listClass}
+          type={CLASS_TYPE.CLASS_STORE}
+          activePage={activePage}
+          itemPerPage={pageSize}
+          totalItems={totalClass}
+          handlePageChange={handlePageChange}
+        />
       )}
     </div>
   );

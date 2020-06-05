@@ -30,21 +30,30 @@ const HomeTeacher = ({ axios }) => {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [activePage, setActivePage] = useState(1);
+  const [totalClass, setTotalClass] = useState(0);
+  const pageSize = 12;
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("user")).id;
     const header = {
       "Content-Type": "application/json",
     };
+    const params = {
+      params: {
+        order_type: "ASC",
+        order_by: "username",
+        page_token: activePage,
+        page_size: pageSize,
+      },
+    };
     axios
-      .get(
-        `/users/${id}/classes?order_by=username&order_type=ASC&page_token=1&page_size=20`,
-        {
-          headers: header,
-        }
-      )
+      .get(`/users/${id}/classes`, params, {
+        headers: header,
+      })
       .then((response) => {
         setListClass(response.data.classes);
+        setTotalClass(response.data.total_records);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -90,6 +99,9 @@ const HomeTeacher = ({ axios }) => {
   const clearMessage = () => {
     setMessage("");
   };
+  const handlePageChange = (event, value) => {
+    setActivePage(value);
+  };
 
   return (
     <div className={classes.root}>
@@ -97,7 +109,14 @@ const HomeTeacher = ({ axios }) => {
       {isLoading ? (
         <Loading></Loading>
       ) : (
-        <MyClass listClass={listClass} type={CLASS_TYPE.TEACHER_CLASS} />
+        <MyClass
+          listClass={listClass}
+          type={CLASS_TYPE.TEACHER_CLASS}
+          activePage={activePage}
+          itemPerPage={pageSize}
+          totalItems={totalClass}
+          handlePageChange={handlePageChange}
+        />
       )}
 
       {message ? (

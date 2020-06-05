@@ -24,7 +24,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ClassIcon from "@material-ui/icons/Class";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AddIcon from "@material-ui/icons/Add";
@@ -129,13 +128,11 @@ const Navigation = ({ hidden, createClass }) => {
       link: "/student/listclass",
     },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/student/profile" },
-    { name: "Đăng Xuất", icon: ExitToAppIcon, link: "/logout" },
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
     { name: "Danh Sách Đăng Kí", icon: ListAltIcon, link: "/teacher/list" },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
-    { name: "Đăng Xuất", icon: ExitToAppIcon, link: "/logout" },
   ];
   const handleDrawerOpen = () => {
     setOpen(true);

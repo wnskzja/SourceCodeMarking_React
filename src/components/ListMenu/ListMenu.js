@@ -4,7 +4,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Link } from "react-router-dom";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 import "./ListMenu.scss";
 const useStyles = makeStyles((theme) => ({
@@ -26,8 +27,16 @@ const useStyles = makeStyles((theme) => ({
 
 const ListMenu = ({ listMenu }) => {
   const classes = useStyles();
-  const handleListItemClick = (event, index, name) => {
+  const history = useHistory();
+
+  const handleListItemClick = (name) => {
     localStorage.setItem("title", name);
+  };
+  const logout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("title");
+    history.push("/");
   };
 
   return (
@@ -37,7 +46,7 @@ const ListMenu = ({ listMenu }) => {
           <Link to={item?.link} key={key}>
             <ListItem
               button
-              onClick={(event) => handleListItemClick(event, key, item.name)}
+              onClick={(event) => handleListItemClick(item.name)}
             >
               <ListItemIcon>
                 <item.icon />
@@ -46,6 +55,12 @@ const ListMenu = ({ listMenu }) => {
             </ListItem>
           </Link>
         ))}
+        <ListItem button onClick={logout}>
+          <ListItemIcon>
+            <ExitToAppIcon />
+          </ListItemIcon>
+          <ListItemText primary="Đăng xuất" />
+        </ListItem>
       </List>
     </div>
   );
