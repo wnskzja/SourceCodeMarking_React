@@ -35,6 +35,7 @@ const HomeTeacher = ({ axios }) => {
   const pageSize = 12;
 
   useEffect(() => {
+    localStorage.setItem("title", "Danh Sách Lớp Học");
     const id = JSON.parse(localStorage.getItem("user")).id;
     const header = {
       "Content-Type": "application/json",
@@ -60,9 +61,10 @@ const HomeTeacher = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios]);
+  }, [axios, activePage]);
 
   const createClass = (dataRequest) => {
+    document.body.style.cursor = "wait";
     const id = JSON.parse(localStorage.getItem("user")).id;
     const header = {
       "Content-Type": "application/json",
@@ -72,8 +74,42 @@ const HomeTeacher = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
-        setMessage("Tạo lớp thành công!");
-        setTypeAlert(ALERT_TYPE.SUCCESS);
+        axios
+          .get(
+            `/users/${id}/classes?order_by=username&order_type=ASC&page_token=1&page_size=20`,
+            {
+              headers: header,
+            }
+          )
+          .then((response) => {
+            setMessage("Tạo lớp thành công!");
+            setTypeAlert(ALERT_TYPE.SUCCESS);
+            setListClass(response.data.classes);
+            document.body.style.cursor = "default";
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          .finally(() => {});
+      })
+      .catch((error) => {
+        setMessage("Tạo lớp thất bại!");
+        setTypeAlert(ALERT_TYPE.ERROR);
+      })
+      .finally(() => {});
+  };
+
+  const deleteClass = (idClass) => {
+    document.body.style.cursor = "wait";
+    const id = JSON.parse(localStorage.getItem("user")).id;
+    const header = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .delete(`classes/${idClass}`, {
+        headers: header,
+      })
+      .then((response) => {
         axios
           .get(
             `/users/${id}/classes?order_by=username&order_type=ASC&page_token=1&page_size=20`,
@@ -83,14 +119,19 @@ const HomeTeacher = ({ axios }) => {
           )
           .then((response) => {
             setListClass(response.data.classes);
+            document.body.style.cursor = "default";
+            setMessage("Xóa thành công");
+            setTypeAlert(ALERT_TYPE.SUCCESS);
           })
           .catch((error) => {
             console.error(error);
           })
           .finally(() => {});
+        console.log("response", response);
       })
       .catch((error) => {
-        setMessage("Tạo lớp thất bại!");
+        console.error(error);
+        setMessage("Xóa lớp thất bại!");
         setTypeAlert(ALERT_TYPE.ERROR);
       })
       .finally(() => {});
@@ -116,6 +157,7 @@ const HomeTeacher = ({ axios }) => {
           itemPerPage={pageSize}
           totalItems={totalClass}
           handlePageChange={handlePageChange}
+          deleteClass={(id) => deleteClass(id)}
         />
       )}
 

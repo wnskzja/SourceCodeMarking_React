@@ -31,6 +31,7 @@ const HomeStudent = ({ axios }) => {
   const pageSize = 12;
 
   useEffect(() => {
+    localStorage.setItem("title", "Lớp Học Của Tôi");
     const id = JSON.parse(localStorage.getItem("user")).id;
     const header = {
       "Content-Type": "application/json",

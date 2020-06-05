@@ -119,6 +119,7 @@ const Navigation = ({ hidden, createClass }) => {
   const [openDiaglog, setOpenDialog] = useState(false);
   const [nameClass, setNameClass] = useState("");
   const [desClass, setDesClass] = useState("");
+  const [errorText, setErrorText] = useState("");
   const role = JSON.parse(localStorage.getItem("user")).role;
   const listMenuStudent = [
     { name: "Lớp Học Của Tôi", icon: ClassIcon, link: "/student" },
@@ -157,12 +158,16 @@ const Navigation = ({ hidden, createClass }) => {
   };
   const clickCreate = (e) => {
     e.preventDefault();
-    const dataRequest = {
-      name: nameClass,
-      description: desClass,
-    };
-    createClass(dataRequest);
-    setOpenDialog(false);
+    if (nameClass) {
+      const dataRequest = {
+        name: nameClass,
+        description: desClass,
+      };
+      createClass(dataRequest);
+      setOpenDialog(false);
+    } else {
+      setErrorText("Vui lòng không để trống");
+    }
   };
   return (
     <>
@@ -238,6 +243,8 @@ const Navigation = ({ hidden, createClass }) => {
             name="nameClass"
             label="Tên lớp *"
             type="text"
+            error={errorText}
+            helperText={errorText}
             fullWidth
             onChange={onChange}
           />

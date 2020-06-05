@@ -26,6 +26,7 @@ const MyClass = ({
   itemPerPage,
   totalItems,
   handlePageChange,
+  deleteClass,
 }) => {
   const classes = useStyles();
   return (
@@ -35,7 +36,12 @@ const MyClass = ({
         <Grid container spacing={2}>
           {listClass &&
             listClass.map((item) => (
-              <Class infoClass={item} key={item.id} type={type} />
+              <Class
+                infoClass={item}
+                key={item.id}
+                type={type}
+                deleteClass={deleteClass}
+              />
             ))}
         </Grid>
         <Pagination

@@ -18,6 +18,7 @@ const Profile = ({ axios }) => {
   const classes = useStyles();
 
   useEffect(() => {
+    localStorage.setItem("title", "Thông Tin");
     axios
       .get("users/profile")
       .then((response) => {
