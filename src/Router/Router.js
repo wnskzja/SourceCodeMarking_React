@@ -2,6 +2,7 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import AuthRouter from "./AuthRouter";
+import Admin from "../components/Admin/Admin";
 import ReactContext from "../ReactContext/ReactContext";
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
@@ -27,6 +28,7 @@ const NavRouter = () => {
           <Route exact path="/" component={SignIn} />
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
+<<<<<<< HEAD
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
@@ -37,6 +39,13 @@ const NavRouter = () => {
             component={HomeTeacher}
             role="TEACHER"
           />
+=======
+          <Route exact path="/admin" component={Admin} />
+          <AuthRouter exact path="/home" component={Home} />
+          <AuthRouter exact path="/profile" component={ProfileUser} />
+          <AuthRouter exact path="/teacher" component={HomeTeacher} />
+          <AuthRouter exact path="/teacher/class/:id" component={DetailClass} />
+>>>>>>> Create skeleton for admin.
           <AuthRouter
             exact
             path="/teacher/profile"
