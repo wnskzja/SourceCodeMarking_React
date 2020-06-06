@@ -49,10 +49,6 @@ const ListExerciseAdmin = ({
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   const handleEditExercise = ({ exercise }) => {
     setExercise(exercise);
   };
@@ -141,9 +137,7 @@ const ListExerciseAdmin = ({
         exercise={exercise}
         handleEditExercise={handleEditExercise}
       />
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
     </div>
   );
 };

@@ -49,10 +49,6 @@ const ListClassesAdmin = ({
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   const handleEditClass = ({ clas }) => {
     setClas(clas);
   };
@@ -139,9 +135,7 @@ const ListClassesAdmin = ({
         />
       </Container>
       <DialogEditClass clas={clas} handleEditClass={handleEditClass} />
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
     </div>
   );
 };

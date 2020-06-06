@@ -49,10 +49,6 @@ const ListUserAdmin = ({
 
   useEffect(() => {}, [statusEdit]);
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   const handleEditUser = ({ statusEdit }) => {
     if (statusEdit) {
       setStatusEdit(statusEdit);
@@ -106,9 +102,7 @@ const ListUserAdmin = ({
         user={statusEdit.user}
         handleEditUser={handleEditUser}
       />
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
     </div>
   );
 };

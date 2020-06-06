@@ -76,10 +76,6 @@ const AddUser = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   return (
     <div className={classes.root}>
       <NavigationAdmin />
@@ -90,7 +86,7 @@ const AddUser = (props) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5" className={classes.text}>
-            Đăng kí
+            Thêm User
           </Typography>
           <Formik
             initialValues={{
@@ -254,13 +250,7 @@ const AddUser = (props) => {
         </div>
 
         <div className="wrap-alert-confirm">
-          {message ? (
-            <Alert
-              message={message}
-              clearMessage={clearMessage}
-              type={typeAlert}
-            />
-          ) : null}
+          <Alert message={message} type={typeAlert} />
         </div>
       </Container>
     </div>
