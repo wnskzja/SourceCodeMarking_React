@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Navigation from "../Navigation/Navigation";
-import MyClass from "../MyClass/MyClass";
-import { withAxios } from "../../axios/index";
-import { CLASS_TYPE } from "../../constant/class";
-import Loading from "../Loading/Loading";
+import NavigationAdmin from "../NavigationAdmin";
+import ListUserAdmin from "../ListUserAdmin/ListUserAdmin";
+import { withAxios } from "../../../axios/index";
+import Loading from "../../Loading/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HomeStudent = ({ axios }) => {
+const StudentAdmin = ({ axios }) => {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
   const [listClass, setListClass] = useState([]);
@@ -31,23 +30,23 @@ const HomeStudent = ({ axios }) => {
   const pageSize = 12;
 
   useEffect(() => {
-    localStorage.setItem("title", "Lớp Học Của Tôi");
+    localStorage.setItem("title", "Student");
     const id = JSON.parse(localStorage.getItem("user")).id;
     const header = {
       "Content-Type": "application/json",
     };
     const params = {
       params: {
+        order_type: "ASC",
+        order_by: "username",
         filter_by: "role",
         filter_value: "STUDENT",
-        order_by: "username",
-        order_type: "ASC",
-        page_token: 1,
-        page_size: 20,
+        page_token: activePage,
+        page_size: pageSize,
       },
     };
     axios
-      .get(`/users`, params, {
+      .get(`/users/${id}/classes`, params, {
         headers: header,
       })
       .then((response) => {
@@ -67,20 +66,9 @@ const HomeStudent = ({ axios }) => {
   };
   return (
     <div className={classes.root}>
-      <Navigation />
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <MyClass
-          listClass={listClass}
-          type={CLASS_TYPE.STUDENT_CLASS}
-          activePage={activePage}
-          itemPerPage={pageSize}
-          totalItems={totalClass}
-          handlePageChange={handlePageChange}
-        />
-      )}
+      <NavigationAdmin />
+      {isLoading ? <Loading /> : <ListUserAdmin />}
     </div>
   );
 };
-export default withAxios(HomeStudent);
+export default withAxios(StudentAdmin);
