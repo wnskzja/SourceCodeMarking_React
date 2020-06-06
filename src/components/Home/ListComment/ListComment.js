@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { withStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
 import List from "@material-ui/core/List";
@@ -11,6 +11,7 @@ import { Grid } from "@material-ui/core";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import "./ListComment.scss";
 
 const theme = createMuiTheme({
   overrides: {
@@ -26,10 +27,9 @@ const theme = createMuiTheme({
 const styles = (theme) => ({
   root: {
     width: "100%",
-    maxWidth: 360,
     position: "relative",
     overflow: "auto",
-    maxHeight: 300,
+    maxHeight: 330,
   },
   listSection: {
     backgroundColor: "inherit",
@@ -118,42 +118,52 @@ const ListComment = (props) => {
   };
 
   const handleDisabledExpandExpandPanelComment = (e, comment) => {
-    const { expandComments } = this.state;
+    // const { expandComments } = this.state;
 
-    if (expandComments.length !== 0) {
-      console.log(expandComments);
-      expandComments.forEach((expandComment) => {
-        const { commentExpand } = expandComment;
-        if (commentExpand.id !== comment.id) {
-          const objExpandComment = {
-            commentExpand: comment,
-          };
+    // if (expandComments.length !== 0) {
+    //   console.log(expandComments);
+    //   expandComments.forEach((expandComment) => {
+    //     const { commentExpand } = expandComment;
+    //     if (commentExpand.id !== comment.id) {
+    //       const objExpandComment = {
+    //         commentExpand: comment,
+    //       };
 
-          const newExpandCommentList = expandComments;
-          newExpandCommentList.push(objExpandComment);
-          console.log(newExpandCommentList);
-          this.setState({
-            expandComments: newExpandCommentList,
-          });
-        } else {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      });
-    } else {
-      const objExpandComment = [
-        {
-          commentExpand: comment,
-        },
-      ];
-      this.setState({
-        expandComments: objExpandComment,
-      });
-    }
+    //       const newExpandCommentList = expandComments;
+    //       newExpandCommentList.push(objExpandComment);
+    //       console.log(newExpandCommentList);
+    //       this.setState({
+    //         expandComments: newExpandCommentList,
+    //       });
+    //     } else {
+    //       e.preventDefault();
+    //       e.stopPropagation();
+    //     }
+    //   });
+    // } else {
+    //   const objExpandComment = [
+    //     {
+    //       commentExpand: comment,
+    //     },
+    //   ];
+    //   this.setState({
+    //     expandComments: objExpandComment,
+    //   });
+    // }
+
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const renderListComment = () => {
-    const { id, comments, editComment, selectedCommentObj, classes } = props;
+    const {
+      id,
+      comments,
+      editComment,
+      selectedCommentObj,
+      classes,
+      role,
+    } = props;
     const listComment = [];
     if (comments) {
       comments.forEach((comment, index) => {
@@ -201,7 +211,7 @@ const ListComment = (props) => {
                         p={1}
                         flexGrow={1}
                       >
-                        {`Commnet ${index + 1}: (Line ${durationLine})`}
+                        {`Ghi chú ${index + 1}: (Line ${durationLine})`}
                       </ActionTitle>
                       <ActionTitle
                         className="Asset_area_edit_comment_Title"
@@ -212,21 +222,25 @@ const ListComment = (props) => {
                           handleDisabledExpandExpandPanelComment(e, comment)
                         }
                       >
-                        <ListItemIcon className="wrap-update-delete">
-                          <EditIcon
-                            className="btn-edit-comment"
-                            onClick={() =>
-                              this.handleEditStatusComment({
-                                id: comment.id,
-                                content: comment.content,
-                              })
-                            }
-                          />
-                          <DeleteIcon
-                            className="btn-delete-comment"
-                            onClick={() => this.handleDeleteComment(comment.id)}
-                          />
-                        </ListItemIcon>
+                        {role === "TEACHER" ? (
+                          <ListItemIcon className="wrap-update-delete">
+                            <EditIcon
+                              className="btn-edit-comment"
+                              onClick={() =>
+                                props.handleEditStatusComment({
+                                  id: comment.id,
+                                  content: comment.content,
+                                })
+                              }
+                            />
+                            <DeleteIcon
+                              className="btn-delete-comment"
+                              onClick={() =>
+                                this.handleDeleteComment(comment.id)
+                              }
+                            />
+                          </ListItemIcon>
+                        ) : null}
                       </ActionTitle>
                     </ExpansionPanelSummary>
                     {editComment.id !== comment.id ||
@@ -247,7 +261,7 @@ const ListComment = (props) => {
                             <button
                               className="btn-cancel-comment"
                               onClick={() =>
-                                this.handleCancelEditComment(comment.id)
+                                props.handleCancelEditComment(comment.id)
                               }
                             >
                               {" "}
@@ -256,7 +270,7 @@ const ListComment = (props) => {
                             <button
                               className="btn-edit-comment"
                               onClick={() =>
-                                this.handleEditComment({
+                                props.handleEditComment({
                                   idComment: comment.id,
                                 })
                               }

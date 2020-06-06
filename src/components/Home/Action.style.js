@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ActionTitle = styled.h6`
+export const ActionTitle = styled.h5`
   margin: 0;
   display: flex;
   align-items: center;

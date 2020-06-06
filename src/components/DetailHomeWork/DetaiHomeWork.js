@@ -54,18 +54,19 @@ const DetailHomeWork = ({ axios, exercise }) => {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState("");
   useEffect(() => {
-    const today = new Date();
-    const deadline = new Date(exercise.deadline);
-    if (today > deadline) {
-      setStatusFile(3);
-    }
     axios
       .get(
         `/exercises/${id}/files?filter_by=user_id&filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
       )
       .then((response) => {
         if (response.data.files.length > 0) {
-          setStatusFile(2);
+          const today = new Date();
+          const deadline = new Date(exercise.deadline);
+          if (today > deadline) {
+            setStatusFile(3);
+          } else {
+            setStatusFile(2);
+          }
           setFile(response.data.files[0]);
           if (response.data.files[0].mark) {
             setResult(true);
@@ -125,6 +126,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
         setCursor("pointer");
       })
       .catch((error) => {
+        document.body.style.cursor = "default";
         setMessage("Nộp thất bại!");
         setTypeAlert(ALERT_TYPE.ERROR);
       })
@@ -148,6 +150,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
         }
       })
       .catch((error) => {
+        document.body.style.cursor = "default";
         console.error(error);
       })
       .finally(() => {});
@@ -212,15 +215,30 @@ const DetailHomeWork = ({ axios, exercise }) => {
   const clearMessage = () => {
     setMessage("");
   };
+  const renderDeadline = (time) => {
+    const deadline = new Date(time);
+    const minutes =
+      deadline.getMinutes() < 10
+        ? "0" + deadline.getMinutes()
+        : deadline.getMinutes();
+    const stringDate =
+      deadline.getHours() +
+      ":" +
+      minutes +
+      ", ngày " +
+      deadline.getDate() +
+      " tháng " +
+      (deadline.getMonth() + 1);
+    return <p style={{ fontSize: "13px" }}>Deadline: {stringDate}</p>;
+  };
 
   return (
-    <div className={classes.content}>
-      <div className={classes.appBarSpacer} />
-
+    <>
       {isLoading ? (
         <Loading />
       ) : (
-        <>
+        <div className={classes.content}>
+          <div className={classes.appBarSpacer} />
           {message ? (
             <Alert
               message={message}
@@ -241,6 +259,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
                   <Grid item xs={8}>
                     <Paper elevation={0} className={classes.paper}>
                       <p>Mô tả: {exercise.description}</p>
+                      {renderDeadline(exercise.deadline)}
                     </Paper>
                   </Grid>
                   <Grid item xs={4}>
@@ -256,9 +275,9 @@ const DetailHomeWork = ({ axios, exercise }) => {
               </Container>
             </>
           )}
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

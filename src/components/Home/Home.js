@@ -419,6 +419,7 @@ class Home extends Component {
       lineNumbers: true,
       scrollbarStyle: null,
       lineWrapping: true,
+      readOnly: true,
     };
 
     return (
@@ -429,7 +430,7 @@ class Home extends Component {
               <Loading />
             ) : (
               <Grid container>
-                <Grid item xs={9}>
+                <Grid item xs={7}>
                   <CodeMirror
                     className="CodeMirrora"
                     value={html}
@@ -475,7 +476,8 @@ class Home extends Component {
                     }}
                   />
                 </Grid>
-                <Grid className="wrap-list-comment" xs={3} item>
+                <Grid className="wrap-list-comment" xs={5} item>
+                  <h2 style={{ textAlign: "center" }}>Ghi chú</h2>
                   <Grid>
                     <Grid container className="list-comment">
                       <ListComment
@@ -483,12 +485,15 @@ class Home extends Component {
                         comments={comments}
                         editComment={editComment}
                         selectedCommentObj={selectedCommentObj}
+                        handleEditStatusComment={this.handleEditStatusComment}
+                        handleEditComment={this.handleEditComment}
+                        handleCancelEditComment={this.handleCancelEditComment}
+                        role={role}
                       />
                     </Grid>
                   </Grid>
                   {role === "TEACHER" ? (
                     <Grid className="wrap-box-comment" item>
-                      <p>Comment:</p>
                       <textarea
                         id="commentTextAread"
                         name="commentTextAread"
@@ -522,7 +527,7 @@ class Home extends Component {
                           }
                         >
                           {" "}
-                          Commit{" "}
+                          Ghi chú{" "}
                         </Button>
                       </>
                     </Grid>

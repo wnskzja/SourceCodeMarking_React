@@ -85,9 +85,11 @@ const HomeTeacher = ({ axios }) => {
             setMessage("Tạo lớp thành công!");
             setTypeAlert(ALERT_TYPE.SUCCESS);
             setListClass(response.data.classes);
+            setTotalClass(response.data.total_records);
             document.body.style.cursor = "default";
           })
           .catch((error) => {
+            document.body.style.cursor = "default";
             console.error(error);
           })
           .finally(() => {});
@@ -119,15 +121,16 @@ const HomeTeacher = ({ axios }) => {
           )
           .then((response) => {
             setListClass(response.data.classes);
+            setTotalClass(response.data.total_records);
             document.body.style.cursor = "default";
             setMessage("Xóa thành công");
             setTypeAlert(ALERT_TYPE.SUCCESS);
           })
           .catch((error) => {
             console.error(error);
+            document.body.style.cursor = "default";
           })
           .finally(() => {});
-        console.log("response", response);
       })
       .catch((error) => {
         console.error(error);

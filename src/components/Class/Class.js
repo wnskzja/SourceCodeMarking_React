@@ -78,12 +78,12 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
       .then((response) => {
         document.body.style.cursor = "default";
         setCursor("pointer");
-        setMessage("Enroll lớp thành công");
+        setMessage("Tham gia lớp thành công");
         setTypeAlert(ALERT_TYPE.SUCCESS);
       })
       .catch((error) => {
-        console.error(error);
-        setMessage("Enroll lớp thất bại!");
+        document.body.style.cursor = "default";
+        setMessage("Bạn đã tham gia lớp!");
         setTypeAlert(ALERT_TYPE.ERROR);
       })
       .finally(() => {});
@@ -104,7 +104,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
                 {infoClass.name}
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
-                GV: {infoClass.teachers[0].name}
+                Giáo Viên: {infoClass.teachers[0].name}
               </Typography>
               <Typography variant="body2" component="p">
                 Mô tả: {infoClass.description}
@@ -118,7 +118,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
                 onClick={enrollClass}
                 style={{ cursor }}
               >
-                Enroll
+                Tham gia
               </Button>
             </CardActions>
           </Card>
@@ -138,7 +138,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
                   {infoClass.name}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                  GV: {infoClass.teachers[0].name}
+                  Giáo Viên: {infoClass.teachers[0].name}
                 </Typography>
                 <Typography variant="body2" component="p">
                   Mô tả: {infoClass.description}
@@ -191,7 +191,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
                 style={{ cursor: "pointer" }}
                 onClick={clickClassTeacher}
               >
-                GV: {infoClass.teachers[0].name}
+                Giáo Viên: {infoClass.teachers[0].name}
               </Typography>
               <Typography
                 variant="body2"

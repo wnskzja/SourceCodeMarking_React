@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import Class from "../Class/Class";
 import { withAxios } from "../../axios/index";
 import Pagination from "../Pagination/Pagination";
+import { CLASS_TYPE } from "../../constant/class";
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -44,12 +45,20 @@ const MyClass = ({
               />
             ))}
         </Grid>
-        <Pagination
-          activePage={activePage}
-          itemPerPage={itemPerPage}
-          totalItems={totalItems}
-          handlePageChange={(e, value) => handlePageChange(e, value)}
-        />
+        {listClass.length > 0 ? (
+          <Pagination
+            activePage={activePage}
+            itemPerPage={itemPerPage}
+            totalItems={totalItems}
+            handlePageChange={(e, value) => handlePageChange(e, value)}
+          />
+        ) : (
+          <>
+            {type === CLASS_TYPE.STUDENT_CLASS ? (
+              <h3>Bạn chưa tham gia lớp</h3>
+            ) : null}
+          </>
+        )}
       </Container>
     </div>
   );
