@@ -67,7 +67,7 @@ const SignIn = (props) => {
   const { from } = props.location.state ? props.location.state : "";
   const classes = useStyles();
   const { axios } = props;
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [isSignIn, setIsSignIn] = useState(false);
   const [dataResponseService, setDataResponseService] = useState({});
   const history = useHistory();
@@ -128,10 +128,6 @@ const SignIn = (props) => {
       .finally(() => {});
   };
 
-  const componentClickedFacebook = () => {
-    console.log("Button Facebook login clicked");
-  };
-
   const responseFacebook = (response) => {
     const { name, email } = response;
     const data = {
@@ -189,11 +185,11 @@ const SignIn = (props) => {
             }}
             validationSchema={Yup.object({
               password: Yup.string()
-                .min(6, "At least 6 characters")
-                .required("Required"),
+                .min(6, "Ít nhất 6 kí tự")
+                .required("Vui lòng không bỏ trống"),
               email: Yup.string()
-                .email("Invalid email address")
-                .required("Required"),
+                .email("Không đúng cấu trúc email")
+                .required("Vui lòng không bỏ trống"),
             })}
             onSubmit={(values, { setSubmitting }) => {
               const data = {
@@ -227,8 +223,15 @@ const SignIn = (props) => {
                   }
                 })
                 .catch((error) => {
+                  if (
+                    error.response.data.error ===
+                    "code=401, message=Invalid email or password."
+                  ) {
+                    setSubmitError("Email hoặc mật khẩu không đúng!");
+                  } else {
+                    setSubmitError("Tài khoản chưa được xác thực!");
+                  }
                   setSubmitting(false);
-                  setSubmitError(true);
                 })
                 .finally(() => {});
             }}
@@ -263,9 +266,7 @@ const SignIn = (props) => {
                   error={Boolean(touched.password && errors.password)}
                 />
                 {submitError ? (
-                  <div className="ErrorForm">
-                    You enter wrong email or password
-                  </div>
+                  <div className="ErrorForm">{submitError}</div>
                 ) : (
                   ""
                 )}
@@ -308,7 +309,6 @@ const SignIn = (props) => {
                 className="btn-facebook-login"
                 appId={`${process.env.REACT_APP_ID_APP_FACEBOOK}`}
                 fields="name,email,picture"
-                onClick={componentClickedFacebook}
                 callback={responseFacebook}
               />
             </div>

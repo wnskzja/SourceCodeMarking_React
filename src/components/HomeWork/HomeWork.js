@@ -212,57 +212,61 @@ const HomeWork = ({ axios }) => {
         {isLoading ? (
           <Loading />
         ) : (
-          <List component="nav" className={classes.list}>
-            {listEx &&
-              listEx.map((item) => (
-                <div key={item.id}>
-                  <ListItem
-                    button
-                    onClick={() => selectExercise(item.name, item.id)}
-                  >
-                    <ListItemIcon>
-                      <AssignmentIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={item.name} />
-                    <ListItemSecondaryAction>
-                      <Grid container xs={12} item>
-                        {renderDeadline(item.deadline)}
-                        {role === "TEACHER" ? (
-                          <IconButton onClick={() => deleteEx(item.id)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        ) : null}
-                      </Grid>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                  <Divider />
+          <>
+            <List component="nav" className={classes.list}>
+              {listEx &&
+                listEx.map((item) => (
+                  <div key={item.id}>
+                    <ListItem
+                      button
+                      onClick={() => selectExercise(item.name, item.id)}
+                    >
+                      <ListItemIcon>
+                        <AssignmentIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={item.name} />
+                      <ListItemSecondaryAction>
+                        <Grid container xs={12} item>
+                          {renderDeadline(item.deadline)}
+                          {role === "TEACHER" ? (
+                            <IconButton onClick={() => deleteEx(item.id)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          ) : null}
+                        </Grid>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                    <Divider />
+                  </div>
+                ))}
+            </List>
+            {role === "TEACHER" ? (
+              <Box align="center">
+                <div>
+                  <Fade in={process} unmountOnExit>
+                    <CircularProgress />
+                  </Fade>
                 </div>
-              ))}
-          </List>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClickOpen}
+                  disabled={process}
+                >
+                  Thêm bài tập
+                </Button>
+              </Box>
+            ) : null}
+            {listEx.length > 0 ? (
+              <Pagination
+                activePage={activePage}
+                itemPerPage={pageSize}
+                totalItems={totalEx}
+                handlePageChange={handlePageChange}
+              />
+            ) : null}
+          </>
         )}
-        {role === "TEACHER" ? (
-          <Box align="center">
-            <div>
-              <Fade in={process} unmountOnExit>
-                <CircularProgress />
-              </Fade>
-            </div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleClickOpen}
-              disabled={process}
-            >
-              Thêm bài tập
-            </Button>
-          </Box>
-        ) : null}
-        <Pagination
-          activePage={activePage}
-          itemPerPage={pageSize}
-          totalItems={totalEx}
-          handlePageChange={handlePageChange}
-        />
 
         <Dialog
           open={openDiaglog}
