@@ -2,14 +2,13 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import AuthRouter from "./AuthRouter";
-import Admin from "../components/Admin/NavigationAdmin";
-import Dashboard from "../components/Admin/Dashboard/Dashboard";
-import TeacherAdmin from "../components/Admin/TeacherAdmin/TeacherAdmin";
-import StudentAdmin from "../components/Admin/StudentAdmin/StudentAdmin";
 import ReactContext from "../ReactContext/ReactContext";
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
-import Home from "../components/Home/Home";
+import Dashboard from "../components/Admin/Dashboard/Dashboard";
+import TeacherAdmin from "../components/Admin/TeacherAdmin/TeacherAdmin";
+import StudentAdmin from "../components/Admin/StudentAdmin/StudentAdmin";
+import AddUser from "../components/Admin/AddUser/AddUser";
 import HomeTeacher from "../components/HomeTeacher/HomeTeacher";
 import HomeStudent from "../components/HomeStudent/HomeStudent";
 import ListClassStudent from "../components/ListClassStudent/ListClassStudent";
@@ -31,18 +30,14 @@ const NavRouter = () => {
           <Route exact path="/" component={SignIn} />
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
-
-          <AuthRouter exact path="/home" component={Home} />
-          <AuthRouter exact path="/profile" component={ProfileUser} />
-          <AuthRouter exact path="/teacher" component={HomeTeacher} />
-          <AuthRouter exact path="/teacher/class/:id" component={DetailClass} />
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
 
-          <Route exact path="/admin" component={Admin} />
+          <Route exact path="/admin" component={Dashboard} />
           <Route exact path="/admin/teacher" component={TeacherAdmin} />
           <Route exact path="/admin/student" component={StudentAdmin} />
+          <Route exact path="/admin/adduser" component={AddUser} />
 
           <AuthRouter
             exact
@@ -50,8 +45,6 @@ const NavRouter = () => {
             component={HomeTeacher}
             role="TEACHER"
           />
-          <Route exact path="/admin" component={Admin} />
-
           <AuthRouter
             exact
             path="/teacher/profile"

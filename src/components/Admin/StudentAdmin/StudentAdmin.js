@@ -24,35 +24,33 @@ const useStyles = makeStyles((theme) => ({
 const StudentAdmin = ({ axios }) => {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
-  const [listClass, setListClass] = useState([]);
+  const [listUser, setListUser] = useState([]);
   const [activePage, setActivePage] = useState(1);
-  const [totalClass, setTotalClass] = useState(0);
-  const pageSize = 12;
+  const [totalUser, setTotalUser] = useState(0);
+  const pageSize = 10;
 
   useEffect(() => {
-    localStorage.setItem("title", "Student");
-    const id = JSON.parse(localStorage.getItem("user")).id;
+    localStorage.setItem("title", "Student Admin");
     const header = {
       "Content-Type": "application/json",
     };
     const params = {
       params: {
-        order_type: "ASC",
-        order_by: "username",
         filter_by: "role",
         filter_value: "STUDENT",
-        page_token: activePage,
-        page_size: pageSize,
+        order_by: "username",
+        order_type: "ASC",
+        page_token: 1,
+        page_size: 10,
       },
     };
     axios
-      .get(`/users/${id}/classes`, params, {
+      .get(`/users`, params, {
         headers: header,
       })
       .then((response) => {
-        console.log(response);
-        // setListClass(response.data.classes);
-        // setTotalClass(response.data.total_records);
+        setListUser(response.data.users);
+        setTotalUser(response.data.users.length);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -67,7 +65,17 @@ const StudentAdmin = ({ axios }) => {
   return (
     <div className={classes.root}>
       <NavigationAdmin />
-      {isLoading ? <Loading /> : <ListUserAdmin />}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <ListUserAdmin
+          activePage={activePage}
+          listUser={listUser}
+          itemPerPage={pageSize}
+          totalUser={totalUser}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

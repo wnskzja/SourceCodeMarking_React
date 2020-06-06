@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -12,6 +12,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Alert from "../../Alert/Alert";
+import DialogEditUser from "../DialogEditUser/DialogEditUser";
+import { ALERT_TYPE } from "../../../constant/alert";
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -34,11 +37,35 @@ const ListUserAdmin = ({
   type,
   activePage,
   itemPerPage,
-  totalItems,
+  totalUser,
   handlePageChange,
   deleteClass,
 }) => {
   const classes = useStyles();
+  const [statusEdit, setStatusEdit] = useState({ status: false, user: {} });
+  const [isDelete, setIsDelete] = useState(false);
+  const [message, setMessage] = useState("");
+  const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
+
+  useEffect(() => {}, [statusEdit]);
+
+  const clearMessage = () => {
+    setMessage("");
+  };
+
+  const handleEditUser = ({ statusEdit }) => {
+    if (statusEdit) {
+      setStatusEdit(statusEdit);
+      console.log("Edit USer");
+    }
+  };
+
+  const handleDelete = ({ isDelete }) => {
+    if (isDelete) {
+      setMessage("Delete user");
+      setIsDelete(false);
+    }
+  };
 
   return (
     <div className={classes.content}>
@@ -49,7 +76,7 @@ const ListUserAdmin = ({
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Username</TableCell>
+                  <TableCell>Họ Tên</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell align="right"></TableCell>
                 </TableRow>
@@ -57,7 +84,12 @@ const ListUserAdmin = ({
               <TableBody>
                 {listUser &&
                   listUser.map((user) => (
-                    <User key={`admin-user-${user.id}`} user={user} />
+                    <User
+                      key={`admin-user-${user.id}`}
+                      user={user}
+                      handleDelete={handleDelete}
+                      handleEditUser={handleEditUser}
+                    />
                   ))}
               </TableBody>
             </Table>
@@ -66,10 +98,18 @@ const ListUserAdmin = ({
         <Pagination
           activePage={activePage}
           itemPerPage={itemPerPage}
-          totalItems={totalItems}
+          totalItems={totalUser}
           handlePageChange={(e, value) => handlePageChange(e, value)}
         />
       </Container>
+      <DialogEditUser
+        isEdit={statusEdit.status}
+        user={statusEdit.user}
+        handleEditUser={handleEditUser}
+      />
+      {message ? (
+        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
+      ) : null}
     </div>
   );
 };

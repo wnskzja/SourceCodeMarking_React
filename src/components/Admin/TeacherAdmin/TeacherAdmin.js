@@ -27,11 +27,10 @@ const TeacherAdmin = ({ axios }) => {
   const [listUser, setListUser] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalUser, setTotalUser] = useState(0);
-  const pageSize = 12;
+  const pageSize = 10;
 
   useEffect(() => {
     localStorage.setItem("title", "Teacher Admin");
-    const id = JSON.parse(localStorage.getItem("user")).id;
     const header = {
       "Content-Type": "application/json",
     };
@@ -42,7 +41,7 @@ const TeacherAdmin = ({ axios }) => {
         order_by: "username",
         order_type: "ASC",
         page_token: 1,
-        page_size: 20,
+        page_size: 10,
       },
     };
     axios
@@ -70,7 +69,10 @@ const TeacherAdmin = ({ axios }) => {
         <Loading />
       ) : (
         <ListUserAdmin
+          activePage={activePage}
           listUser={listUser}
+          itemPerPage={pageSize}
+          totalUser={totalUser}
           handlePageChange={handlePageChange}
         />
       )}

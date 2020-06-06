@@ -112,9 +112,14 @@ const NavigationAdmin = () => {
   const role = JSON.parse(localStorage.getItem("user")).role;
 
   const listMenuAdmin = [
-    { name: "Dashboard", icon: DashboardIcon, link: "/admin" },
-    { name: "Teacher", icon: SupervisorAccountIcon, link: "/admin/teacher" },
-    { name: "Student", icon: PersonIcon, link: "/admin/student" },
+    { name: "Thống kê", icon: DashboardIcon, link: "/admin" },
+    {
+      name: "Danh sách giáo viên",
+      icon: SupervisorAccountIcon,
+      link: "/admin/teacher",
+    },
+    { name: "Danh sách học sinh", icon: PersonIcon, link: "/admin/student" },
+    { name: "Thêm user", icon: PersonIcon, link: "/admin/adduser" },
   ];
 
   return (
