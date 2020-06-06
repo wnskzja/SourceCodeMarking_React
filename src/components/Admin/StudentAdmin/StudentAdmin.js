@@ -57,7 +57,7 @@ const StudentAdmin = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, activePage]);
+  }, [axios, activePage, listUser]);
 
   const handlePageChange = (event, value) => {
     setActivePage(value);

@@ -9,6 +9,8 @@ import Dashboard from "../components/Admin/Dashboard/Dashboard";
 import TeacherAdmin from "../components/Admin/TeacherAdmin/TeacherAdmin";
 import StudentAdmin from "../components/Admin/StudentAdmin/StudentAdmin";
 import AddUser from "../components/Admin/AddUser/AddUser";
+import ClassesAdmin from "../components/Admin/ClassesAdmin/ClassesAdmin";
+import ExerciseAdmin from "../components/Admin/ExerciseAdmin/ExerciseAdmin";
 import HomeTeacher from "../components/HomeTeacher/HomeTeacher";
 import HomeStudent from "../components/HomeStudent/HomeStudent";
 import ListClassStudent from "../components/ListClassStudent/ListClassStudent";
@@ -38,6 +40,8 @@ const NavRouter = () => {
           <Route exact path="/admin/teacher" component={TeacherAdmin} />
           <Route exact path="/admin/student" component={StudentAdmin} />
           <Route exact path="/admin/adduser" component={AddUser} />
+          <Route exact path="/admin/classes" component={ClassesAdmin} />
+          <Route exact path="/admin/exercise" component={ExerciseAdmin} />
 
           <AuthRouter
             exact

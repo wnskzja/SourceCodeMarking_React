@@ -15,6 +15,9 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import ListMenu from "../ListMenu/ListMenu";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PersonIcon from "@material-ui/icons/Person";
+import ClassIcon from "@material-ui/icons/Class";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 
 const drawerWidth = 240;
@@ -119,7 +122,9 @@ const NavigationAdmin = () => {
       link: "/admin/teacher",
     },
     { name: "Danh sách học sinh", icon: PersonIcon, link: "/admin/student" },
-    { name: "Thêm user", icon: PersonIcon, link: "/admin/adduser" },
+    { name: "Danh sách lớp học", icon: ClassIcon, link: "/admin/classes" },
+    { name: "Danh sách bài tập", icon: MenuBookIcon, link: "/admin/exercise" },
+    { name: "Thêm user", icon: AddBoxIcon, link: "/admin/adduser" },
   ];
 
   return (

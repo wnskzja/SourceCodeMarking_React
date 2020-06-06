@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import NavigationAdmin from "../NavigationAdmin";
-import ListUserAdmin from "../ListUserAdmin/ListUserAdmin";
+import ListClassesAdmin from "../ListClassesAdmin/ListClassesAdmin";
+
 import { withAxios } from "../../../axios/index";
 import Loading from "../../Loading/Loading";
 
@@ -21,23 +22,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TeacherAdmin = ({ axios }) => {
+const ClassesAdmin = ({ axios }) => {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
-  const [listUser, setListUser] = useState([]);
+  const [listClass, setListClass] = useState([]);
   const [activePage, setActivePage] = useState(1);
-  const [totalUser, setTotalUser] = useState(0);
+  const [totalClass, setTotalClass] = useState(0);
   const pageSize = 10;
 
   useEffect(() => {
-    localStorage.setItem("title", "Teacher Admin");
+    localStorage.setItem("title", "Class Admin");
     const header = {
       "Content-Type": "application/json",
     };
     const params = {
       params: {
-        filter_by: "role",
-        filter_value: "TEACHER",
         order_by: "username",
         order_type: "ASC",
         page_token: 1,
@@ -45,19 +44,19 @@ const TeacherAdmin = ({ axios }) => {
       },
     };
     axios
-      .get(`/users`, params, {
+      .get(`/classes`, params, {
         headers: header,
       })
       .then((response) => {
-        setListUser(response.data.users);
-        setTotalUser(response.data.users.length);
+        setListClass(response.data.classes);
+        setTotalClass(response.data.classes.length);
         setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, activePage, listUser]);
+  }, [axios, activePage, listClass]);
 
   const handlePageChange = (event, value) => {
     setActivePage(value);
@@ -68,15 +67,15 @@ const TeacherAdmin = ({ axios }) => {
       {isLoading ? (
         <Loading />
       ) : (
-        <ListUserAdmin
+        <ListClassesAdmin
           activePage={activePage}
-          listUser={listUser}
+          listClass={listClass}
           itemPerPage={pageSize}
-          totalUser={totalUser}
+          totalClass={totalClass}
           handlePageChange={handlePageChange}
         />
       )}
     </div>
   );
 };
-export default withAxios(TeacherAdmin);
+export default withAxios(ClassesAdmin);

@@ -234,7 +234,7 @@ const AddUser = (props) => {
                   </Grid>
                 </Grid>
                 {submitError ? (
-                  <div className="ErrorForm">This account already existed</div>
+                  <div className="ErrorForm">Tài khoản này đã tồn tại</div>
                 ) : (
                   ""
                 )}

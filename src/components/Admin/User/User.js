@@ -12,7 +12,7 @@ const User = ({ user, axios, handleDelete, handleEditUser }) => {
       "Content-Type": "application/json",
     };
     axios
-      .get(`/users/${user.id}`, {
+      .delete(`/users/${user.id}`, {
         headers: header,
       })
       .then((response) => {

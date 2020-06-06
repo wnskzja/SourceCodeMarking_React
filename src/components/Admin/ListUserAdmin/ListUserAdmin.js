@@ -56,7 +56,6 @@ const ListUserAdmin = ({
   const handleEditUser = ({ statusEdit }) => {
     if (statusEdit) {
       setStatusEdit(statusEdit);
-      console.log("Edit USer");
     }
   };
 

@@ -9,7 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { withAxios } from "../../../axios/index";
 
 function SimpleDialog(props) {
-  const { onClose, selectedValue, open, user, axios } = props;
+  const { onClose, selectedValue, open, user, axios, handleEditUser } = props;
   const [fullname, setFullname] = useState("");
   const handleClose = () => {
     onClose(selectedValue);
@@ -24,17 +24,21 @@ function SimpleDialog(props) {
       "Content-Type": "application/json",
     };
     console.log(fullname);
-    const data = {};
+    const data = {
+      name: fullname ? fullname : user?.name,
+    };
 
-    // axios
-    //   .put("/users/", data, {
-    //     headers: header,
-    //   })
-    //   .then((response) => {})
-    //   .catch((error) => {
-    //     console.log(error);
-    //   })
-    //   .finally(() => {});
+    axios
+      .put(`/users/${user.id}`, data, {
+        headers: header,
+      })
+      .then((response) => {
+        handleEditUser({ statusEdit: { status: false, user: "" } });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {});
   };
 
   return (
@@ -51,7 +55,7 @@ function SimpleDialog(props) {
           id="username"
           label="Họ Tên"
           type="text"
-          defaultValue={user.name}
+          defaultValue={user?.name}
           onChange={handleEditFullName}
           fullWidth
         />
@@ -61,7 +65,7 @@ function SimpleDialog(props) {
           id="email"
           label="Email"
           type="email"
-          value={user.email}
+          value={user?.email}
           disabled={true}
           fullWidth
         />
@@ -100,7 +104,9 @@ const DialogEditUser = ({ isEdit, user, axios, handleEditUser }) => {
         user={user}
         selectedValue={selectedValue}
         open={isEdit ? isEdit : false}
+        handleEditUser={handleEditUser}
         onClose={handleClose}
+        axios={axios}
       />
     </div>
   );
