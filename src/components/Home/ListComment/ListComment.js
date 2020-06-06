@@ -29,7 +29,7 @@ const styles = (theme) => ({
     width: "100%",
     position: "relative",
     overflow: "auto",
-    maxHeight: 330,
+    maxHeight: 300,
   },
   listSection: {
     backgroundColor: "inherit",

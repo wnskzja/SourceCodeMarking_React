@@ -25,14 +25,10 @@ const User = ({ user, axios, handleDelete, handleEditUser }) => {
   };
   return (
     <>
-      <TableRow key={`table-row-admin-user-${user.id}`}>
-        <TableCell component="th" scope="row">
-          {user.name}
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {user.email}
-        </TableCell>
-        <TableCell scope="row" align="right">
+      <TableRow key={user.id}>
+        <TableCell>{user.name}</TableCell>
+        <TableCell>{user.email}</TableCell>
+        <TableCell>
           <IconButton
             aria-label="edit"
             onClick={() =>

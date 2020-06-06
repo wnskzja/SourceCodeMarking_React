@@ -65,30 +65,28 @@ const ListUserAdmin = ({
   return (
     <div className={classes.content}>
       <div className={classes.appBarSpacer} />
-      <Container maxWidth="lg" className={classes.container}>
+      <Container maxWidth="md" className={classes.container}>
         <Grid container spacing={2}>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Họ Tên</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell align="right"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {listUser &&
-                  listUser.map((user) => (
-                    <User
-                      key={`admin-user-${user.id}`}
-                      user={user}
-                      handleDelete={handleDelete}
-                      handleEditUser={handleEditUser}
-                    />
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Họ Tên</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {listUser &&
+                listUser.map((user) => (
+                  <User
+                    key={`admin-user-${user.id}`}
+                    user={user}
+                    handleDelete={handleDelete}
+                    handleEditUser={handleEditUser}
+                  />
+                ))}
+            </TableBody>
+          </Table>
         </Grid>
         <Pagination
           activePage={activePage}

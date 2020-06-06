@@ -79,6 +79,8 @@ const SignIn = (props) => {
         history.push("/student");
       } else if (user.role === "TEACHER") {
         history.push("/teacher");
+      } else {
+        history.push("/admin");
       }
     }
   }, [history]);
@@ -144,6 +146,7 @@ const SignIn = (props) => {
         headers: header,
       })
       .then((response) => {
+        console.log("responseFacebook -> response", response);
         if (response?.data?.role) {
           localStorage.setItem("user", JSON.stringify(response?.data));
           localStorage.setItem("token", response?.headers["access-token"]);
@@ -219,6 +222,8 @@ const SignIn = (props) => {
                       history.push("/student");
                     } else if (response?.data.role === "TEACHER") {
                       history.push("/teacher");
+                    } else {
+                      history.push("/admin");
                     }
                   }
                 })
