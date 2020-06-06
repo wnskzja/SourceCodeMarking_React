@@ -177,10 +177,6 @@ const HomeWork = ({ axios }) => {
     }
   };
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   const deleteEx = (id) => {
     setProcess(true);
     axios
@@ -204,9 +200,7 @@ const HomeWork = ({ axios }) => {
   return (
     <div className={classes.content}>
       <div className={classes.appBarSpacer} />
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
       <Container maxWidth="md">
         <h2>Bài Tập</h2>
         {isLoading ? (
@@ -282,7 +276,7 @@ const HomeWork = ({ axios }) => {
               name="name"
               label="Tên bài tập"
               type="text"
-              error={errorText}
+              error={Boolean(errorText)}
               helperText={errorText}
               fullWidth
               onChange={onChange}

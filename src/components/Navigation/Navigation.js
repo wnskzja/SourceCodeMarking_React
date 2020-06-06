@@ -136,7 +136,6 @@ const Navigation = ({ hidden, createClass }) => {
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
-    { name: "Danh Sách Đăng Kí", icon: ListAltIcon, link: "/teacher/list" },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
   ];
 
@@ -258,7 +257,7 @@ const Navigation = ({ hidden, createClass }) => {
             name="nameClass"
             label="Tên lớp *"
             type="text"
-            error={errorText}
+            error={Boolean(errorText)}
             helperText={errorText}
             fullWidth
             onChange={onChange}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -7,10 +7,14 @@ const AlertSnackbar = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
-const Alert = ({ message, clearMessage, type }) => {
-  const [open, setOpen] = useState(true);
+const Alert = ({ message, type }) => {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (message) {
+      setOpen(true);
+    }
+  }, [message]);
   const handleClose = () => {
-    clearMessage();
     setOpen(false);
   };
 
@@ -32,13 +36,11 @@ const Alert = ({ message, clearMessage, type }) => {
 
 Alert.propTypes = {
   message: PropTypes.string,
-  clearMessage: PropTypes.func,
   type: PropTypes.string,
 };
 Alert.defaultProps = {
   message: "",
-  clearMessage: () => {},
-  type: "info",
+  type: "",
 };
 
 export default Alert;

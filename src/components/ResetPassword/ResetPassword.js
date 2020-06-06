@@ -59,10 +59,6 @@ const ResetPassword = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -141,9 +137,7 @@ const ResetPassword = (props) => {
         </Formik>
       </div>
 
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
       <Box mt={5}>
         <Copyright />
       </Box>

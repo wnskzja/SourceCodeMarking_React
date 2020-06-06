@@ -15,7 +15,6 @@ import { CLASS_TYPE } from "../../constant/class";
 import Alert from "../Alert/Alert";
 import { ALERT_TYPE } from "../../constant/alert";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/MenuList";
 import { useHistory } from "react-router-dom";
@@ -208,14 +207,9 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
         break;
     }
   };
-  const clearMessage = () => {
-    setMessage("");
-  };
   return (
     <Grid xs={4} item>
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
       {renderClass()}
     </Grid>
   );

@@ -212,9 +212,6 @@ const DetailHomeWork = ({ axios, exercise }) => {
     }
   };
 
-  const clearMessage = () => {
-    setMessage("");
-  };
   const renderDeadline = (time) => {
     const deadline = new Date(time);
     const minutes =
@@ -239,13 +236,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
       ) : (
         <div className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {message ? (
-            <Alert
-              message={message}
-              clearMessage={clearMessage}
-              type={typeAlert}
-            />
-          ) : null}
+          <Alert message={message} type={typeAlert} />
           <h2 style={{ textAlign: "center" }}>{exercise.name}</h2>
           {result ? (
             <div className={classes.home}>
