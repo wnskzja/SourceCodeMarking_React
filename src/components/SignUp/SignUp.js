@@ -64,10 +64,6 @@ const SignUp = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -246,13 +242,7 @@ const SignUp = (props) => {
       </div>
 
       <div className="wrap-alert-confirm">
-        {message ? (
-          <Alert
-            message={message}
-            clearMessage={clearMessage}
-            type={typeAlert}
-          />
-        ) : null}
+        <Alert message={message} type={typeAlert} />
       </div>
 
       <Box mt={5}>

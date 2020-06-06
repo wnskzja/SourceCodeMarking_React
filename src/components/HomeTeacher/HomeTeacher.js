@@ -140,9 +140,6 @@ const HomeTeacher = ({ axios }) => {
       .finally(() => {});
   };
 
-  const clearMessage = () => {
-    setMessage("");
-  };
   const handlePageChange = (event, value) => {
     setActivePage(value);
   };
@@ -164,9 +161,7 @@ const HomeTeacher = ({ axios }) => {
         />
       )}
 
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
     </div>
   );
 };

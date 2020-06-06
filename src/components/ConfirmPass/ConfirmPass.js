@@ -60,10 +60,6 @@ const ConfirmPass = (props) => {
   const history = useHistory();
   const { token } = useParams();
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -166,9 +162,7 @@ const ConfirmPass = (props) => {
         </Formik>
       </div>
 
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
       <Box mt={5}>
         <Copyright />
       </Box>
