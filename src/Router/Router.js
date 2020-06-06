@@ -5,7 +5,12 @@ import AuthRouter from "./AuthRouter";
 import ReactContext from "../ReactContext/ReactContext";
 import SignIn from "../components/SignIn/SignIn";
 import SignUp from "../components/SignUp/SignUp";
-import Home from "../components/Home/Home";
+import Dashboard from "../components/Admin/Dashboard/Dashboard";
+import TeacherAdmin from "../components/Admin/TeacherAdmin/TeacherAdmin";
+import StudentAdmin from "../components/Admin/StudentAdmin/StudentAdmin";
+import AddUser from "../components/Admin/AddUser/AddUser";
+import ClassesAdmin from "../components/Admin/ClassesAdmin/ClassesAdmin";
+import ExerciseAdmin from "../components/Admin/ExerciseAdmin/ExerciseAdmin";
 import HomeTeacher from "../components/HomeTeacher/HomeTeacher";
 import HomeStudent from "../components/HomeStudent/HomeStudent";
 import ListClassStudent from "../components/ListClassStudent/ListClassStudent";
@@ -31,6 +36,13 @@ const NavRouter = () => {
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
+
+          <Route exact path="/admin" component={Dashboard} />
+          <Route exact path="/admin/teacher" component={TeacherAdmin} />
+          <Route exact path="/admin/student" component={StudentAdmin} />
+          <Route exact path="/admin/adduser" component={AddUser} />
+          <Route exact path="/admin/classes" component={ClassesAdmin} />
+          <Route exact path="/admin/exercise" component={ExerciseAdmin} />
 
           <AuthRouter
             exact
