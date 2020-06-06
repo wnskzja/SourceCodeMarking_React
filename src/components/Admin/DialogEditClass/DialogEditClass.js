@@ -58,7 +58,7 @@ function SimpleDialog(props) {
         handleEditClass({ clas: "" });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };

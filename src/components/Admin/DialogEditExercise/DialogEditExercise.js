@@ -35,7 +35,6 @@ function SimpleDialog(props) {
       description: description ? description : exercise?.description,
       deadline: deadline ? deadline : exercise?.deadline,
     };
-    console.log(data);
 
     axios
       .put(`/exercises/${exercise.id}`, data, {
@@ -45,7 +44,7 @@ function SimpleDialog(props) {
         handleEditExercise({ exercise: "" });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };

@@ -48,7 +48,6 @@ const ExerciseAdmin = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
-        console.log(response);
         setListExercise(response.data.exercisees);
         setTotalExercise(response.data.exercisees.length);
         setIsLoading(false);

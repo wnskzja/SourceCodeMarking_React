@@ -69,7 +69,7 @@ const ListClassesAdmin = ({
         setMessage("Delete class");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };

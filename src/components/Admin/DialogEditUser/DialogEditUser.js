@@ -23,7 +23,6 @@ function SimpleDialog(props) {
     const header = {
       "Content-Type": "application/json",
     };
-    console.log(fullname);
     const data = {
       name: fullname ? fullname : user?.name,
     };
@@ -36,7 +35,7 @@ function SimpleDialog(props) {
         handleEditUser({ statusEdit: { status: false, user: "" } });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };

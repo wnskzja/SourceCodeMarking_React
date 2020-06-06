@@ -69,7 +69,7 @@ const ListExerciseAdmin = ({
         setMessage("Delete exercise");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
