@@ -31,7 +31,6 @@ const ClassesAdmin = ({ axios }) => {
   const pageSize = 10;
 
   useEffect(() => {
-    localStorage.setItem("title", "Class Admin");
     const header = {
       "Content-Type": "application/json",
     };

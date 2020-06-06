@@ -74,58 +74,60 @@ const ListClassesAdmin = ({
       <div className={classes.appBarSpacer} />
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={2}>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tên lớp</TableCell>
-                  <TableCell>Mô tả</TableCell>
-                  <TableCell>Giáo viên</TableCell>
-                  <TableCell align="right"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {listClass &&
-                  listClass.map((clas) => (
-                    <TableRow key={`list-class-wrap-class-${clas.id}`}>
-                      <TableCell component="th" scope="row">
-                        {clas.name}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {clas.description}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {clas &&
-                          clas.teachers &&
-                          clas.teachers.map((teacher) => (
-                            <TableCell
-                              key={`list-class-teacher-${teacher.id}`}
-                              component="li"
-                              scope="row"
-                            >
-                              {teacher.name}
-                            </TableCell>
-                          ))}
-                      </TableCell>
-                      <TableCell scope="row" align="right">
-                        <IconButton
-                          aria-label="edit"
-                          onClick={() => handleEditClass({ clas })}
-                        >
-                          <CreateIcon />
-                        </IconButton>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleDeleteClass({ clas })}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Table
+            size="small"
+            className={classes.table}
+            aria-label="simple table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>Tên lớp</TableCell>
+                <TableCell>Mô tả</TableCell>
+                <TableCell>Giáo viên</TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {listClass &&
+                listClass.map((clas) => (
+                  <TableRow key={`list-class-wrap-class-${clas.id}`}>
+                    <TableCell component="th" scope="row">
+                      {clas.name}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {clas.description}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {clas &&
+                        clas.teachers &&
+                        clas.teachers.map((teacher) => (
+                          <TableCell
+                            key={`list-class-teacher-${teacher.id}`}
+                            component="li"
+                            scope="row"
+                          >
+                            {teacher.name}
+                          </TableCell>
+                        ))}
+                    </TableCell>
+                    <TableCell scope="row" align="right">
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() => handleEditClass({ clas })}
+                      >
+                        <CreateIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleDeleteClass({ clas })}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
         </Grid>
         <Pagination
           activePage={activePage}

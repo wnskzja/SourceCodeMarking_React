@@ -37,12 +37,37 @@ const NavRouter = () => {
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
 
-          <Route exact path="/admin" component={Dashboard} />
-          <Route exact path="/admin/teacher" component={TeacherAdmin} />
-          <Route exact path="/admin/student" component={StudentAdmin} />
-          <Route exact path="/admin/adduser" component={AddUser} />
-          <Route exact path="/admin/classes" component={ClassesAdmin} />
-          <Route exact path="/admin/exercise" component={ExerciseAdmin} />
+          <AuthRouter exact path="/admin" component={Dashboard} role="ADMIN" />
+          <AuthRouter
+            exact
+            path="/admin/teacher"
+            component={TeacherAdmin}
+            role="ADMIN"
+          />
+          <AuthRouter
+            exact
+            path="/admin/student"
+            component={StudentAdmin}
+            role="ADMIN"
+          />
+          <AuthRouter
+            exact
+            path="/admin/adduser"
+            component={AddUser}
+            role="ADMIN"
+          />
+          <AuthRouter
+            exact
+            path="/admin/classes"
+            component={ClassesAdmin}
+            role="ADMIN"
+          />
+          <AuthRouter
+            exact
+            path="/admin/exercise"
+            component={ExerciseAdmin}
+            role="ADMIN"
+          />
 
           <AuthRouter
             exact

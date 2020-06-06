@@ -83,48 +83,50 @@ const ListExerciseAdmin = ({
       <div className={classes.appBarSpacer} />
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={2}>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tên bài tập</TableCell>
-                  <TableCell>Mô tả</TableCell>
-                  <TableCell>Thời hạn nộp bài</TableCell>
-                  <TableCell align="right"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {listExercise &&
-                  listExercise.map((exercise) => (
-                    <TableRow key={`list-class-wrap-class-${exercise.id}`}>
-                      <TableCell component="th" scope="row">
-                        {exercise?.name}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {exercise?.description}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {formatDate(exercise?.deadline)}
-                      </TableCell>
-                      <TableCell scope="row" align="right">
-                        <IconButton
-                          aria-label="edit"
-                          onClick={() => handleEditExercise({ exercise })}
-                        >
-                          <CreateIcon />
-                        </IconButton>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleDeleteExercise({ exercise })}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Table
+            size="small"
+            className={classes.table}
+            aria-label="simple table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>Tên bài tập</TableCell>
+                <TableCell>Mô tả</TableCell>
+                <TableCell>Thời hạn nộp bài</TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {listExercise &&
+                listExercise.map((exercise) => (
+                  <TableRow key={`list-class-wrap-class-${exercise.id}`}>
+                    <TableCell component="th" scope="row">
+                      {exercise?.name}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {exercise?.description}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {formatDate(exercise?.deadline)}
+                    </TableCell>
+                    <TableCell scope="row" align="right">
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() => handleEditExercise({ exercise })}
+                      >
+                        <CreateIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleDeleteExercise({ exercise })}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
         </Grid>
         <Pagination
           activePage={activePage}

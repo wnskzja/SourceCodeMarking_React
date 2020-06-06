@@ -31,7 +31,6 @@ const ExerciseAdmin = ({ axios }) => {
   const pageSize = 10;
 
   useEffect(() => {
-    localStorage.setItem("title", "Exercise Admin");
     const header = {
       "Content-Type": "application/json",
     };

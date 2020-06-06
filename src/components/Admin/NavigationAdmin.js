@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
 const NavigationAdmin = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const title = localStorage.getItem("title");
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -154,7 +155,7 @@ const NavigationAdmin = () => {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            {title}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">

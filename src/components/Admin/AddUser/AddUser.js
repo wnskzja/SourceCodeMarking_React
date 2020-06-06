@@ -242,7 +242,7 @@ const AddUser = (props) => {
                   className={classes.submit}
                   disabled={isSubmitting}
                 >
-                  Đăng kí
+                  Thêm User
                 </Button>
               </Form>
             )}
