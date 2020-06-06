@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Navigation from "../Navigation/Navigation";
 import DetailHomeWork from "../DetailHomeWork/DetaiHomeWork";
 import { withAxios } from "../../axios/index";
+import Loading from "../Loading/Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +16,8 @@ const StudentExercise = ({ axios }) => {
   const classes = useStyles();
   const { id } = useParams();
   const [exercise, setExercise] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const header = {
       "Content-Type": "application/json",
@@ -25,6 +28,7 @@ const StudentExercise = ({ axios }) => {
       })
       .then((response) => {
         setExercise(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -34,7 +38,7 @@ const StudentExercise = ({ axios }) => {
   return (
     <div className={classes.root}>
       <Navigation hidden={false} />
-      <DetailHomeWork exercise={exercise} />
+      {isLoading ? <Loading /> : <DetailHomeWork exercise={exercise} />}
     </div>
   );
 };

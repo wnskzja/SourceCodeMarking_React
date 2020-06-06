@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CssBaseline,
@@ -28,7 +29,9 @@ import ListAltIcon from "@material-ui/icons/ListAlt";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AddIcon from "@material-ui/icons/Add";
 import ListMenu from "../ListMenu/ListMenu";
-
+const client = new W3CWebSocket(
+  "wss://staging-source-code-marking.herokuapp.com/api/v1/ws"
+);
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -121,6 +124,7 @@ const Navigation = ({ hidden, createClass }) => {
   const [desClass, setDesClass] = useState("");
   const [errorText, setErrorText] = useState("");
   const role = JSON.parse(localStorage.getItem("user")).role;
+  const token = localStorage.getItem("token");
   const listMenuStudent = [
     { name: "Lớp Học Của Tôi", icon: ClassIcon, link: "/student" },
     {
@@ -132,9 +136,19 @@ const Navigation = ({ hidden, createClass }) => {
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
-    { name: "Danh Sách Đăng Kí", icon: ListAltIcon, link: "/teacher/list" },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
   ];
+
+  // useEffect(() => {
+  //   client.onopen = () => {
+  //     console.log("WebSocket Client Connected");
+  //   };
+  //   client.send(JSON.stringify(token));
+  //   client.onmessage = (message) => {
+  //     console.log(message);
+  //   };
+  // }, []);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -243,7 +257,7 @@ const Navigation = ({ hidden, createClass }) => {
             name="nameClass"
             label="Tên lớp *"
             type="text"
-            error={errorText}
+            error={Boolean(errorText)}
             helperText={errorText}
             fullWidth
             onChange={onChange}

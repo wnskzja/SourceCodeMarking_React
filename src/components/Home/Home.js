@@ -11,9 +11,8 @@ import { Grid } from "@material-ui/core";
 import "codemirror/mode/htmlmixed/htmlmixed";
 import "codemirror/mode/css/css";
 import "codemirror/mode/javascript/javascript";
-
-import PropTypes from "prop-types";
-
+import Alert from "../Alert/Alert";
+import { ALERT_TYPE } from "../../constant/alert";
 import { withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -54,6 +53,10 @@ class Home extends Component {
       openDiaglog: false,
       mark: "",
       isLoading: true,
+      errorMark: "",
+      message: "",
+      typeAlert: "",
+      statusMark: false,
     };
   }
   componentDidMount() {
@@ -377,24 +380,38 @@ class Home extends Component {
     this.setState({ openDiaglog: false });
   };
   onChange = (e) => {
-    console.log("onChange -> e.target.value", typeof e.target.value);
     this.setState({ mark: e.target.value });
   };
   submitMark = () => {
-    const { axios } = this.props;
     const { id, mark } = this.state;
-    axios
-      .patch(`/files/${id}`, {
-        mark: parseInt(mark),
-      })
-      .then((response) => {
-        console.log("response", response);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {});
-    this.setState({ openDiaglog: false });
+    if (mark) {
+      if (parseFloat(mark) > 10 || parseFloat(mark) < 0) {
+        this.setState({ errorMark: "Giá trị từ 0 đến 10" });
+      } else {
+        this.setState({ statusMark: true });
+        const { axios } = this.props;
+        axios
+          .patch(`/files/${id}`, {
+            mark: parseFloat(mark),
+          })
+          .then((response) => {
+            this.setState({
+              message: "Nhập điểm thành công",
+              typeAlert: ALERT_TYPE.SUCCESS,
+              statusMark: false,
+              openDiaglog: false,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            this.setState({ errorMark: "", mark: "" });
+          });
+      }
+    } else {
+      this.setState({ errorMark: "Vui lòng không bỏ trống" });
+    }
   };
 
   render() {
@@ -408,6 +425,10 @@ class Home extends Component {
       comments,
       selectedCommentObj,
       isLoading,
+      errorMark,
+      message,
+      typeAlert,
+      statusMark,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
     const role = JSON.parse(localStorage.getItem("user")).role;
@@ -419,17 +440,19 @@ class Home extends Component {
       lineNumbers: true,
       scrollbarStyle: null,
       lineWrapping: true,
+      readOnly: true,
     };
 
     return (
       <div className="App">
         <section className="playground">
+          <Alert message={message} type={typeAlert} />
           <div className="code-editor html-code">
             {isLoading ? (
               <Loading />
             ) : (
               <Grid container>
-                <Grid item xs={9}>
+                <Grid item xs={7}>
                   <CodeMirror
                     className="CodeMirrora"
                     value={html}
@@ -475,7 +498,8 @@ class Home extends Component {
                     }}
                   />
                 </Grid>
-                <Grid className="wrap-list-comment" xs={3} item>
+                <Grid className="wrap-list-comment" xs={5} item>
+                  <h2 style={{ textAlign: "center" }}>Ghi chú</h2>
                   <Grid>
                     <Grid container className="list-comment">
                       <ListComment
@@ -483,12 +507,15 @@ class Home extends Component {
                         comments={comments}
                         editComment={editComment}
                         selectedCommentObj={selectedCommentObj}
+                        handleEditStatusComment={this.handleEditStatusComment}
+                        handleEditComment={this.handleEditComment}
+                        handleCancelEditComment={this.handleCancelEditComment}
+                        role={role}
                       />
                     </Grid>
                   </Grid>
                   {role === "TEACHER" ? (
                     <Grid className="wrap-box-comment" item>
-                      <p>Comment:</p>
                       <textarea
                         id="commentTextAread"
                         name="commentTextAread"
@@ -522,7 +549,7 @@ class Home extends Component {
                           }
                         >
                           {" "}
-                          Commit{" "}
+                          Ghi chú{" "}
                         </Button>
                       </>
                     </Grid>
@@ -545,19 +572,24 @@ class Home extends Component {
                   name="name"
                   label="Điểm"
                   type="number"
-                  InputProps={{ inputProps: { min: 0, max: 10 } }}
+                  error={Boolean(errorMark)}
+                  helperText={errorMark}
                   fullWidth
                   value={mark}
                   onChange={this.onChange}
-                  required
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
+                <Button onClick={this.handleClose} color="default">
                   Hủy
                 </Button>
-                <Button onClick={this.submitMark} color="primary">
-                  Nhập điểm
+                <Button
+                  onClick={this.submitMark}
+                  color="primary"
+                  variant="contained"
+                  disabled={statusMark}
+                >
+                  {statusMark ? "Đang nhập" : "Nhập điểm"}
                 </Button>
               </DialogActions>
             </Dialog>

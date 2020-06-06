@@ -6,8 +6,10 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import Select from "@material-ui/core/Select";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -62,10 +64,6 @@ const SignUp = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const clearMessage = () => {
-    setMessage("");
-  };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -86,17 +84,17 @@ const SignUp = (props) => {
           }}
           validationSchema={Yup.object({
             firstName: Yup.string()
-              .max(15, "Must be 15 characters or less")
-              .required("Required *"),
+              .max(15, "Tối đa 15 kí tự")
+              .required("Vui lòng không bỏ trống"),
             lastName: Yup.string()
-              .max(20, "Must be 20 characters or less")
-              .required("Required *"),
+              .max(20, "Tối đa 20 kí tự")
+              .required("Vui lòng không bỏ trống"),
             password: Yup.string()
-              .min(6, "At least 6 charaters")
-              .required("Required *"),
+              .min(6, "Ít nhất 6 kí tự")
+              .required("Vui lòng không bỏ trống"),
             email: Yup.string()
-              .email("Invalid email address")
-              .required("Required *"),
+              .email("Không đúng cấu trúc email")
+              .required("Vui lòng không bỏ trống"),
           })}
           onSubmit={(values, { setSubmitting }) => {
             const name = values.firstName + " " + values.lastName;
@@ -142,7 +140,6 @@ const SignUp = (props) => {
                     autoComplete="fname"
                     name="firstName"
                     variant="outlined"
-                    required
                     fullWidth
                     id="firstName"
                     label="Họ"
@@ -158,11 +155,10 @@ const SignUp = (props) => {
                   <Field
                     as={TextField}
                     variant="outlined"
-                    required
                     fullWidth
                     id="lastName"
-                    label="Last Name"
-                    name="Tên"
+                    label="Tên"
+                    name="lastName"
                     autoComplete="lname"
                     helperText={
                       errors.lastName && touched.lastName ? errors.lastName : ""
@@ -174,7 +170,6 @@ const SignUp = (props) => {
                   <Field
                     as={TextField}
                     variant="outlined"
-                    required
                     fullWidth
                     label="Email"
                     autoComplete="email"
@@ -190,7 +185,6 @@ const SignUp = (props) => {
                   <Field
                     as={TextField}
                     variant="outlined"
-                    required
                     fullWidth
                     name="password"
                     label="Mật khẩu"
@@ -208,20 +202,20 @@ const SignUp = (props) => {
                     Loại tài khoản
                   </InputLabel>
                   <Field
-                    component="select"
+                    as={Select}
                     id="role"
                     name="role"
                     label="role"
-                    value="STUDENT"
+                    defaultValue="STUDENT"
                     className="select-role-sign-up"
                   >
-                    <option value="STUDENT">Học Viên</option>
-                    <option value="TEACHER">Giáo Viên</option>
+                    <MenuItem value={"STUDENT"}>Học Viên</MenuItem>
+                    <MenuItem value={"TEACHER"}>Giáo Viên</MenuItem>
                   </Field>
                 </Grid>
               </Grid>
               {submitError ? (
-                <div className="ErrorForm">This account already existed</div>
+                <div className="ErrorForm">Tài khoản đã tồn tại</div>
               ) : (
                 ""
               )}
@@ -248,13 +242,7 @@ const SignUp = (props) => {
       </div>
 
       <div className="wrap-alert-confirm">
-        {message ? (
-          <Alert
-            message={message}
-            clearMessage={clearMessage}
-            type={typeAlert}
-          />
-        ) : null}
+        <Alert message={message} type={typeAlert} />
       </div>
 
       <Box mt={5}>

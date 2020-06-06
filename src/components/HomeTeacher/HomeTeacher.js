@@ -85,9 +85,11 @@ const HomeTeacher = ({ axios }) => {
             setMessage("Tạo lớp thành công!");
             setTypeAlert(ALERT_TYPE.SUCCESS);
             setListClass(response.data.classes);
+            setTotalClass(response.data.total_records);
             document.body.style.cursor = "default";
           })
           .catch((error) => {
+            document.body.style.cursor = "default";
             console.error(error);
           })
           .finally(() => {});
@@ -119,15 +121,16 @@ const HomeTeacher = ({ axios }) => {
           )
           .then((response) => {
             setListClass(response.data.classes);
+            setTotalClass(response.data.total_records);
             document.body.style.cursor = "default";
             setMessage("Xóa thành công");
             setTypeAlert(ALERT_TYPE.SUCCESS);
           })
           .catch((error) => {
             console.error(error);
+            document.body.style.cursor = "default";
           })
           .finally(() => {});
-        console.log("response", response);
       })
       .catch((error) => {
         console.error(error);
@@ -137,9 +140,6 @@ const HomeTeacher = ({ axios }) => {
       .finally(() => {});
   };
 
-  const clearMessage = () => {
-    setMessage("");
-  };
   const handlePageChange = (event, value) => {
     setActivePage(value);
   };
@@ -161,9 +161,7 @@ const HomeTeacher = ({ axios }) => {
         />
       )}
 
-      {message ? (
-        <Alert message={message} clearMessage={clearMessage} type={typeAlert} />
-      ) : null}
+      <Alert message={message} type={typeAlert} />
     </div>
   );
 };

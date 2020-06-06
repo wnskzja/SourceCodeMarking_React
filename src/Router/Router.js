@@ -22,6 +22,7 @@ import ProfileUser from "../components/ProfileUser/ProfileUser";
 import VerifyEmail from "../components/VerifyEmail/VerifyEmail";
 import ResetPassword from "../components/ResetPassword/ResetPassword";
 import ConfirmPass from "../components/ConfirmPass/ConfirmPass";
+import NotFound from "../components/NotFound/NotFound";
 
 const hist = createBrowserHistory();
 const NavRouter = () => {
@@ -73,7 +74,6 @@ const NavRouter = () => {
             path="/teacher/mark/exercise/:id"
             component={Mark}
           />
-
           <AuthRouter
             exact
             path="/student"
@@ -104,6 +104,7 @@ const NavRouter = () => {
             path="/student/exercise/:id"
             component={StudentExercise}
           />
+          <Route component={NotFound} />
         </Switch>
       </Router>
     </ReactContext>

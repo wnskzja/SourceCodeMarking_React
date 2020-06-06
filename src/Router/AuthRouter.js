@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import NotFound from "../components/NotFound/NotFound";
 
 const AuthRouter = ({ component: Component, role, pageTitle, ...rest }) => {
   if (pageTitle) {
@@ -10,7 +11,7 @@ const AuthRouter = ({ component: Component, role, pageTitle, ...rest }) => {
     if (role === roleLocal) {
       return <Component {...props} />;
     } else {
-      return <div>éo có quyên ok ?</div>;
+      return <NotFound />;
     }
   };
   return (
