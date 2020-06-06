@@ -31,14 +31,11 @@ const NavRouter = () => {
           <Route exact path="/" component={SignIn} />
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={SignUp} />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
           <AuthRouter exact path="/home" component={Home} />
           <AuthRouter exact path="/profile" component={ProfileUser} />
           <AuthRouter exact path="/teacher" component={HomeTeacher} />
           <AuthRouter exact path="/teacher/class/:id" component={DetailClass} />
->>>>>>> Add ListUserAdmin, NavigationAdmin, StudentAdmin, TeacherAdmin, USer.
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
@@ -53,13 +50,8 @@ const NavRouter = () => {
             component={HomeTeacher}
             role="TEACHER"
           />
-=======
           <Route exact path="/admin" component={Admin} />
-          <AuthRouter exact path="/home" component={Home} />
-          <AuthRouter exact path="/profile" component={ProfileUser} />
-          <AuthRouter exact path="/teacher" component={HomeTeacher} />
-          <AuthRouter exact path="/teacher/class/:id" component={DetailClass} />
->>>>>>> Create skeleton for admin.
+
           <AuthRouter
             exact
             path="/teacher/profile"
