@@ -8,10 +8,8 @@ import Pagination from "../../Pagination/Pagination";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Alert from "../../Alert/Alert";
 import DialogEditUser from "../DialogEditUser/DialogEditUser";
 import { ALERT_TYPE } from "../../../constant/alert";
@@ -56,8 +54,10 @@ const ListUserAdmin = ({
   };
 
   const handleDelete = ({ isDelete }) => {
+    setMessage("");
     if (isDelete) {
-      setMessage("Delete user");
+      setMessage("Xóa thành công");
+      setTypeAlert("success");
       setIsDelete(false);
     }
   };

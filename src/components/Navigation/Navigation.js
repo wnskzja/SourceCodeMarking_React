@@ -32,6 +32,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ListMenu from "../ListMenu/ListMenu";
 import Popper from "@material-ui/core/Popper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/MenuList";
 import { withAxios } from "../../axios/index";
@@ -156,10 +157,20 @@ const Navigation = ({ hidden, createClass, axios }) => {
       icon: NotificationsIcon,
       link: "/student/notifications",
     },
+    {
+      name: "Đổi mật khẩu",
+      icon: VpnKeyIcon,
+      link: "/student/changepassword",
+    },
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
+    {
+      name: "Đổi mật khẩu",
+      icon: VpnKeyIcon,
+      link: "/teacher/changepassword",
+    },
   ];
 
   const handleDrawerOpen = () => {

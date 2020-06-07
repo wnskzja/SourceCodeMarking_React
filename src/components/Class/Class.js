@@ -66,6 +66,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
   const enrollClass = () => {
     document.body.style.cursor = "wait";
     setCursor("wait");
+    setMessage("");
     const header = {
       "Content-Type": "application/json",
     };

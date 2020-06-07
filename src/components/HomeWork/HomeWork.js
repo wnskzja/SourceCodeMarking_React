@@ -155,6 +155,7 @@ const HomeWork = ({ axios }) => {
         description: desEx,
         deadline: deadline,
       };
+      setMessage("");
       axios
         .post("/exercises", dataRequest, {
           headers: header,
@@ -179,6 +180,7 @@ const HomeWork = ({ axios }) => {
 
   const deleteEx = (id) => {
     setProcess(true);
+    setMessage("");
     axios
       .delete(`/exercises/${id}`)
       .then((response) => {

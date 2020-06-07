@@ -12,6 +12,8 @@ const Alert = ({ message, type }) => {
   useEffect(() => {
     if (message) {
       setOpen(true);
+    } else {
+      setOpen(false);
     }
   }, [message]);
   const handleClose = () => {

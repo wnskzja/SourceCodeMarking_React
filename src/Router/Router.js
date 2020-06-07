@@ -24,6 +24,7 @@ import ResetPassword from "../components/ResetPassword/ResetPassword";
 import ConfirmPass from "../components/ConfirmPass/ConfirmPass";
 import NotFound from "../components/NotFound/NotFound";
 import Notifications from "../components/Notifications/Notifications";
+import ChangePassword from "../components/ChangePassword/ChangePassword";
 
 const hist = createBrowserHistory();
 const NavRouter = () => {
@@ -102,6 +103,13 @@ const NavRouter = () => {
           />
           <AuthRouter
             exact
+            role="TEACHER"
+            path="/teacher/changepassword"
+            component={ChangePassword}
+          />
+
+          <AuthRouter
+            exact
             path="/student"
             component={HomeStudent}
             role="STUDENT"
@@ -135,6 +143,12 @@ const NavRouter = () => {
             exact
             path="/student/notifications"
             component={Notifications}
+          />
+          <AuthRouter
+            role="STUDENT"
+            exact
+            path="/student/changepassword"
+            component={ChangePassword}
           />
           <Route component={NotFound} />
         </Switch>

@@ -110,7 +110,7 @@ const SignUp = (props) => {
             const header = {
               "Content-Type": "application/json",
             };
-
+            setMessage("");
             axios
               .post("users/signup", data, {
                 headers: header,

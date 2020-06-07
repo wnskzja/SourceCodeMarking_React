@@ -83,7 +83,7 @@ const ResetPassword = (props) => {
             const header = {
               "Content-Type": "application/json",
             };
-
+            setMessage("");
             axios
               .get(`users/password?email=${email}`, {
                 headers: header,

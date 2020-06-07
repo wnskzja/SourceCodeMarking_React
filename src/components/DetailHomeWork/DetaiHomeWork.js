@@ -112,6 +112,7 @@ const DetailHomeWork = ({ axios, exercise }) => {
     const header = {
       "Content-Type": "application/json",
     };
+    setMessage("");
     axios
       .post("/files", dataRequest, {
         headers: header,

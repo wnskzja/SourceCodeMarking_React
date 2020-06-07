@@ -68,7 +68,7 @@ const ConfirmPass = (props) => {
           <VpnKeyIcon />
         </Avatar>
         <Typography component="h1" variant="h5" className={classes.text}>
-          Mật khấu mới
+          Đổi mật khẩu
         </Typography>
         <Formik
           initialValues={{
@@ -77,8 +77,8 @@ const ConfirmPass = (props) => {
           }}
           validationSchema={Yup.object({
             password: Yup.string()
-              .min(6, "At least 6 charaters")
-              .required("Required *"),
+              .min(6, "Ít nhất 6 kí tự")
+              .required("Vui lòng không để trống"),
             confirm: Yup.string().when("password", {
               is: (val) => (val && val.length > 0 ? true : false),
               then: Yup.string().oneOf(
@@ -92,7 +92,7 @@ const ConfirmPass = (props) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             };
-
+            setMessage("");
             axios
               .post(
                 `users/password`,

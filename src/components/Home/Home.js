@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./Home.scss";
 import ListComment from "./ListComment/ListComment";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import pushid from "pushid";
 import { withAxios } from "../../axios/index";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
@@ -315,7 +314,9 @@ class Home extends Component {
     const header = {
       "Content-Type": "application/json",
     };
-
+    this.setState({
+      message: "",
+    });
     axios
       .delete(`/comments/${idComment}`, {
         headers: header,
@@ -416,6 +417,7 @@ class Home extends Component {
       } else {
         this.setState({ statusMark: true });
         const { axios } = this.props;
+        this.setState({ message: "" });
         axios
           .patch(`/files/${id}`, {
             mark: parseFloat(mark),
