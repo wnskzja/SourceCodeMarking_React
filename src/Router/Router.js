@@ -23,6 +23,7 @@ import VerifyEmail from "../components/VerifyEmail/VerifyEmail";
 import ResetPassword from "../components/ResetPassword/ResetPassword";
 import ConfirmPass from "../components/ConfirmPass/ConfirmPass";
 import NotFound from "../components/NotFound/NotFound";
+import Notifications from "../components/Notifications/Notifications";
 
 const hist = createBrowserHistory();
 const NavRouter = () => {
@@ -128,6 +129,12 @@ const NavRouter = () => {
             exact
             path="/student/exercise/:id"
             component={StudentExercise}
+          />
+          <AuthRouter
+            role="STUDENT"
+            exact
+            path="/student/notifications"
+            component={Notifications}
           />
           <Route component={NotFound} />
         </Switch>

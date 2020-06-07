@@ -104,6 +104,7 @@ const HomeTeacher = ({ axios }) => {
   const deleteClass = (idClass) => {
     document.body.style.cursor = "wait";
     const id = JSON.parse(localStorage.getItem("user")).id;
+    localStorage.setItem("title", "Danh Sách Lớp Học");
     const header = {
       "Content-Type": "application/json",
     };
