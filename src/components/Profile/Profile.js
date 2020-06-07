@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Typography, Grid } from "@material-ui/core";
+import { Container, Typography, Grid, Button } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 import { withAxios } from "../../axios/index";
 import "./Profile.scss";
 import Loading from "../Loading/Loading";
+import Alert from "../Alert/Alert";
+import { ALERT_TYPE } from "../../constant/alert";
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -17,8 +24,12 @@ const useStyles = makeStyles((theme) => ({
 const Profile = ({ axios }) => {
   const [profile, setProfile] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [name, setName] = useState("");
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
-
+  const [message, setMessage] = useState("");
+  const [typeAlert, setTypeAlert] = useState("");
+  const [errorText, setErrorText] = useState("");
   useEffect(() => {
     localStorage.setItem("title", "Thông Tin");
     axios
@@ -30,6 +41,37 @@ const Profile = ({ axios }) => {
       .catch((error) => {})
       .finally(() => {});
   }, [axios]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const onChange = (e) => {
+    setName(e.target.value);
+  };
+  const updateProfile = () => {
+    if (name) {
+      axios
+        .put(`/users/${profile.id}`, { name: name })
+        .then((response) => {
+          if (response.status === 200) {
+            setMessage("");
+            setMessage("Cập nhật thành công");
+            profile.name = name;
+            setTypeAlert(ALERT_TYPE.SUCCESS);
+          }
+        })
+        .catch((error) => {
+          setMessage("");
+          setMessage("Cập nhật thât bại");
+          setTypeAlert(ALERT_TYPE.ERROR);
+        })
+        .finally(() => {
+          setOpen(false);
+        });
+    } else {
+      setErrorText("Vui lòng không bỏ trống");
+    }
+  };
   return (
     <div className="Profile">
       <div className={classes.appBarSpacer} />
@@ -37,6 +79,7 @@ const Profile = ({ axios }) => {
         <Loading />
       ) : (
         <Container maxWidth="xl">
+          <Alert message={message} type={typeAlert} />
           <Grid container={true}>
             <Grid item xs={12}>
               <Container maxWidth="md">
@@ -105,9 +148,63 @@ const Profile = ({ axios }) => {
                     </Grid>
                   </div>
                 </div>
+                <Grid className="updateInfo" container>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                  >
+                    Cập nhật thông tin
+                  </Button>
+                </Grid>
               </Container>
             </Grid>
           </Grid>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Cập nhật thông tin</DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="username"
+                label="Họ Tên"
+                type="text"
+                defaultValue={profile?.name}
+                error={Boolean(errorText)}
+                helperText={errorText}
+                onChange={onChange}
+                fullWidth
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="email"
+                label="Email"
+                type="email"
+                value={profile?.email}
+                disabled={true}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="default">
+                Hủy
+              </Button>
+              <Button
+                onClick={updateProfile}
+                variant="contained"
+                color="primary"
+              >
+                Cập nhật
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       )}
     </div>
