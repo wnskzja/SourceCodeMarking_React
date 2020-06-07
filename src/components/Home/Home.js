@@ -36,6 +36,7 @@ class Home extends Component {
         head: {},
       },
       isCommit: false,
+      textareaComment: "",
       expandComments: [],
       isEditCommentIcon: false,
       isEditCommentBtn: false,
@@ -74,6 +75,9 @@ class Home extends Component {
         const { editComment } = this.state;
         const { id, content } = editComment;
         document.getElementById(`editCommentTextAread-${id}`).value = content;
+        this.setState({
+          textareaComment: content,
+        });
       }
     }
   }
@@ -121,7 +125,7 @@ class Home extends Component {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -145,6 +149,12 @@ class Home extends Component {
       { line: end_line.row, ch: end_line.column },
       { className: "styled-background" }
     );
+  };
+
+  handleTextAreaComment = (e) => {
+    this.setState({
+      textareaComment: e.target.value,
+    });
   };
 
   handleClickSubmitComment = ({ anchor, head }) => {
@@ -190,10 +200,13 @@ class Home extends Component {
         );
         this.setState({
           isCommit: true,
+          textareaComment: "",
+          message: "Ghi chú thành công",
+          typeAlert: ALERT_TYPE.SUCCESS,
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -265,24 +278,36 @@ class Home extends Component {
           },
         });
 
-        alert("Edit successfully");
+        this.setState({
+          message: "Sửa ghi chú thành công",
+          typeAlert: ALERT_TYPE.SUCCESS,
+        });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
 
-  handleCancelEditComment = (idComment) => {
-    document.getElementById(`editCommentTextAread-${idComment}`).value = "";
+  handleExpandComments = (expandCommentsInList) => {
     this.setState({
-      isEditCommentIcon: false,
-      editComment: {
-        id: idComment,
-        content: "",
-        isEdit: false,
-      },
+      expandComments: expandCommentsInList,
     });
+  };
+
+  handleCancelEditComment = (idComment) => {
+    if (document.getElementById(`editCommentTextAread-${idComment}`)) {
+      document.getElementById(`editCommentTextAread-${idComment}`).value = "";
+
+      this.setState({
+        isEditCommentIcon: false,
+        editComment: {
+          id: idComment,
+          content: "",
+          isEdit: false,
+        },
+      });
+    }
   };
 
   handleDeleteComment = (idComment) => {
@@ -299,11 +324,12 @@ class Home extends Component {
         this.setState({
           isCommit: true,
           isDeleteCommentBtn: true,
+          message: "Xóa ghi chú thành công",
+          typeAlert: ALERT_TYPE.SUCCESS,
         });
-        alert("Delete comment successfully");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -403,7 +429,7 @@ class Home extends Component {
             });
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           })
           .finally(() => {
             this.setState({ errorMark: "", mark: "" });
@@ -429,6 +455,8 @@ class Home extends Component {
       message,
       typeAlert,
       statusMark,
+      expandComments,
+      textareaComment,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
     const role = JSON.parse(localStorage.getItem("user")).role;
@@ -511,6 +539,9 @@ class Home extends Component {
                         handleEditComment={this.handleEditComment}
                         handleCancelEditComment={this.handleCancelEditComment}
                         role={role}
+                        handleDeleteComment={this.handleDeleteComment}
+                        expandComments={expandComments}
+                        handleExpandComments={this.handleExpandComments}
                       />
                     </Grid>
                   </Grid>
@@ -521,6 +552,7 @@ class Home extends Component {
                         name="commentTextAread"
                         rows="4"
                         cols="50"
+                        onChange={this.handleTextAreaComment}
                       ></textarea>
 
                       <>
@@ -542,7 +574,8 @@ class Home extends Component {
                           disabled={
                             (anchor.line === head.line &&
                               anchor.ch === head.ch) ||
-                            editComment.isEdit
+                            editComment.isEdit ||
+                            textareaComment === ""
                           }
                           onClick={() =>
                             this.handleClickSubmitComment({ anchor, head })
