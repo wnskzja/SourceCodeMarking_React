@@ -36,6 +36,7 @@ class Home extends Component {
         head: {},
       },
       isCommit: false,
+      textareaComment: "",
       expandComments: [],
       isEditCommentIcon: false,
       isEditCommentBtn: false,
@@ -74,6 +75,9 @@ class Home extends Component {
         const { editComment } = this.state;
         const { id, content } = editComment;
         document.getElementById(`editCommentTextAread-${id}`).value = content;
+        this.setState({
+          textareaComment: content,
+        });
       }
     }
   }
@@ -147,6 +151,12 @@ class Home extends Component {
     );
   };
 
+  handleTextAreaComment = (e) => {
+    this.setState({
+      textareaComment: e.target.value,
+    });
+  };
+
   handleClickSubmitComment = ({ anchor, head }) => {
     const { id } = this.state;
     const { axios } = this.props;
@@ -190,6 +200,7 @@ class Home extends Component {
         );
         this.setState({
           isCommit: true,
+          textareaComment: "",
         });
       })
       .catch((error) => {
@@ -439,6 +450,7 @@ class Home extends Component {
       typeAlert,
       statusMark,
       expandComments,
+      textareaComment,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
     const role = JSON.parse(localStorage.getItem("user")).role;
@@ -534,6 +546,7 @@ class Home extends Component {
                         name="commentTextAread"
                         rows="4"
                         cols="50"
+                        onChange={this.handleTextAreaComment}
                       ></textarea>
 
                       <>
@@ -555,7 +568,8 @@ class Home extends Component {
                           disabled={
                             (anchor.line === head.line &&
                               anchor.ch === head.ch) ||
-                            editComment.isEdit
+                            editComment.isEdit ||
+                            textareaComment === ""
                           }
                           onClick={() =>
                             this.handleClickSubmitComment({ anchor, head })

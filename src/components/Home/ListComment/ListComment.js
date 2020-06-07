@@ -149,9 +149,6 @@ const ListComment = (props) => {
           newExpandCommentList.push(objExpandComment);
           handleExpandComments(newExpandCommentList);
         } else if (commentExpand && commentExpand.id === comment.id) {
-          // const newExpandCommentList = expandComments;
-          // newExpandCommentList.splice(index, 1);
-          // handleExpandComments(newExpandCommentList);
           props.handleCancelEditComment(comment.id);
         }
       });
@@ -178,9 +175,18 @@ const ListComment = (props) => {
           newExpandCommentList.push(objExpandComment);
           handleExpandComments(newExpandCommentList);
         } else if (commentExpand && commentExpand.id === comment.id) {
-          const newExpandCommentList = expandComments;
-          newExpandCommentList.splice(index, 1);
+          const newExpandCommentList = [];
+          expandComments.forEach((expandComment) => {
+            const tmpCommentExpand = expandComment.commentExpand;
+            if (tmpCommentExpand.id !== comment.id) {
+              const objExpandComment = {
+                commentExpand: tmpCommentExpand,
+              };
+              newExpandCommentList.push(objExpandComment);
+            }
+          });
           handleExpandComments(newExpandCommentList);
+
           props.handleCancelEditComment(comment.id);
         }
       });
@@ -216,12 +222,18 @@ const ListComment = (props) => {
             ? commentStartAt.row + 1
             : `${commentStartAt.row + 1} - ${commentEndAt.row + 1}`;
 
-        const isSelectComment = isSelectedCommentInCodeMirror({
+        let isSelectComment = isSelectedCommentInCodeMirror({
           selectedComment: selectedCommentObj,
           currentComment: comment,
         })
           ? "selected-comment"
           : "";
+
+        if (!isSelectComment) {
+          isSelectComment = statusExpandComment(comment)
+            ? "selected-comment"
+            : "";
+        }
 
         listComment.push(
           <li
