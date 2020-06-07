@@ -201,6 +201,8 @@ class Home extends Component {
         this.setState({
           isCommit: true,
           textareaComment: "",
+          message: "Ghi chú thành công",
+          typeAlert: ALERT_TYPE.SUCCESS,
         });
       })
       .catch((error) => {
@@ -276,7 +278,10 @@ class Home extends Component {
           },
         });
 
-        alert("Edit successfully");
+        this.setState({
+          message: "Sửa ghi chú thành công",
+          typeAlert: ALERT_TYPE.SUCCESS,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -319,8 +324,9 @@ class Home extends Component {
         this.setState({
           isCommit: true,
           isDeleteCommentBtn: true,
+          message: "Xóa ghi chú thành công",
+          typeAlert: ALERT_TYPE.SUCCESS,
         });
-        alert("Delete comment successfully");
       })
       .catch((error) => {
         console.error(error);
