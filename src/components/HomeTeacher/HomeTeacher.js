@@ -69,6 +69,7 @@ const HomeTeacher = ({ axios }) => {
     const header = {
       "Content-Type": "application/json",
     };
+    setMessage("");
     axios
       .post(`/classes`, dataRequest, {
         headers: header,
@@ -108,6 +109,7 @@ const HomeTeacher = ({ axios }) => {
     const header = {
       "Content-Type": "application/json",
     };
+    setMessage("");
     axios
       .delete(`classes/${idClass}`, {
         headers: header,

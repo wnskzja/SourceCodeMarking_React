@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -7,10 +7,8 @@ import Pagination from "../../Pagination/Pagination";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Alert from "../../Alert/Alert";
 import DialogEditClass from "../DialogEditClass/DialogEditClass";
 import IconButton from "@material-ui/core/IconButton";
@@ -57,12 +55,14 @@ const ListClassesAdmin = ({
     const header = {
       "Content-Type": "application/json",
     };
+    setMessage("");
     axios
       .delete(`/classes/${clas.id}`, {
         headers: header,
       })
       .then((response) => {
-        setMessage("Delete class");
+        setMessage("Xóa thành công");
+        setTypeAlert("success");
       })
       .catch((error) => {
         console.error(error);

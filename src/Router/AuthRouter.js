@@ -25,7 +25,7 @@ const AuthRouter = ({ component: Component, role, pageTitle, ...rest }) => {
         setListNoti(JSON.parse(JSON.parse(message.data).notifications));
       };
     }
-  }, [setListNoti]);
+  }, [setListNoti, client, role]);
   const protectRoute = (props) => {
     const roleLocal = JSON.parse(localStorage.getItem("user")).role;
     if (role === roleLocal) {
