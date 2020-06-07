@@ -38,22 +38,21 @@ const HomeStudent = ({ axios }) => {
     };
     const params = {
       params: {
+        order_type: "ASC",
+        order_by: "username",
         filter_by: "role",
         filter_value: "STUDENT",
-        order_by: "username",
-        order_type: "ASC",
-        page_token: 1,
-        page_size: 20,
+        page_token: activePage,
+        page_size: pageSize,
       },
     };
     axios
-      .get(`/users`, params, {
+      .get(`/users/${id}/classes`, params, {
         headers: header,
       })
       .then((response) => {
-        console.log(response);
-        // setListClass(response.data.classes);
-        // setTotalClass(response.data.total_records);
+        setListClass(response.data.classes);
+        setTotalClass(response.data.total_records);
         setIsLoading(false);
       })
       .catch((error) => {

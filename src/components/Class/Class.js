@@ -9,7 +9,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Popper from "@material-ui/core/Popper";
-import Link from "@material-ui/core/Link";
 import { withAxios } from "../../axios/index";
 import { CLASS_TYPE } from "../../constant/class";
 import Alert from "../Alert/Alert";
@@ -17,7 +16,7 @@ import { ALERT_TYPE } from "../../constant/alert";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/MenuList";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const useStyles = (theme) =>
   makeStyles({
@@ -125,11 +124,11 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
       case CLASS_TYPE.STUDENT_CLASS:
         return (
           <Link
-            href={`/student/class/${infoClass.id}`}
+            to={`/student/class/${infoClass.id}`}
             onClick={() => {
               localStorage.setItem("title", infoClass.name);
             }}
-            underline="none"
+            style={{ textDecoration: "none" }}
           >
             <Card className={classes.root}>
               <CardContent>

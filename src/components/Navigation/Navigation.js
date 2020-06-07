@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
+import { useHistory, Link } from "react-router-dom";
 import clsx from "clsx";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CssBaseline,
@@ -19,6 +19,7 @@ import {
   DialogTitle,
   Button,
   TextField,
+  Paper,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
@@ -29,9 +30,13 @@ import ListAltIcon from "@material-ui/icons/ListAlt";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AddIcon from "@material-ui/icons/Add";
 import ListMenu from "../ListMenu/ListMenu";
-const client = new W3CWebSocket(
-  "wss://staging-source-code-marking.herokuapp.com/api/v1/ws"
-);
+import Popper from "@material-ui/core/Popper";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/MenuList";
+import { withAxios } from "../../axios/index";
+import { GlobalContext } from "../../ReactContext/ReactContext";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -113,9 +118,19 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  noti: {
+    zIndex: 2000,
+  },
+  paperNoti: {
+    color: "black",
+    backgroundColor: theme.palette.background.paper,
+  },
+  isRead: {
+    backgroundColor: "#E5EAF2",
+  },
 }));
 
-const Navigation = ({ hidden, createClass }) => {
+const Navigation = ({ hidden, createClass, axios }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(hidden);
   const title = localStorage.getItem("title");
@@ -124,7 +139,10 @@ const Navigation = ({ hidden, createClass }) => {
   const [desClass, setDesClass] = useState("");
   const [errorText, setErrorText] = useState("");
   const role = JSON.parse(localStorage.getItem("user")).role;
-  const token = localStorage.getItem("token");
+  const history = useHistory();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { listNotification, setIsReadNoti } = useContext(GlobalContext);
+  const openNoti = Boolean(anchorEl);
   const listMenuStudent = [
     { name: "Lớp Học Của Tôi", icon: ClassIcon, link: "/student" },
     {
@@ -133,21 +151,16 @@ const Navigation = ({ hidden, createClass }) => {
       link: "/student/listclass",
     },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/student/profile" },
+    {
+      name: "Thông Báo",
+      icon: NotificationsIcon,
+      link: "/student/notifications",
+    },
   ];
   const listMenuTeacher = [
     { name: "Danh Sách Lớp Học", icon: ClassIcon, link: "/teacher" },
     { name: "Thông Tin", icon: PermIdentityIcon, link: "/teacher/profile" },
   ];
-
-  // useEffect(() => {
-  //   client.onopen = () => {
-  //     console.log("WebSocket Client Connected");
-  //   };
-  //   client.send(JSON.stringify(token));
-  //   client.onmessage = (message) => {
-  //     console.log(message);
-  //   };
-  // }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -170,6 +183,15 @@ const Navigation = ({ hidden, createClass }) => {
   const handleClose = () => {
     setOpenDialog(false);
   };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseNoti = () => {
+    setAnchorEl(null);
+  };
+
   const clickCreate = (e) => {
     e.preventDefault();
     if (nameClass) {
@@ -183,6 +205,18 @@ const Navigation = ({ hidden, createClass }) => {
       setErrorText("Vui lòng không để trống");
     }
   };
+  const clickNoti = (id, idEx) => {
+    axios
+      .patch(`notifications/${id}`)
+      .then((response) => {
+        console.log("clickNoti -> response", response);
+        setIsReadNoti(id);
+        history.push(`/student/exercise/${idEx}`);
+      })
+      .catch((error) => {})
+      .finally(() => {});
+  };
+
   return (
     <>
       <CssBaseline />
@@ -219,11 +253,55 @@ const Navigation = ({ hidden, createClass }) => {
               </IconButton>
             </Tooltip>
           ) : null}
-          <IconButton color="inherit">
-            <Badge badgeContent={1} color="secondary">
+          <IconButton color="inherit" onClick={handleClick}>
+            <Badge
+              badgeContent={
+                listNotification
+                  ? listNotification.filter((d) => d.is_read === false).length
+                  : 0
+              }
+              color="secondary"
+            >
               <NotificationsIcon />
             </Badge>
           </IconButton>
+          <Popper open={openNoti} anchorEl={anchorEl} className={classes.noti}>
+            <ClickAwayListener onClickAway={handleCloseNoti}>
+              <Paper className={classes.paperNoti} elevation={3}>
+                <Menu id="simple-menu" keepMounted>
+                  {listNotification &&
+                    listNotification.map((item) => (
+                      <div key={item.id}>
+                        <MenuItem
+                          style={{
+                            fontSize: "13px",
+                            fontWeight: 450,
+                          }}
+                          className={item.is_read ? "" : classes.isRead}
+                          onClick={() => clickNoti(item.id, item.exercise_id)}
+                        >
+                          {item.content}
+                        </MenuItem>
+                        <Divider />
+                      </div>
+                    ))}
+                  <div
+                    style={{
+                      marginTop: 5,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Link
+                      to={"/student/notifications"}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      Xem tất cả
+                    </Link>
+                  </div>
+                </Menu>
+              </Paper>
+            </ClickAwayListener>
+          </Popper>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -294,4 +372,4 @@ Navigation.defaultProps = {
   createClass: () => {},
 };
 
-export default Navigation;
+export default withAxios(Navigation);

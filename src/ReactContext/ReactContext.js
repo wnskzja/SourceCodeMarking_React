@@ -1,26 +1,36 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import Reducer from "./Reducer";
 
 const initialState = {
   title: "",
+  notifications: [],
 };
 
 export const GlobalContext = createContext(initialState);
-const ReactContext = ({ children }) => {
+const ReactContext = ({ children, notifications }) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-
-  function setTitle(title) {
+  state.listNotification = notifications;
+  const setListNoti = (listNoti) => {
     dispatch({
-      type: "SET_TITLE",
-      payload: title,
+      type: "SET_LIST_NOTI",
+      payload: listNoti,
     });
-  }
+  };
+
+  const setIsReadNoti = (idNoti) => {
+    dispatch({
+      type: "SET_IS_READ_NOTI",
+      payload: idNoti,
+    });
+  };
 
   return (
     <GlobalContext.Provider
       value={{
         title: state.title,
-        setTitle,
+        listNotification: state.notifications,
+        setListNoti,
+        setIsReadNoti,
       }}
     >
       {children}
