@@ -121,7 +121,7 @@ class Home extends Component {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -193,7 +193,7 @@ class Home extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -268,21 +268,30 @@ class Home extends Component {
         alert("Edit successfully");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
 
-  handleCancelEditComment = (idComment) => {
-    document.getElementById(`editCommentTextAread-${idComment}`).value = "";
+  handleExpandComments = (expandCommentsInList) => {
     this.setState({
-      isEditCommentIcon: false,
-      editComment: {
-        id: idComment,
-        content: "",
-        isEdit: false,
-      },
+      expandComments: expandCommentsInList,
     });
+  };
+
+  handleCancelEditComment = (idComment) => {
+    if (document.getElementById(`editCommentTextAread-${idComment}`)) {
+      document.getElementById(`editCommentTextAread-${idComment}`).value = "";
+
+      this.setState({
+        isEditCommentIcon: false,
+        editComment: {
+          id: idComment,
+          content: "",
+          isEdit: false,
+        },
+      });
+    }
   };
 
   handleDeleteComment = (idComment) => {
@@ -303,7 +312,7 @@ class Home extends Component {
         alert("Delete comment successfully");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -403,7 +412,7 @@ class Home extends Component {
             });
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           })
           .finally(() => {
             this.setState({ errorMark: "", mark: "" });
@@ -429,6 +438,7 @@ class Home extends Component {
       message,
       typeAlert,
       statusMark,
+      expandComments,
     } = this.state;
     const { anchor, head } = coordinateSelectText;
     const role = JSON.parse(localStorage.getItem("user")).role;
@@ -511,6 +521,9 @@ class Home extends Component {
                         handleEditComment={this.handleEditComment}
                         handleCancelEditComment={this.handleCancelEditComment}
                         role={role}
+                        handleDeleteComment={this.handleDeleteComment}
+                        expandComments={expandComments}
+                        handleExpandComments={this.handleExpandComments}
                       />
                     </Grid>
                   </Grid>

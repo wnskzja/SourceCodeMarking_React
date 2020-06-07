@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { withStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
 import List from "@material-ui/core/List";
@@ -85,6 +85,10 @@ const ExpansionPanelSummary = withStyles({
 })(MuiExpansionPanelSummary);
 
 const ListComment = (props) => {
+  const { handleExpandComments, expandComments } = props;
+
+  useEffect(() => {}, [expandComments]);
+
   const isSelectedCommentInCodeMirror = ({
     selectedComment,
     currentComment,
@@ -117,42 +121,77 @@ const ListComment = (props) => {
     cm.scrollTo(null, t);
   };
 
-  const handleDisabledExpandExpandPanelComment = (e, comment) => {
-    // const { expandComments } = this.state;
+  const statusExpandComment = (comment) => {
+    const { expandComments } = props;
+    let result = false;
 
-    // if (expandComments.length !== 0) {
-    //   console.log(expandComments);
-    //   expandComments.forEach((expandComment) => {
-    //     const { commentExpand } = expandComment;
-    //     if (commentExpand.id !== comment.id) {
-    //       const objExpandComment = {
-    //         commentExpand: comment,
-    //       };
+    if (expandComments && expandComments.length !== 0) {
+      expandComments.forEach((expandComment) => {
+        const { commentExpand } = expandComment;
+        if (commentExpand && commentExpand.id === comment.id) {
+          result = true;
+        }
+      });
+    }
+    return result;
+  };
 
-    //       const newExpandCommentList = expandComments;
-    //       newExpandCommentList.push(objExpandComment);
-    //       console.log(newExpandCommentList);
-    //       this.setState({
-    //         expandComments: newExpandCommentList,
-    //       });
-    //     } else {
-    //       e.preventDefault();
-    //       e.stopPropagation();
-    //     }
-    //   });
-    // } else {
-    //   const objExpandComment = [
-    //     {
-    //       commentExpand: comment,
-    //     },
-    //   ];
-    //   this.setState({
-    //     expandComments: objExpandComment,
-    //   });
-    // }
+  const handleDisabled_Tool_ExpandPanelComment = (e, comment, index) => {
+    const { expandComments } = props;
+    if (expandComments && expandComments.length !== 0) {
+      expandComments.forEach((expandComment) => {
+        const { commentExpand } = expandComment;
+        if (commentExpand && commentExpand.id !== comment.id) {
+          const objExpandComment = {
+            commentExpand: comment,
+          };
+          const newExpandCommentList = expandComments;
+          newExpandCommentList.push(objExpandComment);
+          handleExpandComments(newExpandCommentList);
+        } else if (commentExpand && commentExpand.id === comment.id) {
+          // const newExpandCommentList = expandComments;
+          // newExpandCommentList.splice(index, 1);
+          // handleExpandComments(newExpandCommentList);
+          props.handleCancelEditComment(comment.id);
+        }
+      });
+    } else {
+      const objExpandComment = [
+        {
+          commentExpand: comment,
+        },
+      ];
+      handleExpandComments(objExpandComment);
+    }
+  };
 
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDisabledExpandExpandPanelComment = (e, comment, index) => {
+    const { expandComments } = props;
+    if (expandComments && expandComments.length !== 0) {
+      expandComments.forEach((expandComment) => {
+        const { commentExpand } = expandComment;
+        if (commentExpand && commentExpand.id !== comment.id) {
+          const objExpandComment = {
+            commentExpand: comment,
+          };
+          const newExpandCommentList = expandComments;
+          newExpandCommentList.push(objExpandComment);
+          handleExpandComments(newExpandCommentList);
+        } else if (commentExpand && commentExpand.id === comment.id) {
+          const newExpandCommentList = expandComments;
+          newExpandCommentList.splice(index, 1);
+          handleExpandComments(newExpandCommentList);
+          props.handleCancelEditComment(comment.id);
+        }
+      });
+    } else {
+      const objExpandComment = [
+        {
+          commentExpand: comment,
+        },
+      ];
+      handleExpandComments(objExpandComment);
+    }
   };
 
   const renderListComment = () => {
@@ -188,7 +227,7 @@ const ListComment = (props) => {
           <li
             key={`wrap-comment-li-${index + 1}-${id}`}
             className={classes.listSection}
-            onClick={() => jumpToLine({ start_line, end_line })}
+            onClick={(e) => jumpToLine({ start_line, end_line })}
           >
             <ul
               key={`wrap-comment-ul-${index + 1}-${id}`}
@@ -196,7 +235,11 @@ const ListComment = (props) => {
             >
               <ListItem key={`wrap-comment-listitem-${index + 1}-${id}`}>
                 <ThemeProvider theme={theme}>
-                  <ExpansionPanel square className="Action">
+                  <ExpansionPanel
+                    square
+                    className="Action"
+                    expanded={statusExpandComment(comment)}
+                  >
                     <ExpansionPanelSummary
                       className={`expand-summary-comment ${isSelectComment}`}
                       value={`RS: ${commentStartAt.row + 1} - CS: ${
@@ -210,6 +253,13 @@ const ListComment = (props) => {
                         key={`${id}-${comment.id}-comment-title-${index + 1}`}
                         p={1}
                         flexGrow={1}
+                        onClick={(e) =>
+                          handleDisabledExpandExpandPanelComment(
+                            e,
+                            comment,
+                            index
+                          )
+                        }
                       >
                         {`Ghi chú ${index + 1}: (Line ${durationLine})`}
                       </ActionTitle>
@@ -219,7 +269,11 @@ const ListComment = (props) => {
                           index + 1
                         }`}
                         onClick={(e) =>
-                          handleDisabledExpandExpandPanelComment(e, comment)
+                          handleDisabled_Tool_ExpandPanelComment(
+                            e,
+                            comment,
+                            index
+                          )
                         }
                       >
                         {role === "TEACHER" ? (
@@ -236,7 +290,7 @@ const ListComment = (props) => {
                             <DeleteIcon
                               className="btn-delete-comment"
                               onClick={() =>
-                                this.handleDeleteComment(comment.id)
+                                props.handleDeleteComment(comment.id)
                               }
                             />
                           </ListItemIcon>
