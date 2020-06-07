@@ -10,7 +10,6 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { withAxios } from "../../axios/index";
@@ -50,9 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ConfirmPass = ({ axios }) => {
   const [message, setMessage] = useState("");
-  const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
+  const [typeAlert, setTypeAlert] = useState("");
   const classes = useStyles();
-  const history = useHistory();
 
   return (
     <div className={classes.root}>
@@ -75,7 +73,7 @@ const ConfirmPass = ({ axios }) => {
                 confirm: "",
               }}
               validationSchema={Yup.object({
-                oldpassword: Yup.string()
+                oldPassword: Yup.string()
                   .min(6, "Ít nhất 6 kí tự")
                   .required("Vui lòng không để trống"),
                 password: Yup.string()
@@ -95,24 +93,34 @@ const ConfirmPass = ({ axios }) => {
                 };
                 setMessage("");
                 axios
-                  .post(
+                  .put(
                     `users/password`,
-                    { password: values.password },
+
+                    {
+                      old_password: values.oldPassword,
+                      new_password: values.password,
+                    },
                     {
                       headers: header,
                     }
                   )
                   .then((response) => {
+                    console.log("ConfirmPass -> response", response);
                     if (response.status === 204) {
                       setSubmitting(false);
                       setMessage("Đổi mật khẩu thành công!");
                       setTypeAlert(ALERT_TYPE.SUCCESS);
-                      setInterval(function () {
-                        history.push("/");
-                      }, 2000);
                     }
                   })
                   .catch((error) => {
+                    if (
+                      error.response.data.error ===
+                      "code=400, message=Invalid old password"
+                    ) {
+                      setMessage("");
+                      setMessage("Mật khẩu cũ không đúng");
+                      setTypeAlert(ALERT_TYPE.WARNING);
+                    }
                     setSubmitting(false);
                   })
                   .finally(() => {});
@@ -127,7 +135,7 @@ const ConfirmPass = ({ axios }) => {
                         variant="outlined"
                         fullWidth
                         label="Mật khẩu cũ"
-                        name="passwordold"
+                        name="oldPassword"
                         type="password"
                         helperText={
                           errors.password && touched.password
