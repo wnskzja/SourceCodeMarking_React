@@ -108,6 +108,7 @@ const SignIn = (props) => {
       })
       .then((response) => {
         if (response?.data?.role) {
+          data.role = response?.data?.role;
           localStorage.setItem("user", JSON.stringify(response?.data));
           localStorage.setItem("token", response?.headers["access-token"]);
           if (from) {
@@ -119,13 +120,12 @@ const SignIn = (props) => {
               history.push("/teacher");
             }
           }
-        } else {
-          setIsSignIn(true);
-          setDataResponseService(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        setIsSignIn(true);
+        setDataResponseService(data);
+        console.error(error);
       })
       .finally(() => {});
   };
@@ -146,8 +146,8 @@ const SignIn = (props) => {
         headers: header,
       })
       .then((response) => {
-        console.log("responseFacebook -> response", response);
         if (response?.data?.role) {
+          data.role = response?.data?.role;
           localStorage.setItem("user", JSON.stringify(response?.data));
           localStorage.setItem("token", response?.headers["access-token"]);
           if (from) {
@@ -159,13 +159,12 @@ const SignIn = (props) => {
               history.push("/teacher");
             }
           }
-        } else {
-          setIsSignIn(true);
-          setDataResponseService(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        setIsSignIn(true);
+        setDataResponseService(data);
+        console.error(error);
       })
       .finally(() => {});
   };
