@@ -309,14 +309,16 @@ const SignIn = (props) => {
             </Grid>
           </Grid>
           <Grid container>
-            <GoogleLogin
-              className="btn-google-login"
-              buttonText="ĐĂNG NHẬP VỚI GOOGLE"
-              clientId={`${process.env.REACT_APP_CLIENT_ID_GOOGLE}`}
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
+            <div style={{ width: "100%" }}>
+              <GoogleLogin
+                className="btn-google-login"
+                buttonText="ĐĂNG NHẬP VỚI GOOGLE"
+                clientId={`${process.env.REACT_APP_CLIENT_ID_GOOGLE}`}
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={"single_host_origin"}
+              />
+            </div>
             <div className="wrap-btn-facebook-login">
               <FacebookLogin
                 className="btn-facebook-login"
