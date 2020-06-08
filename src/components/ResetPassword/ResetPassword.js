@@ -99,6 +99,9 @@ const ResetPassword = (props) => {
                 }
               })
               .catch((error) => {
+                setMessage("");
+                setMessage("Email không tồn tại");
+                setTypeAlert(ALERT_TYPE.WARNING);
                 setSubmitting(false);
               })
               .finally(() => {});

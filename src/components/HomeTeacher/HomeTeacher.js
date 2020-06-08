@@ -75,13 +75,18 @@ const HomeTeacher = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
+        const params = {
+          params: {
+            order_type: "ASC",
+            order_by: "username",
+            page_token: activePage,
+            page_size: pageSize,
+          },
+        };
         axios
-          .get(
-            `/users/${id}/classes?order_by=username&order_type=ASC&page_token=1&page_size=20`,
-            {
-              headers: header,
-            }
-          )
+          .get(`/users/${id}/classes`, params, {
+            headers: header,
+          })
           .then((response) => {
             setMessage("Tạo lớp thành công!");
             setTypeAlert(ALERT_TYPE.SUCCESS);
@@ -115,13 +120,18 @@ const HomeTeacher = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
+        const params = {
+          params: {
+            order_type: "ASC",
+            order_by: "username",
+            page_token: activePage,
+            page_size: pageSize,
+          },
+        };
         axios
-          .get(
-            `/users/${id}/classes?order_by=username&order_type=ASC&page_token=1&page_size=20`,
-            {
-              headers: header,
-            }
-          )
+          .get(`/users/${id}/classes`, params, {
+            headers: header,
+          })
           .then((response) => {
             setListClass(response.data.classes);
             setTotalClass(response.data.total_records);
