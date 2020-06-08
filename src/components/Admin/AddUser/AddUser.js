@@ -11,7 +11,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import NavigationAdmin from "../NavigationAdmin";
@@ -60,7 +59,6 @@ const AddUser = (props) => {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
   const classes = useStyles();
-  const history = useHistory();
 
   return (
     <div className={classes.root}>

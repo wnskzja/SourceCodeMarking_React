@@ -52,7 +52,6 @@ function SimpleDialog(props) {
   const getDeadLineFromProp = (exercise) => {
     if (exercise) {
       const today = new Date(exercise?.deadline);
-      console.log(exercise?.deadline);
       const string =
         today.toISOString().substr(0, 10) +
         "T" +

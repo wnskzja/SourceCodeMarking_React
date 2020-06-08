@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
@@ -10,7 +10,6 @@ import Navigation from "../Navigation/Navigation";
 import Loading from "../Loading/Loading";
 import { withAxios } from "../../axios/index";
 import Pagination from "../Pagination/Pagination";
-import { GlobalContext } from "../../ReactContext/ReactContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {

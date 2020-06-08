@@ -87,7 +87,7 @@ const ConfirmPass = ({ axios }) => {
                   ),
                 }),
               })}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={(values, { setSubmitting, resetForm }) => {
                 const header = {
                   "Content-Type": "application/json",
                 };
@@ -105,25 +105,29 @@ const ConfirmPass = ({ axios }) => {
                     }
                   )
                   .then((response) => {
-                    console.log("ConfirmPass -> response", response);
                     if (response.status === 204) {
                       setSubmitting(false);
                       setMessage("Đổi mật khẩu thành công!");
                       setTypeAlert(ALERT_TYPE.SUCCESS);
+                      resetForm({});
                     }
                   })
                   .catch((error) => {
                     if (
-                      error.response.data.error ===
-                      "code=400, message=Invalid old password"
+                      error.response.data.error.message ===
+                      "Invalid old password"
                     ) {
                       setMessage("");
                       setMessage("Mật khẩu cũ không đúng");
                       setTypeAlert(ALERT_TYPE.WARNING);
+                      resetForm({});
                     }
                     setSubmitting(false);
                   })
                   .finally(() => {});
+              }}
+              handleReset={({ resetForm }) => {
+                resetForm({});
               }}
             >
               {({ isSubmitting, errors, touched }) => (
@@ -190,7 +194,6 @@ const ConfirmPass = ({ axios }) => {
               )}
             </Formik>
           </div>
-
           <Alert message={message} type={typeAlert} />
         </Container>
       </div>

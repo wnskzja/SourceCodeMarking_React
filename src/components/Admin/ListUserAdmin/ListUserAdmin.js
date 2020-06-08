@@ -41,7 +41,6 @@ const ListUserAdmin = ({
 }) => {
   const classes = useStyles();
   const [statusEdit, setStatusEdit] = useState({ status: false, user: {} });
-  const [isDelete, setIsDelete] = useState(false);
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState(ALERT_TYPE.SUCCESS);
 
@@ -58,7 +57,6 @@ const ListUserAdmin = ({
     if (isDelete) {
       setMessage("Xóa thành công");
       setTypeAlert("success");
-      setIsDelete(false);
     }
   };
 

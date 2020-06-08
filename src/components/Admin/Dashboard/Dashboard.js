@@ -3,10 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import ChartClasses from "../ChartClasses/ChartClasses";
-import ChartExercises from "../ChartExercises/ChartExercises";
-import ChartTeacher from "../ChartTeacher/ChartTeacher";
-import ChartStudent from "../ChartStudent/ChartStudent";
 import ChartTotal from "../ChartTotal/ChartTotal";
 import NavigationAdmin from "../NavigationAdmin";
 import { withAxios } from "../../../axios/index";
@@ -96,7 +92,6 @@ const Dashboard = (props) => {
         headers: header,
       })
       .then((response) => {
-        console.log("Class: ", response);
         setClassData(response.data);
       })
       .catch((error) => {
