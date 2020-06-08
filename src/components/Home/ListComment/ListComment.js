@@ -311,7 +311,15 @@ const ListComment = (props) => {
                     </ExpansionPanelSummary>
                     {editComment.id !== comment.id ||
                     editComment.isEdit === false ? (
-                      <ActionWrapper>{`${comment.content}`}</ActionWrapper>
+                      <Grid item xs={12}>
+                        <textarea
+                          className="defaultTextAreaComment"
+                          rows="3"
+                          cols="34"
+                          disabled
+                          defaultValue={comment.content}
+                        ></textarea>
+                      </Grid>
                     ) : (
                       <ActionWrapper>
                         <Grid container className="wrap-edit-comment-area">
