@@ -61,10 +61,11 @@ const ListExerciseAdmin = ({
     };
     setMessage("");
     axios
-      .delete(`/classes/${exercise.id}`, {
+      .delete(`/exercises/${exercise.id}`, {
         headers: header,
       })
       .then((response) => {
+        Reload();
         setMessage("Xóa thành công");
         setTypeAlert("success");
       })

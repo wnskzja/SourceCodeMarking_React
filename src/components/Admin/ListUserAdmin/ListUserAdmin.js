@@ -83,6 +83,7 @@ const ListUserAdmin = ({
                     user={user}
                     handleDelete={handleDelete}
                     handleEditUser={handleEditUser}
+                    Reload={Reload}
                   />
                 ))}
             </TableBody>

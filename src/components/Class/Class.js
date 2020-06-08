@@ -111,11 +111,7 @@ const Class = ({ axios, infoClass, type, deleteClass, Reload }) => {
         setCursor("pointer");
         setMessage("Rời lớp lớp thành công");
         setTypeAlert(ALERT_TYPE.SUCCESS);
-<<<<<<< HEAD
-        history.push(`/`);
-=======
         Reload();
->>>>>>> 4509ab90bb68800157074e2315a2a972945472ec
       })
       .catch((error) => {
         document.body.style.cursor = "default";
