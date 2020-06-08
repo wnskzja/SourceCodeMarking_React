@@ -15,6 +15,7 @@ const TeacherExercise = ({ axios }) => {
   const classes = useStyles();
   const { id } = useParams();
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const TeacherExercise = ({ axios }) => {
         headers: header,
       })
       .then((response) => {
+        setDescription(response.data.description);
         setName(response.data.name);
         setDeadline(response.data.deadline);
       })
@@ -38,7 +40,11 @@ const TeacherExercise = ({ axios }) => {
   return (
     <div className={classes.root}>
       <Navigation hidden={false} />
-      <ListFile nameEx={name} deadlineEx={deadline} />
+      <ListFile
+        nameEx={name}
+        deadlineEx={deadline}
+        descriptionEx={description}
+      />
     </div>
   );
 };

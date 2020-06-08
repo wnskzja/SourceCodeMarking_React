@@ -20,9 +20,18 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   appBarSpacer: theme.mixins.toolbar,
+  textarea: {
+    width: "100%",
+    outline: "none",
+    backgroundColor: "transparent",
+    border: "none",
+    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+    fontSize: "15px",
+    resize: "none",
+  },
 }));
 
-const ListFile = ({ axios, nameEx, deadlineEx }) => {
+const ListFile = ({ axios, nameEx, deadlineEx, descriptionEx }) => {
   const classes = useStyles();
   const [listFile, setListFile] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -108,6 +117,15 @@ const ListFile = ({ axios, nameEx, deadlineEx }) => {
             >
               {nameEx}
             </Typography>
+            <Typography component="h2" variant="h6" gutterBottom>
+              Mô tả
+              <textarea
+                className={classes.textarea}
+                defaultValue={`${descriptionEx}`}
+                disabled
+                rows="10"
+              ></textarea>
+            </Typography>
             <React.Fragment>
               <Typography component="h2" variant="h6" gutterBottom>
                 Danh sách nộp
@@ -143,12 +161,16 @@ const ListFile = ({ axios, nameEx, deadlineEx }) => {
                 </TableBody>
               </Table>
             </React.Fragment>
-            <Pagination
-              activePage={activePage}
-              itemPerPage={pageSize}
-              totalItems={totalFile}
-              handlePageChange={handlePageChange}
-            />
+            {listFile.length > 0 ? (
+              <Pagination
+                activePage={activePage}
+                itemPerPage={pageSize}
+                totalItems={totalFile}
+                handlePageChange={handlePageChange}
+              />
+            ) : (
+              ""
+            )}
           </>
         )}
       </Container>
