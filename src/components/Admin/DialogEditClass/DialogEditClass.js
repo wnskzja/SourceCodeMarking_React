@@ -55,6 +55,7 @@ function SimpleDialog(props) {
         headers: header,
       })
       .then((response) => {
+        props.Reload();
         handleEditClass({ clas: "" });
       })
       .catch((error) => {
@@ -113,7 +114,7 @@ SimpleDialog.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
-const DialogEditClass = ({ clas, handleEditClass, axios }) => {
+const DialogEditClass = ({ clas, handleEditClass, axios, Reload }) => {
   const handleClose = (value) => {};
   return (
     <div>
@@ -123,6 +124,7 @@ const DialogEditClass = ({ clas, handleEditClass, axios }) => {
         handleEditClass={handleEditClass}
         onClose={handleClose}
         axios={axios}
+        Reload={Reload}
       />
     </div>
   );

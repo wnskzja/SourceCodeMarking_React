@@ -28,6 +28,7 @@ const ClassesAdmin = ({ axios }) => {
   const [listClass, setListClass] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalClass, setTotalClass] = useState(0);
+  const [reload, setReload] = useState(0);
   const pageSize = 10;
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const ClassesAdmin = ({ axios }) => {
         order_by: "username",
         order_type: "ASC",
         page_token: 1,
-        page_size: 10,
+        page_size: pageSize,
       },
     };
     axios
@@ -55,10 +56,13 @@ const ClassesAdmin = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, activePage]);
+  }, [axios, activePage, reload]);
 
   const handlePageChange = (event, value) => {
     setActivePage(value);
+  };
+  const Reload = () => {
+    setReload(reload + 1);
   };
   return (
     <div className={classes.root}>
@@ -72,6 +76,7 @@ const ClassesAdmin = ({ axios }) => {
           itemPerPage={pageSize}
           totalClass={totalClass}
           handlePageChange={handlePageChange}
+          Reload={Reload}
         />
       )}
     </div>

@@ -44,6 +44,7 @@ const ListClassesAdmin = ({
   handlePageChange,
   deleteClass,
   axios,
+  Reload,
 }) => {
   const classes = useStyles();
   const [clas, setClas] = useState("");
@@ -151,7 +152,11 @@ const ListClassesAdmin = ({
           handlePageChange={(e, value) => handlePageChange(e, value)}
         />
       </Container>
-      <DialogEditClass clas={clas} handleEditClass={handleEditClass} />
+      <DialogEditClass
+        clas={clas}
+        handleEditClass={handleEditClass}
+        Reload={Reload}
+      />
       <Alert message={message} type={typeAlert} />
     </div>
   );

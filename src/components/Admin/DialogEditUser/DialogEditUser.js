@@ -34,6 +34,7 @@ function SimpleDialog(props) {
           headers: header,
         })
         .then((response) => {
+          props.Reload();
           handleEditUser({ statusEdit: { status: false, user: "" } });
         })
         .catch((error) => {
@@ -98,7 +99,7 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired,
 };
 
-const DialogEditUser = ({ isEdit, user, axios, handleEditUser }) => {
+const DialogEditUser = ({ isEdit, user, axios, handleEditUser, Reload }) => {
   const [selectedValue, setSelectedValue] = React.useState("");
 
   useEffect(() => {
@@ -117,6 +118,7 @@ const DialogEditUser = ({ isEdit, user, axios, handleEditUser }) => {
         handleEditUser={handleEditUser}
         onClose={handleClose}
         axios={axios}
+        Reload={Reload}
       />
     </div>
   );

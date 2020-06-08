@@ -302,7 +302,7 @@ const Navigation = ({ hidden, createClass, axios }) => {
                       to={"/student/notifications"}
                       style={{ textDecoration: "none" }}
                     >
-                      {listNotification.length > 0
+                      {listNotification?.notifications?.length > 0
                         ? "Xem tất cả"
                         : "Không có thông báo"}
                     </Link>
