@@ -6,13 +6,18 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { withAxios } from "../../axios/index";
 import { useParams, useHistory } from "react-router-dom";
 import Loading from "../Loading/Loading";
+import EditIcon from "@material-ui/icons/Edit";
 import Pagination from "../Pagination/Pagination";
+import CheckIcon from "@material-ui/icons/Check";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -24,20 +29,22 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     outline: "none",
     backgroundColor: "transparent",
-    border: "none",
+    padding: 5,
     fontFamily: "Roboto, Helvetica, Arial, sans-serif",
     fontSize: "15px",
     resize: "none",
   },
 }));
 
-const ListFile = ({ axios, nameEx, deadlineEx, descriptionEx }) => {
+const ListFile = ({ axios, nameEx, deadlineEx, descriptionEx, updateDes }) => {
   const classes = useStyles();
   const [listFile, setListFile] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activePage, setActivePage] = useState(1);
   const [totalFile, setTotalFile] = useState(0);
   const [disabled, setDisabled] = useState(false);
+  const [enableDes, setEnableDes] = useState(true);
+  const [newDes, setNewDes] = useState(descriptionEx);
   const pageSize = 10;
   const { id } = useParams();
   const history = useHistory();
@@ -99,6 +106,14 @@ const ListFile = ({ axios, nameEx, deadlineEx, descriptionEx }) => {
     setActivePage(value);
   };
 
+  const onChange = (e) => {
+    setNewDes(e.target.value);
+  };
+  const clickUpdate = () => {
+    updateDes(newDes);
+    setEnableDes(true);
+  };
+
   return (
     <div className={classes.content}>
       <div className={classes.appBarSpacer} />
@@ -107,7 +122,6 @@ const ListFile = ({ axios, nameEx, deadlineEx, descriptionEx }) => {
           <Loading />
         ) : (
           <>
-            {" "}
             <Typography
               component="h2"
               variant="h6"
@@ -119,13 +133,30 @@ const ListFile = ({ axios, nameEx, deadlineEx, descriptionEx }) => {
             </Typography>
             <Typography component="h2" variant="h6" gutterBottom>
               Mô tả
-              <textarea
-                className={classes.textarea}
-                defaultValue={`${descriptionEx}`}
-                disabled
-                rows="10"
-              ></textarea>
+              <Tooltip title="Chỉnh sửa mô tả">
+                {enableDes ? (
+                  <IconButton
+                    onClick={() => {
+                      setEnableDes(false);
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={clickUpdate}>
+                    <CheckIcon />
+                  </IconButton>
+                )}
+              </Tooltip>
             </Typography>
+            <textarea
+              className={classes.textarea}
+              defaultValue={`${descriptionEx}`}
+              disabled={enableDes}
+              onChange={onChange}
+              rows="10"
+            ></textarea>
+
             <React.Fragment>
               <Typography component="h2" variant="h6" gutterBottom>
                 Danh sách nộp
