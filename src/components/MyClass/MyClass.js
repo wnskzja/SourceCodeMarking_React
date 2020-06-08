@@ -28,6 +28,7 @@ const MyClass = ({
   totalItems,
   handlePageChange,
   deleteClass,
+  Reload,
 }) => {
   const classes = useStyles();
   return (
@@ -42,6 +43,7 @@ const MyClass = ({
                 key={item.id}
                 type={type}
                 deleteClass={deleteClass}
+                Reload={Reload}
               />
             ))}
         </Grid>
