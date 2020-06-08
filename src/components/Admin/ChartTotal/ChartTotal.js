@@ -113,7 +113,7 @@ const ChartTotal = (props) => {
               borderColor: "black",
             },
             {
-              label: "Học sinh",
+              label: "Học viên",
               data: studentDatesArray,
               fill: false,
               borderColor: "Red",

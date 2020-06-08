@@ -70,6 +70,7 @@ const ListUserAdmin = ({
               <TableRow>
                 <TableCell>Họ Tên</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell align="center">Chưa xóa</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>

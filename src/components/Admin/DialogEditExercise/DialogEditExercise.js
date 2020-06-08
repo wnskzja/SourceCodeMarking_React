@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -13,7 +13,13 @@ function SimpleDialog(props) {
   const [exercisename, setExerciseName] = useState(exercise?.name);
   const [description, setDescription] = useState(exercise?.description);
   const [deadline, setDeadline] = useState(exercise?.deadline);
+  const [errorEx, setErrorEx] = useState("");
 
+  useEffect(() => {
+    setExerciseName(exercise?.name);
+    setDescription(exercise?.description);
+    setDeadline(exercise?.deadline);
+  }, [props]);
   const handleCancelDialog = () => {
     handleEditExercise({ exercise: "" });
   };
@@ -27,26 +33,31 @@ function SimpleDialog(props) {
   };
 
   const handleSubmitEditUser = () => {
-    const header = {
-      "Content-Type": "application/json",
-    };
-    const data = {
-      name: exercisename ? exercisename : exercise?.name,
-      description: description ? description : exercise?.description,
-      deadline: deadline ? deadline : exercise?.deadline,
-    };
+    if (exercisename) {
+      const header = {
+        "Content-Type": "application/json",
+      };
+      const data = {
+        name: exercisename ? exercisename : exercise?.name,
+        description: description ? description : exercise?.description,
+        deadline: deadline ? deadline : exercise?.deadline,
+      };
 
-    axios
-      .put(`/exercises/${exercise.id}`, data, {
-        headers: header,
-      })
-      .then((response) => {
-        handleEditExercise({ exercise: "" });
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {});
+      axios
+        .put(`/exercises/${exercise.id}`, data, {
+          headers: header,
+        })
+        .then((response) => {
+          props.Reload();
+          handleEditExercise({ exercise: "" });
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {});
+    } else {
+      setErrorEx("Vui lòng không bỏ trống");
+    }
   };
 
   const getDeadLineFromProp = (exercise) => {
@@ -68,17 +79,19 @@ function SimpleDialog(props) {
 
   return (
     <Dialog open={open} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Sửa thông tin user</DialogTitle>
+      <DialogTitle id="form-dialog-title">Sửa thông tin</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
           id="exercisename"
-          label="Tên lớp"
+          label="Tên bài tập"
           type="text"
           defaultValue={exercise?.name}
           onChange={handleEditExerciseName}
           fullWidth
+          error={Boolean(errorEx)}
+          helperText={errorEx}
         />
         <TextField
           autoFocus
@@ -118,7 +131,12 @@ SimpleDialog.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
-const DialogEditExercise = ({ exercise, handleEditExercise, axios }) => {
+const DialogEditExercise = ({
+  exercise,
+  handleEditExercise,
+  axios,
+  Reload,
+}) => {
   const handleClose = (value) => {};
   return (
     <div>
@@ -128,6 +146,7 @@ const DialogEditExercise = ({ exercise, handleEditExercise, axios }) => {
         handleEditExercise={handleEditExercise}
         onClose={handleClose}
         axios={axios}
+        Reload={Reload}
       />
     </div>
   );

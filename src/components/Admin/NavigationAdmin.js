@@ -122,7 +122,7 @@ const NavigationAdmin = () => {
       icon: SupervisorAccountIcon,
       link: "/admin/teacher",
     },
-    { name: "Danh sách học sinh", icon: PersonIcon, link: "/admin/student" },
+    { name: "Danh sách học viên", icon: PersonIcon, link: "/admin/student" },
     { name: "Danh sách lớp học", icon: ClassIcon, link: "/admin/classes" },
     { name: "Danh sách bài tập", icon: MenuBookIcon, link: "/admin/exercise" },
     { name: "Thêm user", icon: AddBoxIcon, link: "/admin/adduser" },

@@ -55,7 +55,7 @@ const ClassesAdmin = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, activePage, listClass]);
+  }, [axios, activePage]);
 
   const handlePageChange = (event, value) => {
     setActivePage(value);
