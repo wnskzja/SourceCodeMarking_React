@@ -76,6 +76,7 @@ const Dashboard = (props) => {
   };
 
   useEffect(() => {
+    localStorage.setItem("title", "Thống kê");
     initStartAndEndDate();
     const header = {
       "Content-Type": "application/json",

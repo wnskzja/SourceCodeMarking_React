@@ -37,6 +37,15 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 10,
     paddingRight: 10,
   },
+  textarea: {
+    width: "100%",
+    outline: "none",
+    backgroundColor: "transparent",
+    border: "none",
+    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+    fontSize: "15px",
+    resize: "none",
+  },
 }));
 
 const DetailHomeWork = ({ axios, exercise }) => {
@@ -230,7 +239,11 @@ const DetailHomeWork = ({ axios, exercise }) => {
       deadline.getDate() +
       " tháng " +
       (deadline.getMonth() + 1);
-    return <p style={{ fontSize: "13px" }}>Deadline: {stringDate}</p>;
+    return (
+      <p style={{ fontSize: "14px", fontWeight: "bold" }}>
+        Deadline: {stringDate}
+      </p>
+    );
   };
 
   return (
@@ -253,8 +266,13 @@ const DetailHomeWork = ({ axios, exercise }) => {
                 <Grid xs={12} item container>
                   <Grid item xs={8}>
                     <Paper elevation={0} className={classes.paper}>
-                      <p>Mô tả: {exercise.description}</p>
                       {renderDeadline(exercise.deadline)}
+                      <textarea
+                        className={classes.textarea}
+                        defaultValue={`Mô tả: ${exercise.description} `}
+                        disabled
+                        rows="23"
+                      ></textarea>
                     </Paper>
                   </Grid>
                   <Grid item xs={4}>

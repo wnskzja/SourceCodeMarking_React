@@ -27,6 +27,7 @@ import { withAxios } from "../../axios/index";
 import Alert from "../Alert/Alert";
 import { ALERT_TYPE } from "../../constant/alert";
 import Loading from "../Loading/Loading";
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Pagination from "../Pagination/Pagination";
 
 const useStyles = makeStyles((theme) => ({
@@ -284,14 +285,19 @@ const HomeWork = ({ axios }) => {
               onChange={onChange}
               required
             />
-            <TextField
-              margin="dense"
-              id="desExercise"
+
+            <TextareaAutosize
+              aria-label="minimum height"
               name="desExercise"
-              label="Mô tả"
               type="text"
-              fullWidth
               onChange={onChange}
+              rowsMin={3}
+              placeholder="Mô tả"
+              style={{
+                width: "100%",
+                fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                fontSize: "15px",
+              }}
             />
             <TextField
               id="datetime-local"
