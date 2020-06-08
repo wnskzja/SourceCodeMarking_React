@@ -322,6 +322,7 @@ const SignIn = (props) => {
             <div className="wrap-btn-facebook-login">
               <FacebookLogin
                 className="btn-facebook-login"
+                textButton="&nbsp;&nbsp;ĐĂNG NHẬP VỚI FACEBOOK"
                 appId={`${process.env.REACT_APP_ID_APP_FACEBOOK}`}
                 fields="name,email,picture"
                 callback={responseFacebook}
