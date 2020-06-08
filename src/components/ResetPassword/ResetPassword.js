@@ -99,9 +99,17 @@ const ResetPassword = (props) => {
                 }
               })
               .catch((error) => {
-                setMessage("");
-                setMessage("Email không tồn tại");
-                setTypeAlert(ALERT_TYPE.WARNING);
+                if (error.response.data.error.message === "Wrong service") {
+                  setMessage("");
+                  setMessage(
+                    "Tài khoản đã đăng nhập bằng Google hoặc Facebook"
+                  );
+                  setTypeAlert(ALERT_TYPE.WARNING);
+                } else {
+                  setMessage("");
+                  setMessage("Email không tồn tại");
+                  setTypeAlert(ALERT_TYPE.ERROR);
+                }
                 setSubmitting(false);
               })
               .finally(() => {});
@@ -132,7 +140,7 @@ const ResetPassword = (props) => {
                   color="primary"
                   disabled={isSubmitting}
                 >
-                  Reset
+                  Lấy lại mật khẩu
                 </Button>
               </Grid>
             </Form>
