@@ -264,14 +264,17 @@ const Navigation = ({ hidden, createClass, axios }) => {
               </IconButton>
             </Tooltip>
           ) : null}
-          <IconButton color="inherit" onClick={handleClick}>
-            <Badge
-              badgeContent={listNotification.total_unread}
-              color="secondary"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          {role === "STUDENT" ? (
+            <IconButton color="inherit" onClick={handleClick}>
+              <Badge
+                badgeContent={listNotification.total_unread}
+                color="secondary"
+              >
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          ) : null}
+
           <Popper open={openNoti} anchorEl={anchorEl} className={classes.noti}>
             <ClickAwayListener onClickAway={handleCloseNoti}>
               <Paper className={classes.paperNoti} elevation={3}>
