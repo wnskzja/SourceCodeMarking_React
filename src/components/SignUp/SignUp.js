@@ -80,6 +80,7 @@ const SignUp = (props) => {
             lastName: "",
             email: "",
             password: "",
+            confirm: "",
             role: "STUDENT",
           }}
           validationSchema={Yup.object({
@@ -92,6 +93,13 @@ const SignUp = (props) => {
             password: Yup.string()
               .min(6, "Ít nhất 6 kí tự")
               .required("Vui lòng không bỏ trống"),
+            confirm: Yup.string().when("password", {
+              is: (val) => (val && val.length > 0 ? true : false),
+              then: Yup.string().oneOf(
+                [Yup.ref("password")],
+                "Xác nhận mật khẩu không đúng"
+              ),
+            }),
             email: Yup.string()
               .email("Không đúng cấu trúc email")
               .required("Vui lòng không bỏ trống"),
@@ -193,6 +201,20 @@ const SignUp = (props) => {
                       errors.password && touched.password ? errors.password : ""
                     }
                     error={Boolean(errors.password && touched.password)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    as={TextField}
+                    variant="outlined"
+                    fullWidth
+                    label="Nhập lại mật khẩu"
+                    name="confirm"
+                    type="password"
+                    helperText={
+                      errors.confirm && touched.confirm ? errors.confirm : ""
+                    }
+                    error={Boolean(errors.confirm && touched.confirm)}
                   />
                 </Grid>
                 <Grid item xs={12}>

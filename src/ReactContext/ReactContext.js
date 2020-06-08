@@ -7,9 +7,8 @@ const initialState = {
 };
 
 export const GlobalContext = createContext(initialState);
-const ReactContext = ({ children, notifications }) => {
+const ReactContext = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-  state.listNotification = notifications;
   const setListNoti = (listNoti) => {
     dispatch({
       type: "SET_LIST_NOTI",

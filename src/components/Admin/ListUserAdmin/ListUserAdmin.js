@@ -38,6 +38,7 @@ const ListUserAdmin = ({
   totalUser,
   handlePageChange,
   deleteClass,
+  Reload,
 }) => {
   const classes = useStyles();
   const [statusEdit, setStatusEdit] = useState({ status: false, user: {} });
@@ -98,6 +99,7 @@ const ListUserAdmin = ({
         isEdit={statusEdit.status}
         user={statusEdit.user}
         handleEditUser={handleEditUser}
+        Reload={Reload}
       />
       <Alert message={message} type={typeAlert} />
     </div>
