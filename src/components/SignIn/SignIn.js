@@ -249,7 +249,7 @@ const SignIn = (props) => {
             }}
           >
             {({ isSubmitting, errors, touched }) => (
-              <Grid className={classes.form}>
+              <Grid container className={classes.form}>
                 <Form className={classes.form}>
                   <Field
                     as={TextField}

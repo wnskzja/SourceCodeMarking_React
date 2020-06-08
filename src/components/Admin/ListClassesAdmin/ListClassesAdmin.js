@@ -65,6 +65,7 @@ const ListClassesAdmin = ({
         headers: header,
       })
       .then((response) => {
+        Reload();
         setMessage("Xóa thành công");
         setTypeAlert("success");
       })

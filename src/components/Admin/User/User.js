@@ -9,7 +9,7 @@ import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
 import { green } from "@material-ui/core/colors";
 
-const User = ({ user, axios, handleDelete, handleEditUser }) => {
+const User = ({ user, axios, handleDelete, handleEditUser, Reload }) => {
   const handleDeleteUser = () => {
     const header = {
       "Content-Type": "application/json",
@@ -19,6 +19,7 @@ const User = ({ user, axios, handleDelete, handleEditUser }) => {
         headers: header,
       })
       .then((response) => {
+        Reload();
         handleDelete({ isDelete: true });
       })
       .catch((error) => {
