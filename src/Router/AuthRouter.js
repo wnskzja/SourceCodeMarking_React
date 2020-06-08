@@ -8,9 +8,7 @@ const AuthRouter = ({ component: Component, role, pageTitle, ...rest }) => {
   if (pageTitle) {
     window.document.title = pageTitle;
   }
-  const client = new W3CWebSocket(
-    "wss://staging-source-code-marking.herokuapp.com/api/v1/ws"
-  );
+  const client = new W3CWebSocket(`${process.env.REACT_APP_URL_WEBSOCKET}`);
   const { setListNoti } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -25,7 +23,7 @@ const AuthRouter = ({ component: Component, role, pageTitle, ...rest }) => {
         setListNoti(JSON.parse(JSON.parse(message.data).notifications));
       };
     }
-  }, [setListNoti, client, role]);
+  }, []);
   const protectRoute = (props) => {
     const roleLocal = JSON.parse(localStorage.getItem("user")).role;
     if (role === roleLocal) {

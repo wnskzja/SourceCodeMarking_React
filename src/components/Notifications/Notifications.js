@@ -42,14 +42,13 @@ const Notifications = ({ axios }) => {
   const [activePage, setActivePage] = useState(1);
   const [totalNoti, setTotalNoti] = useState(0);
   const history = useHistory();
-  const { setIsReadNoti } = useContext(GlobalContext);
   const pageSize = 12;
 
   useEffect(() => {
     localStorage.setItem("title", "Thông Báo");
     const params = {
       params: {
-        order_type: "ASC",
+        order_type: "DESC",
         page_token: activePage,
         page_size: pageSize,
       },
@@ -73,8 +72,9 @@ const Notifications = ({ axios }) => {
     axios
       .patch(`notifications/${id}`)
       .then((response) => {
-        setIsReadNoti(id);
-        history.push(`/student/exercise/${idEx}`);
+        if (response.status === 204) {
+          history.push(`/student/exercise/${idEx}`);
+        }
       })
       .catch((error) => {})
       .finally(() => {});

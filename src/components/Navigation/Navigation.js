@@ -142,7 +142,7 @@ const Navigation = ({ hidden, createClass, axios }) => {
   const role = JSON.parse(localStorage.getItem("user")).role;
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { listNotification, setIsReadNoti } = useContext(GlobalContext);
+  const { listNotification } = useContext(GlobalContext);
   const openNoti = Boolean(anchorEl);
   const listMenuStudent = [
     { name: "Lớp Học Của Tôi", icon: ClassIcon, link: "/student" },
@@ -220,9 +220,9 @@ const Navigation = ({ hidden, createClass, axios }) => {
     axios
       .patch(`notifications/${id}`)
       .then((response) => {
-        console.log("clickNoti -> response", response);
-        setIsReadNoti(id);
-        history.push(`/student/exercise/${idEx}`);
+        if (response.status === 204) {
+          history.push(`/student/exercise/${idEx}`);
+        }
       })
       .catch((error) => {})
       .finally(() => {});
@@ -266,11 +266,7 @@ const Navigation = ({ hidden, createClass, axios }) => {
           ) : null}
           <IconButton color="inherit" onClick={handleClick}>
             <Badge
-              badgeContent={
-                listNotification
-                  ? listNotification.filter((d) => d.is_read === false).length
-                  : 0
-              }
+              badgeContent={listNotification.total_unread}
               color="secondary"
             >
               <NotificationsIcon />
@@ -279,9 +275,9 @@ const Navigation = ({ hidden, createClass, axios }) => {
           <Popper open={openNoti} anchorEl={anchorEl} className={classes.noti}>
             <ClickAwayListener onClickAway={handleCloseNoti}>
               <Paper className={classes.paperNoti} elevation={3}>
-                <Menu id="simple-menu" keepMounted>
-                  {listNotification &&
-                    listNotification.map((item) => (
+                <Menu id="simple-menu">
+                  {listNotification.notifications &&
+                    listNotification.notifications.map((item) => (
                       <div key={item.id}>
                         <MenuItem
                           style={{
@@ -304,9 +300,11 @@ const Navigation = ({ hidden, createClass, axios }) => {
                   >
                     <Link
                       to={"/student/notifications"}
-                      style={{ textDecoration: "none", color: "black" }}
+                      style={{ textDecoration: "none" }}
                     >
-                      Xem tất cả
+                      {listNotification.length > 0
+                        ? "Xem tất cả"
+                        : "Không có thông báo"}
                     </Link>
                   </div>
                 </Menu>
