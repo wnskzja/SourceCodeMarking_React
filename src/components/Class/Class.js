@@ -95,6 +95,31 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
       .finally(() => {});
   };
 
+  const unEnrollClass = () => {
+    document.body.style.cursor = "wait";
+    setCursor("wait");
+    setMessage("");
+    const header = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .put(`classes/${infoClass.id}/enroll`, {
+        headers: header,
+      })
+      .then((response) => {
+        document.body.style.cursor = "default";
+        setCursor("pointer");
+        setMessage("Rời lớp lớp thành công");
+        setTypeAlert(ALERT_TYPE.SUCCESS);
+        history.push(`/`);
+      })
+      .catch((error) => {
+        document.body.style.cursor = "default";
+        setCursor("pointer");
+      })
+      .finally(() => {});
+  };
+
   const clickClassTeacher = () => {
     history.push(`/teacher/class/${infoClass.id}`);
     localStorage.setItem("title", infoClass.name);
@@ -140,14 +165,14 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
         );
       case CLASS_TYPE.STUDENT_CLASS:
         return (
-          <Link
-            to={`/student/class/${infoClass.id}`}
-            onClick={() => {
-              localStorage.setItem("title", infoClass.name);
-            }}
-            style={{ textDecoration: "none" }}
-          >
-            <Card className={classes.root}>
+          <Card className={classes.root}>
+            <Link
+              to={`/student/class/${infoClass.id}`}
+              onClick={() => {
+                localStorage.setItem("title", infoClass.name);
+              }}
+              style={{ textDecoration: "none", color: "black" }}
+            >
               <CardContent>
                 <Typography
                   variant="h5"
@@ -168,8 +193,20 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
                   Mô tả: {infoClass.description}
                 </Typography>
               </CardContent>
-            </Card>
-          </Link>
+            </Link>
+
+            <CardActions>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={unEnrollClass}
+                style={{ cursor }}
+              >
+                Rời lớp
+              </Button>
+            </CardActions>
+          </Card>
         );
       case CLASS_TYPE.TEACHER_CLASS:
         return (

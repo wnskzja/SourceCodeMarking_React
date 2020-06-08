@@ -249,7 +249,11 @@ const SignIn = (props) => {
             }}
           >
             {({ isSubmitting, errors, touched }) => (
+<<<<<<< HEAD
               <Grid className={classes.form}>
+=======
+              <Grid container className={classes.form}>
+>>>>>>> Fix color class.
                 <Form className={classes.form}>
                   <Field
                     as={TextField}
