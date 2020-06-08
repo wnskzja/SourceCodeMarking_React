@@ -40,7 +40,7 @@ const TeacherAdmin = ({ axios }) => {
         filter_value: "TEACHER",
         order_by: "username",
         order_type: "ASC",
-        page_token: 1,
+        page_token: activePage,
         page_size: pageSize,
       },
     };
@@ -50,7 +50,7 @@ const TeacherAdmin = ({ axios }) => {
       })
       .then((response) => {
         setListUser(response.data.users);
-        setTotalUser(response.data.users.length);
+        setTotalUser(response.data.total_records);
         setIsLoading(false);
       })
       .catch((error) => {

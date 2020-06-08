@@ -39,7 +39,7 @@ const ClassesAdmin = ({ axios }) => {
       params: {
         order_by: "username",
         order_type: "ASC",
-        page_token: 1,
+        page_token: activePage,
         page_size: pageSize,
       },
     };
@@ -49,7 +49,7 @@ const ClassesAdmin = ({ axios }) => {
       })
       .then((response) => {
         setListClass(response.data.classes);
-        setTotalClass(response.data.classes.length);
+        setTotalClass(response.data.total_records);
         setIsLoading(false);
       })
       .catch((error) => {
