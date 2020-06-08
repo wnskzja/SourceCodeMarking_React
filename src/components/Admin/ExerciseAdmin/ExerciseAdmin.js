@@ -39,7 +39,7 @@ const ExerciseAdmin = ({ axios }) => {
       params: {
         order_by: "username",
         order_type: "ASC",
-        page_token: 1,
+        page_token: activePage,
         page_size: pageSize,
       },
     };
@@ -49,7 +49,7 @@ const ExerciseAdmin = ({ axios }) => {
       })
       .then((response) => {
         setListExercise(response.data.exercisees);
-        setTotalExercise(response.data.exercisees.length);
+        setTotalExercise(response.data.total_records);
         setIsLoading(false);
       })
       .catch((error) => {
