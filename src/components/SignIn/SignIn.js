@@ -95,7 +95,7 @@ const SignIn = (props) => {
     const { email } = profileObj;
     const data = {
       email: email,
-      fullname: profileObj.name,
+      name: profileObj.name,
       role: "",
       service: "GOOGLE",
     };
@@ -135,7 +135,7 @@ const SignIn = (props) => {
     const { name, email } = response;
     const data = {
       email: email,
-      fullname: name,
+      name: name,
       role: "",
       service: "FACEBOOK",
     };
