@@ -52,7 +52,7 @@ const useStyles = (theme) =>
     },
   });
 
-const Class = ({ axios, infoClass, type, deleteClass }) => {
+const Class = ({ axios, infoClass, type, deleteClass, Reload }) => {
   const classes = useStyles();
   const [cursor, setCursor] = useState("pointer");
   const [message, setMessage] = useState("");
@@ -111,7 +111,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
         setCursor("pointer");
         setMessage("Rời lớp lớp thành công");
         setTypeAlert(ALERT_TYPE.SUCCESS);
-        history.push(`/`);
+        Reload();
       })
       .catch((error) => {
         document.body.style.cursor = "default";
