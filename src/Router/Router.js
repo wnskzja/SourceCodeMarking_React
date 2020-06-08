@@ -39,7 +39,7 @@ const NavRouter = () => {
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
-          <Route exact path="/server" component={NotFoundServer} />
+          <Route exact path="/errorserver" component={NotFoundServer} />
 
           <AuthRouter exact path="/admin" component={Dashboard} role="ADMIN" />
           <AuthRouter

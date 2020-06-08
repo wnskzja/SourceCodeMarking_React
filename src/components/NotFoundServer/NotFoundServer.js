@@ -7,10 +7,10 @@ const NotFoundServer = () => {
       <div className="notfound">
         <div className="notfound-404">
           <h1>
-            4<span>0</span>4
+            5<span>0</span>0
           </h1>
         </div>
-        <p>Trang không tồn tại</p>
+        <p>Không thể kết nối với server</p>
         <a href="/">Trang chủ</a>
       </div>
     </div>
