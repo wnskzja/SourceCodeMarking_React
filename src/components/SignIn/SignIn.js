@@ -249,51 +249,56 @@ const SignIn = (props) => {
             }}
           >
             {({ isSubmitting, errors, touched }) => (
-              <Form>
-                <Field
-                  as={TextField}
-                  variant="outlined"
-                  margin="normal"
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                  helperText={touched.email && errors.email ? errors.email : ""}
-                  error={Boolean(touched.email && errors.email)}
-                />
-                <Field
-                  as={TextField}
-                  variant="outlined"
-                  margin="normal"
-                  fullWidth
-                  name="password"
-                  label="Mật khẩu"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  helperText={
-                    touched.password && errors.password ? errors.password : ""
-                  }
-                  error={Boolean(touched.password && errors.password)}
-                />
-                {submitError ? (
-                  <div className="ErrorForm">{submitError}</div>
-                ) : (
-                  ""
-                )}
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  disabled={isSubmitting}
-                  style={{ cursor }}
-                >
-                  Đăng nhập
-                </Button>
-              </Form>
+              <Grid container className={classes.form}>
+                <Form className={classes.form}>
+                  <Field
+                    as={TextField}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    helperText={
+                      touched.email && errors.email ? errors.email : ""
+                    }
+                    error={Boolean(touched.email && errors.email)}
+                  />
+
+                  <Field
+                    as={TextField}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    name="password"
+                    label="Mật khẩu"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    helperText={
+                      touched.password && errors.password ? errors.password : ""
+                    }
+                    error={Boolean(touched.password && errors.password)}
+                  />
+                  {submitError ? (
+                    <div className="ErrorForm">{submitError}</div>
+                  ) : (
+                    ""
+                  )}
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={isSubmitting}
+                    style={{ cursor }}
+                  >
+                    Đăng nhập
+                  </Button>
+                </Form>
+              </Grid>
             )}
           </Formik>
           <Grid container>
