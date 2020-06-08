@@ -120,9 +120,7 @@ const SignUp = (props) => {
                 setSubmitError(false);
                 setMessage("Bạn hãy vào email để xác thực tài khoản!");
                 setTypeAlert(ALERT_TYPE.SUCCESS);
-                setInterval(function () {
-                  history.push("/");
-                }, 3000);
+                setTimeout(() => history.push("/"), 2000);
               })
               .catch((error) => {
                 setSubmitting(false);

@@ -17,20 +17,12 @@ const ReactContext = ({ children, notifications }) => {
     });
   };
 
-  const setIsReadNoti = (idNoti) => {
-    dispatch({
-      type: "SET_IS_READ_NOTI",
-      payload: idNoti,
-    });
-  };
-
   return (
     <GlobalContext.Provider
       value={{
         title: state.title,
         listNotification: state.notifications,
         setListNoti,
-        setIsReadNoti,
       }}
     >
       {children}

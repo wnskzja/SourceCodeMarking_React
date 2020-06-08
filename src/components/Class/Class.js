@@ -82,6 +82,7 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
       })
       .catch((error) => {
         document.body.style.cursor = "default";
+        setCursor("pointer");
         setMessage("Bạn đã tham gia lớp!");
         setTypeAlert(ALERT_TYPE.ERROR);
       })

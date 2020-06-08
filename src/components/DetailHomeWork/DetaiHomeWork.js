@@ -54,14 +54,18 @@ const DetailHomeWork = ({ axios, exercise }) => {
   const [message, setMessage] = useState("");
   const [typeAlert, setTypeAlert] = useState("");
   useEffect(() => {
+    const today = new Date();
+    const deadline = new Date(exercise.deadline);
+    if (today > deadline) {
+      setStatusFile(3);
+    }
     axios
       .get(
         `/exercises/${id}/files?filter_by=user_id&filter_value=${userId}&order_type=ASC&page_token=1&page_size=20`
       )
       .then((response) => {
+        console.log("DetailHomeWork -> response", response);
         if (response.data.files.length > 0) {
-          const today = new Date();
-          const deadline = new Date(exercise.deadline);
           if (today > deadline) {
             setStatusFile(3);
           } else {
@@ -123,15 +127,15 @@ const DetailHomeWork = ({ axios, exercise }) => {
         setDisabled(false);
         setMessage("Đã Nộp!");
         setTypeAlert(ALERT_TYPE.SUCCESS);
-        document.body.style.cursor = "default";
-        setCursor("pointer");
       })
       .catch((error) => {
-        document.body.style.cursor = "default";
         setMessage("Nộp thất bại!");
         setTypeAlert(ALERT_TYPE.ERROR);
       })
-      .finally(() => {});
+      .finally(() => {
+        document.body.style.cursor = "default";
+        setCursor("pointer");
+      });
   };
 
   const removeFile = () => {
@@ -146,15 +150,15 @@ const DetailHomeWork = ({ axios, exercise }) => {
           setStatusFile(0);
           setFile({});
           setDisabled(false);
-          document.body.style.cursor = "default";
-          setCursor("pointer");
         }
       })
       .catch((error) => {
-        document.body.style.cursor = "default";
         console.error(error);
       })
-      .finally(() => {});
+      .finally(() => {
+        document.body.style.cursor = "default";
+        setCursor("pointer");
+      });
   };
 
   const renderButton = () => {

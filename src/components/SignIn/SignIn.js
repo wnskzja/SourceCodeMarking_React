@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundImage: `url(${process.env.PUBLIC_URL}/images/images.jpg)`,
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: "center",
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(5, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -68,6 +68,7 @@ const SignIn = (props) => {
   const classes = useStyles();
   const { axios } = props;
   const [submitError, setSubmitError] = useState("");
+  const [cursor, setCursor] = useState("pointer");
   const [isSignIn, setIsSignIn] = useState(false);
   const [dataResponseService, setDataResponseService] = useState({});
   const history = useHistory();
@@ -195,6 +196,8 @@ const SignIn = (props) => {
                 .required("Vui lòng không bỏ trống"),
             })}
             onSubmit={(values, { setSubmitting }) => {
+              document.body.style.cursor = "wait";
+              setCursor("wait");
               const data = {
                 email: values.email,
                 password: values.password,
@@ -228,17 +231,22 @@ const SignIn = (props) => {
                   }
                 })
                 .catch((error) => {
-                  if (
-                    error.response.data.error ===
-                    "code=401, message=Invalid email or password."
-                  ) {
-                    setSubmitError("Email hoặc mật khẩu không đúng!");
+                  const errorText = error.response.data.error.message;
+                  if (errorText === "Password is invalid.") {
+                    setSubmitError("Sai mật khẩu!");
+                  } else if (errorText === "Not found user ") {
+                    setSubmitError("Tài khoản không tồn tại!");
+                  } else if (errorText === "User has been deleted") {
+                    setSubmitError("Tài khoản đã bị xóa!");
                   } else {
                     setSubmitError("Tài khoản chưa được xác thực!");
                   }
                   setSubmitting(false);
                 })
-                .finally(() => {});
+                .finally(() => {
+                  document.body.style.cursor = "default";
+                  setCursor("pointer");
+                });
             }}
           >
             {({ isSubmitting, errors, touched }) => (
@@ -282,6 +290,7 @@ const SignIn = (props) => {
                   color="primary"
                   className={classes.submit}
                   disabled={isSubmitting}
+                  style={{ cursor }}
                 >
                   Đăng nhập
                 </Button>
