@@ -122,6 +122,16 @@ const ConfirmPass = ({ axios }) => {
                       setTypeAlert(ALERT_TYPE.WARNING);
                       resetForm({});
                     }
+                    if (
+                      error.response.data.error.message === "Not have password"
+                    ) {
+                      setMessage("");
+                      setMessage(
+                        "Bạn đang đăng nhập bằng Google hoặc Facebook"
+                      );
+                      setTypeAlert(ALERT_TYPE.WARNING);
+                      resetForm({});
+                    }
                     setSubmitting(false);
                   })
                   .finally(() => {});

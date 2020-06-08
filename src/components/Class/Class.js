@@ -44,9 +44,15 @@ const useStyles = (theme) =>
       display: "flex",
       justifyContent: "space-between",
     },
+    nameClass: {
+      width: "100%",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
   });
 
-const Class = ({ axios, infoClass, type, deleteClass }) => {
+const Class = ({ axios, infoClass, type, deleteClass, Reload }) => {
   const classes = useStyles();
   const [cursor, setCursor] = useState("pointer");
   const [message, setMessage] = useState("");
@@ -105,7 +111,11 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
         setCursor("pointer");
         setMessage("Rời lớp lớp thành công");
         setTypeAlert(ALERT_TYPE.SUCCESS);
+<<<<<<< HEAD
         history.push(`/`);
+=======
+        Reload();
+>>>>>>> 4509ab90bb68800157074e2315a2a972945472ec
       })
       .catch((error) => {
         document.body.style.cursor = "default";
@@ -125,7 +135,16 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
         return (
           <Card className={classes.classStore}>
             <CardContent>
-              <Typography variant="h5" component="h2">
+              <Typography
+                variant="h5"
+                component="h2"
+                style={{
+                  width: "100%",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {infoClass.name}
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
@@ -159,7 +178,16 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
               style={{ textDecoration: "none", color: "black" }}
             >
               <CardContent>
-                <Typography variant="h5" component="h2">
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  style={{
+                    width: "100%",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {infoClass.name}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
@@ -192,7 +220,13 @@ const Class = ({ axios, infoClass, type, deleteClass }) => {
                 <Typography
                   variant="h5"
                   component="h2"
-                  style={{ cursor: "pointer" }}
+                  style={{
+                    cursor: "pointer",
+                    width: "100%",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
                   onClick={clickClassTeacher}
                 >
                   {infoClass.name}

@@ -4,6 +4,8 @@ import Navigation from "../Navigation/Navigation";
 import ListFile from "../ListFile/ListFile";
 import { withAxios } from "../../axios/index";
 import { useParams } from "react-router-dom";
+import Alert from "../Alert/Alert";
+import { ALERT_TYPE } from "../../constant/alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +19,8 @@ const TeacherExercise = ({ axios }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
+  const [message, setMessage] = useState("");
+  const [typeAlert, setTypeAlert] = useState("");
 
   useEffect(() => {
     const header = {
@@ -35,7 +39,28 @@ const TeacherExercise = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, id]);
+  }, [axios, id, message]);
+
+  const updateDes = (newDes) => {
+    axios
+      .put(`/exercises/${id}`, {
+        name: name,
+        description: newDes,
+        deadline: deadline,
+      })
+      .then((response) => {
+        setMessage("");
+        setMessage("Cập nhật thành công");
+        setTypeAlert(ALERT_TYPE.SUCCESS);
+      })
+      .catch((error) => {
+        console.error(error);
+        setMessage("");
+        setMessage("Cập nhật thất bại");
+        setTypeAlert(ALERT_TYPE.ERROR);
+      })
+      .finally(() => {});
+  };
 
   return (
     <div className={classes.root}>
@@ -44,7 +69,11 @@ const TeacherExercise = ({ axios }) => {
         nameEx={name}
         deadlineEx={deadline}
         descriptionEx={description}
+        updateDes={(newDes) => {
+          updateDes(newDes);
+        }}
       />
+      <Alert message={message} type={typeAlert} />
     </div>
   );
 };

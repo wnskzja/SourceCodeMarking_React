@@ -28,6 +28,7 @@ const HomeStudent = ({ axios }) => {
   const [listClass, setListClass] = useState([]);
   const [activePage, setActivePage] = useState(1);
   const [totalClass, setTotalClass] = useState(0);
+  const [reload, setReload] = useState(0);
   const pageSize = 12;
 
   useEffect(() => {
@@ -59,10 +60,13 @@ const HomeStudent = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, activePage]);
+  }, [axios, activePage, reload]);
 
   const handlePageChange = (event, value) => {
     setActivePage(value);
+  };
+  const Reload = () => {
+    setReload(reload + 1);
   };
   return (
     <div className={classes.root}>
@@ -77,6 +81,7 @@ const HomeStudent = ({ axios }) => {
           itemPerPage={pageSize}
           totalItems={totalClass}
           handlePageChange={handlePageChange}
+          Reload={Reload}
         />
       )}
     </div>
