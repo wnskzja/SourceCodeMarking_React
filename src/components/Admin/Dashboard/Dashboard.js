@@ -7,6 +7,7 @@ import ChartClasses from "../ChartClasses/ChartClasses";
 import ChartExercises from "../ChartExercises/ChartExercises";
 import ChartTeacher from "../ChartTeacher/ChartTeacher";
 import ChartStudent from "../ChartStudent/ChartStudent";
+import ChartTotal from "../ChartTotal/ChartTotal";
 import NavigationAdmin from "../NavigationAdmin";
 import { withAxios } from "../../../axios/index";
 
@@ -46,32 +47,57 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const createDateStart = () => {
+  const today = new Date();
+  const last30Day = new Date(today.setDate(today.getDate() - 30));
+  return last30Day;
+};
+
 const Dashboard = (props) => {
   const classes = useStyles();
   const { axios } = props;
+  const [startDate, setStartDate] = useState(createDateStart);
+  const [endDate, setEndDate] = useState(new Date());
   const [teacherData, setTeacherData] = useState("");
   const [studentData, setStudentData] = useState("");
   const [classData, setClassData] = useState("");
   const [exerciseData, setExerciseData] = useState("");
 
+  const initStartAndEndDate = () => {
+    const resultStartDate =
+      startDate.toISOString().substr(0, 10) +
+      "T" +
+      startDate.toTimeString().substr(0, 8) +
+      "Z";
+    setStartDate(resultStartDate);
+
+    const resultEndDate =
+      endDate.toISOString().substr(0, 10) +
+      "T" +
+      endDate.toTimeString().substr(0, 8) +
+      "Z";
+    setEndDate(resultEndDate);
+  };
+
   useEffect(() => {
+    initStartAndEndDate();
     const header = {
       "Content-Type": "application/json",
     };
     const params = {
       params: {
-        order_by: "username",
-        order_type: "ASC",
-        page_token: 1,
-        page_size: 10,
+        begin_date: startDate,
+        end_date: endDate,
+        user_role: "",
       },
     };
     axios
-      .get(`/classes`, params, {
+      .get(`/classes/statistic`, params, {
         headers: header,
       })
       .then((response) => {
-        setClassData(response.data.classes);
+        console.log("Class: ", response);
+        setClassData(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -79,12 +105,11 @@ const Dashboard = (props) => {
       .finally(() => {});
 
     axios
-      .get(`/exercises`, params, {
+      .get(`/exercises/statistic`, params, {
         headers: header,
       })
       .then((response) => {
-        setExerciseData(response.data.exercisees);
-        console.log(response);
+        setExerciseData(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -93,20 +118,17 @@ const Dashboard = (props) => {
 
     const paramsTeacher = {
       params: {
-        filter_by: "role",
-        filter_value: "TEACHER",
-        order_by: "username",
-        order_type: "ASC",
-        page_token: 1,
-        page_size: 10,
+        begin_date: startDate,
+        end_date: endDate,
+        user_role: "TEACHER",
       },
     };
     axios
-      .get(`/users`, paramsTeacher, {
+      .get(`/users/statistic`, paramsTeacher, {
         headers: header,
       })
       .then((response) => {
-        setTeacherData(response.data.users);
+        setTeacherData(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -115,20 +137,17 @@ const Dashboard = (props) => {
 
     const paramsStudent = {
       params: {
-        filter_by: "role",
-        filter_value: "STUDENT",
-        order_by: "username",
-        order_type: "ASC",
-        page_token: 1,
-        page_size: 10,
+        begin_date: startDate,
+        end_date: endDate,
+        user_role: "STUDENT",
       },
     };
     axios
-      .get(`/users`, paramsStudent, {
+      .get(`/users/statistic`, paramsStudent, {
         headers: header,
       })
       .then((response) => {
-        setStudentData(response.data.users);
+        setStudentData(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -146,30 +165,17 @@ const Dashboard = (props) => {
             <Grid item xs={12} md={8} lg={9}>
               <Grid>
                 <Paper>
-                  <ChartTeacher type="teacher" data={teacherData} />
+                  <ChartTotal
+                    type="total"
+                    dataTeacher={teacherData}
+                    dataStudent={studentData}
+                    dataClass={classData}
+                    dataExercise={exerciseData}
+                  />
                 </Paper>
-                <div className={classes.titleAboveChart}>Giáo viên</div>
-              </Grid>
-
-              <Grid>
-                <Paper>
-                  <ChartStudent type="student" data={studentData} />
-                </Paper>
-                <div className={classes.titleAboveChart}>Học sinh</div>
-              </Grid>
-
-              <Grid>
-                <Paper>
-                  <ChartClasses type="classes" data={classData} />
-                </Paper>
-                <div className={classes.titleAboveChart}>Lớp học</div>
-              </Grid>
-
-              <Grid>
-                <Paper>
-                  <ChartExercises type="exercises" data={exerciseData} />
-                </Paper>
-                <div className={classes.titleAboveChart}>Bài tập</div>
+                <div className={classes.titleAboveChart}>
+                  Biểu đồ thống kê về giáo viên, học sinh, lớp học, bài tập
+                </div>
               </Grid>
             </Grid>
           </Grid>
