@@ -123,6 +123,7 @@ const SignUp = (props) => {
                 setTimeout(() => history.push("/"), 2000);
               })
               .catch((error) => {
+                console.log("SignUp -> error", error.response);
                 setSubmitting(false);
                 setSubmitError(true);
               })

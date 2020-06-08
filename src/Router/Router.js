@@ -25,6 +25,7 @@ import ConfirmPass from "../components/ConfirmPass/ConfirmPass";
 import NotFound from "../components/NotFound/NotFound";
 import Notifications from "../components/Notifications/Notifications";
 import ChangePassword from "../components/ChangePassword/ChangePassword";
+import NotFoundServer from "../components/NotFoundServer/NotFoundServer";
 
 const hist = createBrowserHistory();
 const NavRouter = () => {
@@ -38,6 +39,7 @@ const NavRouter = () => {
           <Route exact path="/confirmation/:token" component={VerifyEmail} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/password/:token" component={ConfirmPass} />
+          <Route exact path="/server" component={NotFoundServer} />
 
           <AuthRouter exact path="/admin" component={Dashboard} role="ADMIN" />
           <AuthRouter
