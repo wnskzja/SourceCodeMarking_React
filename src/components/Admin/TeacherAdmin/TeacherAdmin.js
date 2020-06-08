@@ -56,7 +56,7 @@ const TeacherAdmin = ({ axios }) => {
         console.error(error);
       })
       .finally(() => {});
-  }, [axios, activePage, listUser]);
+  }, [axios, activePage]);
 
   const handlePageChange = (event, value) => {
     setActivePage(value);

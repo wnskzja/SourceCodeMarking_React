@@ -15,6 +15,9 @@ import IconButton from "@material-ui/core/IconButton";
 import CreateIcon from "@material-ui/icons/Create";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ALERT_TYPE } from "../../../constant/alert";
+import DoneIcon from "@material-ui/icons/Done";
+import ClearIcon from "@material-ui/icons/Clear";
+import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -41,6 +44,7 @@ const ListExerciseAdmin = ({
   handlePageChange,
   deleteClass,
   axios,
+  Reload,
 }) => {
   const classes = useStyles();
   const [exercise, setExercise] = useState("");
@@ -93,6 +97,7 @@ const ListExerciseAdmin = ({
                 <TableCell>Tên bài tập</TableCell>
                 <TableCell>Mô tả</TableCell>
                 <TableCell>Thời hạn nộp bài</TableCell>
+                <TableCell align="center">Chưa xóa</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
@@ -109,19 +114,30 @@ const ListExerciseAdmin = ({
                     <TableCell component="th" scope="row">
                       {formatDate(exercise?.deadline)}
                     </TableCell>
+                    <TableCell scope="row" align="center">
+                      {exercise?.is_deleted ? (
+                        <ClearIcon color="secondary" />
+                      ) : (
+                        <DoneIcon style={{ color: green[500] }} />
+                      )}
+                    </TableCell>
                     <TableCell scope="row" align="right">
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => handleEditExercise({ exercise })}
-                      >
-                        <CreateIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => handleDeleteExercise({ exercise })}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {exercise.is_deleted ? null : (
+                        <>
+                          <IconButton
+                            aria-label="edit"
+                            onClick={() => handleEditExercise({ exercise })}
+                          >
+                            <CreateIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDeleteExercise({ exercise })}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -138,6 +154,7 @@ const ListExerciseAdmin = ({
       <DialogEditExercise
         exercise={exercise}
         handleEditExercise={handleEditExercise}
+        Reload={Reload}
       />
       <Alert message={message} type={typeAlert} />
     </div>

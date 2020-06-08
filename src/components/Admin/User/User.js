@@ -5,6 +5,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { withAxios } from "../../../axios/index";
+import DoneIcon from "@material-ui/icons/Done";
+import ClearIcon from "@material-ui/icons/Clear";
+import { green } from "@material-ui/core/colors";
 
 const User = ({ user, axios, handleDelete, handleEditUser }) => {
   const handleDeleteUser = () => {
@@ -28,18 +31,29 @@ const User = ({ user, axios, handleDelete, handleEditUser }) => {
       <TableRow key={user.id}>
         <TableCell>{user.name}</TableCell>
         <TableCell>{user.email}</TableCell>
+        <TableCell scope="row" align="center">
+          {user?.is_deleted ? (
+            <ClearIcon color="secondary" />
+          ) : (
+            <DoneIcon style={{ color: green[500] }} />
+          )}
+        </TableCell>
         <TableCell>
-          <IconButton
-            aria-label="edit"
-            onClick={() =>
-              handleEditUser({ statusEdit: { status: true, user: user } })
-            }
-          >
-            <CreateIcon />
-          </IconButton>
-          <IconButton aria-label="delete" onClick={handleDeleteUser}>
-            <DeleteIcon />
-          </IconButton>
+          {user?.is_deleted ? null : (
+            <>
+              <IconButton
+                aria-label="edit"
+                onClick={() =>
+                  handleEditUser({ statusEdit: { status: true, user: user } })
+                }
+              >
+                <CreateIcon />
+              </IconButton>
+              <IconButton aria-label="delete" onClick={handleDeleteUser}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          )}
         </TableCell>
       </TableRow>
     </>

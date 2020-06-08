@@ -11,6 +11,7 @@ import { withAxios } from "../../../axios/index";
 function SimpleDialog(props) {
   const { onClose, selectedValue, open, user, axios, handleEditUser } = props;
   const [fullname, setFullname] = useState("");
+  const [errorText, setErrorText] = useState("");
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -20,24 +21,28 @@ function SimpleDialog(props) {
   };
 
   const handleSubmitEditUser = () => {
-    const header = {
-      "Content-Type": "application/json",
-    };
-    const data = {
-      name: fullname ? fullname : user?.name,
-    };
+    if (fullname) {
+      const header = {
+        "Content-Type": "application/json",
+      };
+      const data = {
+        name: fullname ? fullname : user?.name,
+      };
 
-    axios
-      .put(`/users/${user.id}`, data, {
-        headers: header,
-      })
-      .then((response) => {
-        handleEditUser({ statusEdit: { status: false, user: "" } });
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {});
+      axios
+        .put(`/users/${user.id}`, data, {
+          headers: header,
+        })
+        .then((response) => {
+          handleEditUser({ statusEdit: { status: false, user: "" } });
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {});
+    } else {
+      setErrorText("Vui lòng không để trống");
+    }
   };
 
   return (
@@ -57,6 +62,8 @@ function SimpleDialog(props) {
           defaultValue={user?.name}
           onChange={handleEditFullName}
           fullWidth
+          error={Boolean(errorText)}
+          helperText={errorText}
         />
         <TextField
           autoFocus
@@ -70,10 +77,14 @@ function SimpleDialog(props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleClose} color="default">
           Hủy
         </Button>
-        <Button onClick={handleSubmitEditUser} color="primary">
+        <Button
+          onClick={handleSubmitEditUser}
+          color="primary"
+          variant="contained"
+        >
           Sửa
         </Button>
       </DialogActions>

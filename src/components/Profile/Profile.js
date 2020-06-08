@@ -154,6 +154,7 @@ const Profile = ({ axios }) => {
                     color="primary"
                     onClick={() => {
                       setOpen(true);
+                      setName(profile.name);
                     }}
                   >
                     Cập nhật thông tin
